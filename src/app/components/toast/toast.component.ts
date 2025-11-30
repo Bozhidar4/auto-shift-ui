@@ -1,0 +1,29 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ToastService } from '../../services/toast.service';
+
+@Component({
+  selector: 'app-toasts',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+  <div class="toast-container">
+    <div *ngFor="let m of (toast.messages$ | async)" class="toast" [attr.data-type]="m.type">
+      <div class="toast-body">{{ m.text }}</div>
+      <button class="toast-close" (click)="toast.dismiss(m.id)">✕</button>
+    </div>
+  </div>
+  `,
+  styles: [`
+    .toast-container{position:fixed;right:1rem;bottom:1rem;z-index:1200;display:flex;flex-direction:column-reverse;gap:0.5rem}
+    .toast{min-width:220px;padding:0.6rem 0.8rem;border-radius:8px;box-shadow:0 8px 24px rgba(12,8,30,0.12);display:flex;align-items:center;justify-content:space-between}
+    .toast[data-type="error"]{background:linear-gradient(90deg,#ffefef,#ffecec);border:1px solid rgba(200,40,40,0.12);color:#8b0000}
+    .toast[data-type="success"]{background:linear-gradient(90deg,#f0fff4,#ecfff2);border:1px solid rgba(40,160,80,0.08);color:#165e3b}
+    .toast .toast-close{background:transparent;border:none;cursor:pointer;color:inherit}
+  `]
+})
+export class ToastComponent {
+  constructor(public toast: ToastService) {
+    this.toast.messages$.subscribe(m => console.debug('[ToastComponent] messages', m));
+  }
+}

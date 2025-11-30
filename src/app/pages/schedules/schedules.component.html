@@ -1,0 +1,32 @@
+<div class="card">
+	<div style="display:flex;justify-content:space-between;align-items:center">
+		<div>
+			<div class="page-title">Schedules</div>
+			<div class="muted">Generate and review team schedules</div>
+		</div>
+		<div class="controls">
+			<button class="btn primary" (click)="generate()">Generate</button>
+			<button class="btn" (click)="download()">Download</button>
+		</div>
+	</div>
+
+	<div style="margin-top:1rem">
+		<div *ngIf="!schedule" class="muted" style="padding:2rem;text-align:center">
+			<div style="font-size:1rem;font-weight:700;margin-bottom:0.5rem">No schedule yet</div>
+			<div class="muted" style="margin-bottom:1rem">Generate a schedule for a team to see assignments here.</div>
+			<div>
+				<button class="btn primary" (click)="generate()">Generate now</button>
+			</div>
+		</div>
+		<div *ngIf="schedule" class="card" style="margin-top:0.75rem">
+			<div class="muted" style="font-size:0.9rem;margin-bottom:0.5rem">Generated schedule</div>
+			<div style="display:flex;gap:1rem;flex-wrap:wrap">
+				<div *ngFor="let a of schedule.assignments" class="card" style="min-width:220px;flex:1 1 220px">
+					<div style="font-weight:700">{{ a.employeeName || a.employeeId }}</div>
+					<div class="muted" style="font-size:0.9rem">{{ a.shiftType }}</div>
+					<div style="margin-top:0.5rem;font-size:0.9rem">{{ a.date }}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

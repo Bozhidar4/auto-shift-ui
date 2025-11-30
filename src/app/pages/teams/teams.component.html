@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="page-title">Teams</div>
+  <div class="muted">Manage teams and their settings</div>
+
+  <div class="header-row" style="margin-top:0.75rem;justify-content:space-between">
+    <div class="controls">
+      <button class="btn pill primary" (click)="addNew()">Add Team</button>
+    </div>
+  </div>
+
+  <div class="team-grid" style="margin-top:1rem">
+    <div *ngFor="let t of teams" class="card team-card">
+      <div *ngIf="!t._editing" style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-weight:800;font-size:1.05rem">{{ t.name }}</div>
+          <div class="muted" style="font-size:0.9rem">Team</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.35rem">
+          <div>
+            <button class="btn pill" (click)="edit(t)">Edit</button>
+            <button class="btn pill" [routerLink]="['/teams', t.id]">Open</button>
+            <button class="btn pill danger" (click)="remove(t)">Delete</button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="t._editing">
+        <div style="display:flex;gap:0.5rem;align-items:center">
+          <input class="input" [(ngModel)]="t.name" placeholder="Team name" />
+          <div style="margin-left:auto">
+            <button class="btn pill primary" (click)="save(t)">Save</button>
+            <button class="btn pill" (click)="cancelEdit(t)">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

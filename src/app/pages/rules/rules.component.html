@@ -1,0 +1,5 @@
+<h2>Rules</h2>
+<div *ngIf="rules.length === 0">No rules defined yet.</div>
+<ul>
+  <li *ngFor="let r of rules">{{ r.description || r.type }}</li>
+</ul>

@@ -1,0 +1,143 @@
+// :host {
+//     display: block;
+//     width: 100%;
+// }
+
+.auth-root {
+    display: flex;
+    padding: 2rem;
+    width: 100%;
+}
+
+.auth-card {
+    width: 50vw;
+    max-width: 880px;
+    min-width: 360px;
+    padding: 2rem;
+    border-radius: 14px;
+    text-align: left;
+    margin: 0 auto;
+    /* ensure horizontal centering */
+}
+
+.auth-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem
+}
+
+.brand-name {
+    font-weight: 800;
+    font-size: 1.1rem
+}
+
+/* Use global .input from app.scss. Keep auth-specific focus color. */
+.auth-card .input:focus {
+    box-shadow: 0 6px 18px rgba(124, 58, 237, 0.12);
+    border-color: rgba(124, 58, 237, 0.6);
+}
+
+.error {
+    color: #b00020;
+    margin-top: 0.25rem
+}
+
+.btn.primary.pill {
+    background: linear-gradient(90deg, var(--primary), var(--primary-600));
+    color: #fff;
+    border: none;
+    box-shadow: 0 10px 30px rgba(100, 70, 200, 0.12);
+}
+
+.btn.pill:not(.primary) {
+    background: transparent;
+    border: 1px solid var(--primary-600);
+    color: var(--primary-600);
+}
+
+/* Ensure buttons inside auth card have consistent size */
+.auth-card .btn {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+}
+
+.auth-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.auth-actions .btn {
+    min-width: 150px
+}
+
+/* Tweak hover states */
+.auth-card .btn.primary.pill:hover {
+    filter: brightness(0.98);
+    transform: translateY(-1px)
+}
+
+.auth-card .btn.pill:hover {
+    background: rgba(101, 81, 196, 0.06)
+}
+
+/* ensure buttons inside the auth card are visible */
+.auth-card .btn {
+    color: rgba(12, 8, 30, 0.95)
+}
+
+/* Primary button override to ensure purple gradient and white text */
+.auth-card .btn.primary,
+.auth-card .btn.primary.pill {
+    background: linear-gradient(90deg, var(--primary), var(--primary-600)) !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+/* make the background of the auth card lighter while keeping purple accents */
+.auth-card.card {
+    background: linear-gradient(180deg, #fff, #fbfbff);
+    box-shadow: 0 20px 40px rgba(11, 7, 40, 0.25);
+    color: rgba(12, 8, 30, 0.95)
+}
+
+/* Safety: force the primary gradient and white text for the main action button.
+   This rule is intentionally specific and uses !important so it wins over
+   any stray global styles while we tidy up other selectors. */
+:host .auth-card .btn.primary,
+:host .auth-card .btn.primary.pill {
+    background-image: linear-gradient(90deg, var(--primary), var(--primary-600)) !important;
+    background-color: transparent !important;
+    background-repeat: no-repeat !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+/* small toggle link styling */
+.auth-toggle{
+    color: var(--primary-600);
+    cursor: pointer;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 160ms ease;
+}
+.auth-toggle:hover, .auth-toggle:focus{
+    transform: translateY(-2px);
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+@media (max-width:520px) {
+    .auth-card {
+        padding: 1rem;
+        width: 100%
+    }
+
+    .auth-root {
+        padding: 1rem
+    }
+}

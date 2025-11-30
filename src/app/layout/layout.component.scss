@@ -1,0 +1,67 @@
+.app-root {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    grid-template-rows: 64px 1fr;
+    grid-template-areas: "sidebar header" "sidebar main"
+}
+
+.app-sidebar .brand {
+    font-size: 1.1rem;
+    padding: 0.25rem 0;
+    color: #fff
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem
+}
+
+.btn {
+    border: none;
+    background: rgba(255, 255, 255, 0.96);
+    color: rgba(12, 8, 30, 0.9);
+    font-weight: 600
+}
+
+.app-main>* {
+    max-width: 1200px;
+    margin: 0 auto
+}
+
+.app-main .card {
+    margin-bottom: 1rem
+}
+
+.sidebar-footer {
+    margin-top: 1.5rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem
+}
+
+.brand-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--primary));
+    display: inline-block;
+    box-shadow: 0 10px 30px rgba(91, 33, 208, 0.18)
+}
+
+/* small responsive tweaks */
+@media (max-width:900px) {
+    .app-root {
+        grid-template-columns: 1fr;
+        grid-template-rows: 64px auto 1fr;
+        grid-template-areas: "header" "main" "main"
+    }
+
+    .app-sidebar {
+        display: none
+    }
+
+    .app-main {
+        padding: 1rem
+    }
+}

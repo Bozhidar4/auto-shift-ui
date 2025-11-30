@@ -1,0 +1,31 @@
+<div class="app-root" [class.auth-mode]="isAuthRoute()">
+  <aside class="app-sidebar" *ngIf="!isAuthRoute()">
+    <div class="brand">
+      <span class="brand-logo" aria-hidden="true"></span>
+      <span>AutoShift</span>
+    </div>
+    <nav style="margin-top:1rem">
+      <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a class="nav-link" routerLink="/teams" routerLinkActive="active">Teams</a>
+      <a class="nav-link" routerLink="/employees" routerLinkActive="active">Employees</a>
+      <a class="nav-link" routerLink="/shifts" routerLinkActive="active">Shifts</a>
+      <a class="nav-link" routerLink="/rules" routerLinkActive="active">Rules</a>
+      <a class="nav-link" routerLink="/schedules" routerLinkActive="active">Schedules</a>
+    </nav>
+
+    <div class="sidebar-footer">Version 0.1 • Local Dev</div>
+  </aside>
+
+  <header class="app-header" *ngIf="!isAuthRoute()">
+    <div class="brand">AutoShift</div>
+    <div class="header-actions">
+      <button class="btn pill">Profile</button>
+      <button class="btn pill" (click)="logout()">Log out</button>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <router-outlet></router-outlet>
+    <app-toasts></app-toasts>
+  </main>
+</div>

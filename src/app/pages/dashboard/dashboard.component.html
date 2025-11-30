@@ -1,0 +1,28 @@
+<div class="card">
+  <div class="header-row" style="display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <div class="page-title">Dashboard</div>
+      <div class="muted">Overview and quick actions</div>
+    </div>
+    <div class="controls">
+      <button class="btn primary pill" routerLink="/schedules">New Schedule</button>
+    </div>
+  </div>
+
+  <div class="stats-grid" style="margin-top:1rem">
+    <a class="card surface-dark stat-card" routerLink="/teams">
+      <div class="muted">Teams</div>
+      <div class="stat-value">{{ teamsCount }}</div>
+    </a>
+
+    <a class="card surface-dark stat-card" routerLink="/employees">
+      <div class="muted">Employees</div>
+      <div class="stat-value">{{ employeesCount }}</div>
+    </a>
+
+    <a class="card surface-dark stat-card" routerLink="/shifts">
+      <div class="muted">Shift Types</div>
+      <div class="stat-value">{{ shiftTypesCount }}</div>
+    </a>
+  </div>
+</div>
