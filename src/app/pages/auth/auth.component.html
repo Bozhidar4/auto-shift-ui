@@ -17,19 +17,25 @@
       <label class="muted">Password</label>
       <input type="password" [(ngModel)]="password" class="input" />
 
-      <div *ngIf="mode === 'register'">
+      @if (mode === 'register') {
+      <div>
         <label class="muted">Full name</label>
         <input [(ngModel)]="displayName" class="input" />
       </div>
+      }
 
-      <div class="error" *ngIf="error">{{ error }}</div>
+      @if (error) {
+        <div class="error">{{ error }}</div>
+      }
 
-      <div class="controls auth-actions" style="margin-top:0.75rem">
-        <button class="btn primary pill" (click)="submit()">{{ mode === 'login' ? 'Sign in' : 'Create account' }}</button>
+      <div class="controls auth-actions">
+        <button class="btn primary pill" (click)="submit()">{{ mode === 'login' ? 'Sign in' : 'Create account'
+          }}</button>
       </div>
 
-      <div style="margin-top:0.7rem;text-align:center;font-size:0.95rem">
-        <a (click)="mode = mode === 'login' ? 'register' : 'login'" class="muted auth-toggle" role="button">{{ mode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Sign in' }}</a>
+      <div class="auth-message">
+        <a (click)="mode = mode === 'login' ? 'register' : 'login'" class="muted auth-toggle" role="button">{{ mode ===
+          'login' ? "Don't have an account? Sign up" : 'Already have an account? Sign in' }}</a>
       </div>
     </div>
   </div>

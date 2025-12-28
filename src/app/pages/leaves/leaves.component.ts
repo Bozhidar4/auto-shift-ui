@@ -5,6 +5,9 @@ import { ApiService } from '../../services/api.service';
 import { ToastService } from '../../services/toast.service';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { Employee } from '../../models/employee';
+import { createEmptyEmployeeLeave, EmployeeLeave } from '../../models/employee-leave.interface';
+import { createEmptyLeaveType, LeaveType } from '../../models/leave-type.interface';
 
 @Component({
   selector: 'app-leaves',
@@ -14,123 +17,197 @@ import { catchError, tap } from 'rxjs/operators';
   styleUrls: ['./leaves.component.scss']
 })
 export class LeavesComponent implements OnInit {
-  employees: any[] = [];
+  employees: Employee[] = [];
   selectedEmployeeId: number | null = null;
-  leaves: any[] = [];
-  leaveTypes: any[] = [];
-  newLeave: any = { employeeId: null, leaveTypeId: null, startDate: '', endDate: '', notes: '' };
-  newLeaveType: any = { name: '', description: '' };
-  showLeaveTypeManager = false;
+  leaves: EmployeeLeave[] = [];
+  leaveTypes: LeaveType[] = [];
+  newLeave: EmployeeLeave = createEmptyEmployeeLeave();
+  newLeaveType: LeaveType = createEmptyLeaveType();
+  showLeaveTypeManager: boolean = false;
   editingLeaveId: number | null = null;
-  editLeaveModel: any = null;
+  editLeaveModel: EmployeeLeave = createEmptyEmployeeLeave();
   // leave types inline edit
   editingLeaveTypeId: number | null = null;
-  editLeaveTypeModel: any = null;
+  editLeaveTypeModel: LeaveType = createEmptyLeaveType();
 
-  constructor(private api: ApiService, private toast: ToastService) {}
+  constructor(
+    private apiService: ApiService,
+    private toast: ToastService
+  ) { }
 
-  ngOnInit() {
-    // Load employees first, then load leave types and leaves
+  ngOnInit(): void {
     this.loadEmployees(true);
   }
 
-  loadEmployees(triggerNext: boolean = false) {
-    const obs = this.api.listEmployees().pipe(
-      tap((e: any) => this.employees = e || []),
-      catchError((err: any) => { this.employees = []; this.toast.show('Failed to load employees', 'error'); return of([]); })
+  loadEmployees(
+    triggerNext: boolean = false
+  ) {
+    const observable = this.apiService.listEmployees().pipe(
+      tap((e: Employee[]) => this.employees = e || []),
+      catchError((err) => {
+        this.employees = []; this.toast.show('Failed to load employees', 'error'); return of([]);
+      })
     );
 
-    const sub = obs.subscribe(() => {
+    observable.subscribe(() => {
       if (triggerNext) {
         this.loadLeaveTypes();
         this.loadLeaves();
       }
     });
 
-    return obs;
+    return observable;
   }
 
-  loadLeaves() {
-    const id = this.selectedEmployeeId;
-    this.api.listEmployeeLeaves(id || undefined).subscribe({ next: (l:any) => this.leaves = l || [] });
+  loadLeaves(): void {
+    if (!this.selectedEmployeeId) {
+      this.leaves = [];
+      return;
+    }
+
+    this.apiService.listEmployeeLeaves(this.selectedEmployeeId).subscribe({ next: (leave: EmployeeLeave[]) => this.leaves = leave || [] });
   }
 
-  loadLeaveTypes() {
-    this.api.getLeaveTypes().subscribe({ next: (t:any) => this.leaveTypes = t || [] });
+  loadLeaveTypes(): void {
+    this.apiService.getLeaveTypes().subscribe({
+      next: (leaveType: LeaveType[]) => this.leaveTypes = leaveType || []
+    });
   }
 
-  createLeave() {
-    const payload = { ...this.newLeave };
-    this.api.createEmployeeLeave(payload).subscribe({ next: (res:any) => { this.newLeave = { employeeId: null, leaveTypeId: null, startDate: '', endDate: '', notes: '' }; this.loadLeaves(); } });
+  createLeave(): void {
+    if (!this.newLeave) {
+      return;
+    }
+
+    this.apiService.createEmployeeLeave(this.newLeave).subscribe({
+      next: (result) => {
+        this.newLeave = createEmptyEmployeeLeave();
+        this.loadLeaves();
+      }
+    });
   }
 
-  deleteLeave(l: any) {
-    if (!confirm('Delete leave?')) return;
-    this.api.deleteEmployeeLeave(l.id).subscribe({ next: () => this.loadLeaves() });
+  deleteLeave(
+    leave: EmployeeLeave
+  ): void {
+    if (!confirm('Delete leave?')) {
+      return;
+    }
+
+    this.apiService
+      .deleteEmployeeLeave(leave.id)
+      .subscribe({ next: () => this.loadLeaves() });
   }
 
-  startEditLeave(l: any) {
-    this.editingLeaveId = l.id;
+  startEditLeave(
+    leave: EmployeeLeave
+  ): void {
+    this.editingLeaveId = leave.id;
     this.editLeaveModel = {
-      id: l.id,
-      employeeId: l.employeeId || l.employee?.id,
-      leaveTypeId: l.leaveTypeId || l.leaveType?.id,
-      startDate: l.startDate,
-      endDate: l.endDate,
-      notes: l.notes
+      id: leave.id,
+      employeeId: leave.employeeId || leave.employee?.id || 0,
+      leaveTypeId: leave.leaveTypeId || leave.leaveType?.id || 0,
+      startDate: leave.startDate,
+      endDate: leave.endDate,
+      notes: leave.notes
     };
   }
 
-  cancelEditLeave() {
+  cancelEditLeave(): void {
     this.editingLeaveId = null;
-    this.editLeaveModel = null;
+    this.editLeaveModel = createEmptyEmployeeLeave();
   }
 
   canSaveLeave(): boolean {
-    if (!this.editLeaveModel) return false;
-    if (!this.editLeaveModel.employeeId) return false;
-    if (!this.editLeaveModel.leaveTypeId) return false;
-    if (!this.editLeaveModel.startDate) return false;
+    if (!this.editLeaveModel
+      || !this.editLeaveModel.employeeId
+      || !this.editLeaveModel.leaveTypeId
+      || !this.editLeaveModel.startDate) {
+      return false;
+    }
+
     return true;
   }
 
-  saveEditLeave() {
-    if (!this.editLeaveModel || !this.canSaveLeave()) return;
+  saveEditLeave(): void {
+    if (!this.editLeaveModel || !this.canSaveLeave()) {
+      return;
+    }
+
     const id = this.editLeaveModel.id;
     const payload = {
+      id: this.editLeaveModel.id,
       employeeId: this.editLeaveModel.employeeId,
       leaveTypeId: this.editLeaveModel.leaveTypeId,
       startDate: this.editLeaveModel.startDate,
       endDate: this.editLeaveModel.endDate,
       notes: this.editLeaveModel.notes
     };
-    this.api.updateEmployeeLeave(id, payload).subscribe({ next: () => { this.cancelEditLeave(); this.loadLeaves(); } });
+
+    this.apiService
+      .updateEmployeeLeave(id, payload)
+      .subscribe({ next: () => { this.cancelEditLeave(); this.loadLeaves(); } });
   }
 
-  // Leave types manager
-  createLeaveType() {
-    this.api.createLeaveType(this.newLeaveType).subscribe({ next: (t:any) => { this.newLeaveType = { name: '', description: '' }; this.loadLeaveTypes(); } });
+  createLeaveType(): void {
+    this.apiService.createLeaveType(this.newLeaveType).subscribe({
+      next: (type) => {
+        this.newLeaveType = createEmptyLeaveType();
+        this.loadLeaveTypes();
+      }
+    });
   }
 
-  deleteLeaveType(t: any) {
-    if (!confirm('Delete leave type?')) return;
-    this.api.deleteLeaveType(t.id).subscribe({ next: () => this.loadLeaveTypes() });
+  createEmptyLeaveType(): LeaveType {
+    return createEmptyLeaveType();
   }
 
-  startEditLeaveType(t: any) {
-    this.editingLeaveTypeId = t.id;
-    this.editLeaveTypeModel = { id: t.id, name: t.name, description: t.description };
+  deleteLeaveType(
+    leaveType: LeaveType
+  ): void {
+    if (!confirm('Delete leave type?')) {
+      return;
+    }
+
+    this.apiService
+      .deleteLeaveType(leaveType.id)
+      .subscribe({ next: () => this.loadLeaveTypes() });
   }
 
-  cancelEditLeaveType() {
+  startEditLeaveType(
+    leaveType: LeaveType
+  ): void {
+    this.editingLeaveTypeId = leaveType.id;
+    this.editLeaveTypeModel = {
+      id: leaveType.id,
+      name: leaveType.name,
+      description: leaveType.description
+    };
+  }
+
+  cancelEditLeaveType(): void {
     this.editingLeaveTypeId = null;
-    this.editLeaveTypeModel = null;
+    this.editLeaveTypeModel = createEmptyLeaveType();
   }
 
-  saveEditLeaveType() {
-    if (!this.editLeaveTypeModel || !this.editLeaveTypeModel.name) return;
-    const id = this.editLeaveTypeModel.id;
-    const payload = { name: this.editLeaveTypeModel.name, description: this.editLeaveTypeModel.description };
-    this.api.updateLeaveType(id, payload).subscribe({ next: () => { this.cancelEditLeaveType(); this.loadLeaveTypes(); } });
+  saveEditLeaveType(): void {
+    if (!this.editLeaveTypeModel || !this.editLeaveTypeModel.name) {
+      return;
+    }
+
+    const payload = {
+      id: this.editLeaveTypeModel.id,
+      name: this.editLeaveTypeModel.name,
+      description: this.editLeaveTypeModel.description
+    };
+
+    this.apiService
+      .updateLeaveType(payload)
+      .subscribe({
+        next: () => {
+          this.cancelEditLeaveType();
+          this.loadLeaveTypes();
+        }
+      });
   }
 }

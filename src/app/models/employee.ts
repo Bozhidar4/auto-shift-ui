@@ -1,10 +1,10 @@
 export interface Employee {
-  id: string;
-  teamId: string;
+  id: number;
+  teamId: number | null;
   firstName: string;
   lastName: string;
   monthlyHoursTarget: number;
-  isFullTime: boolean;
-  role?: string;
+  // isFullTime: boolean;
+  // role?: string;
   isActive: boolean;
 }

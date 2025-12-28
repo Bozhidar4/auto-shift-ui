@@ -7,7 +7,7 @@ export interface ScheduleAssignment {
 }
 
 export interface GeneratedSchedule {
-  id: string;
+  id: number;
   teamId: string;
   startDate: string;
   endDate: string;

@@ -18,7 +18,10 @@ export class AuthComponent {
   displayName = '';
   error = '';
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(
+    private api: ApiService,
+    private router: Router
+  ) { }
 
   toggleMode() {
     this.mode = this.mode === 'login' ? 'register' : 'login';
@@ -29,18 +32,24 @@ export class AuthComponent {
     this.error = '';
     if (this.mode === 'login') {
       this.api.login(this.email, this.password).subscribe({
-        next: (res: any) => {
+        next: (res) => {
           // backend returns { token }
           const token = res?.token;
-          if (token) localStorage.setItem('access_token', token);
+          if (token) {
+            localStorage.setItem('access_token', token);
+          }
+
           this.router.navigate(['/dashboard']);
         },
         error: (e) => {
           // Try a flexible login with alternate payload shapes (diagnostic fallback)
           this.api.loginFlexible(this.email, this.password).subscribe({
-            next: (res2:any) => {
+            next: (res2) => {
               const token = res2?.token;
-              if (token) localStorage.setItem('access_token', token);
+              if (token) {
+                localStorage.setItem('access_token', token);
+              }
+
               this.router.navigate(['/dashboard']);
             },
             error: (e2) => {
@@ -51,9 +60,12 @@ export class AuthComponent {
       });
     } else {
       this.api.register(this.email, this.password, this.displayName).subscribe({
-        next: (res:any) => {
+        next: (res) => {
           const token = res?.token;
-          if (token) localStorage.setItem('access_token', token);
+          if (token) {
+            localStorage.setItem('access_token', token);
+          }
+
           this.router.navigate(['/dashboard']);
         },
         error: (e) => {

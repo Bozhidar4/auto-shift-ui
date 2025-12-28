@@ -1,10 +1,12 @@
-<div *ngIf="visible" class="confirm-overlay">
-  <div class="confirm-card card">
-    <div class="confirm-title">{{ title || 'Confirm' }}</div>
-    <div class="confirm-message">{{ message }}</div>
-    <div class="confirm-actions">
-      <button class="btn pill" (click)="onCancel()">Cancel</button>
-      <button class="btn danger pill" (click)="onConfirm()">Delete</button>
+@if (visible) {
+<div class="confirm-overlay">
+    <div class="confirm-card card">
+        <div class="confirm-title">{{ title || 'Confirm' }}</div>
+        <div class="confirm-message">{{ message }}</div>
+        <div class="confirm-actions">
+            <button class="btn pill" (click)="onCancel()">Cancel</button>
+            <button class="btn danger pill" (click)="onConfirm()">Delete</button>
+        </div>
     </div>
-  </div>
 </div>
+}

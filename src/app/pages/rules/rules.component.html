@@ -5,37 +5,54 @@
     <label style="display:flex;align-items:center;gap:0.5rem">Select Team:</label>
     <select class="input rules-team-select" [(ngModel)]="selectedTeamId" (change)="onTeamChange()">
       <option [ngValue]="null">-- choose team --</option>
-      <option *ngFor="let t of teams" [ngValue]="t.id">{{ t.name || ('Team ' + t.id) }}</option>
+      @for (t of teams; track $index) {
+      <option [ngValue]="t.id">{{ t.name || ('Team ' + t.id) }}</option>
+      }
     </select>
   </div>
 
-  <div *ngIf="!selectedTeamId" class="muted">Please select a team to view and edit its rule values.</div>
+  @if (!selectedTeamId) {
+  <div class="muted">Please select a team to view and edit its rule values.</div>
+  }
 
-  <div *ngIf="selectedTeamId">
-    <div *ngIf="rules.length === 0">No rules available.</div>
+  @if (selectedTeamId) {
+  <div>
+    @if (!rules.length) {
+    <div>No rules available.</div>
+    }
     <ul class="rules-list">
-      <li *ngFor="let r of rules">
+      @for (rule of rules; track $index) {
+      <li>
         <div class="rule-row">
           <div class="rule-info">
-            <strong>{{ r.name || r.key || r.type }}</strong>
-            <div class="desc muted">{{ r.description }}</div>
+            <strong>{{ rule.name || rule.key || rule.type }}</strong>
+            <div class="desc muted">{{ rule.description }}</div>
           </div>
-          <div class="rule-action" *ngIf="r.requiresInput">
-            <input class="input" *ngIf="r.inputType === 'int' || r.inputType === null" type="number" min="1" [value]="getValueForRule(r)"
-              (input)="setValueForRule(r, $any($event.target).valueAsNumber)" [disabled]="!selectedTeamId" />
-            <div *ngIf="(r.inputType === 'int' || r.inputType === null) && isInvalidIntValue(r)" class="muted" style="font-size:0.85rem;margin-top:0.25rem;color:var(--danger,#d9534f)">Value must be at least 1</div>
-            <input class="input" *ngIf="r.inputType === 'string'" type="text" [value]="getValueForRule(r)"
-              (input)="setValueForRule(r, $any($event.target).value)" [disabled]="!selectedTeamId" />
-            <button class="btn primary pill" (click)="saveRuleValue(r)" [disabled]="!selectedTeamId || savingMap[r.id]">
-              <span *ngIf="!savingMap[r.id]">Save</span>
-              <span *ngIf="savingMap[r.id]">Saving...</span>
+          @if (rule.requiresInput) {
+          <div class="rule-action">
+            <input class="input" *ngIf="rule.inputType === 'int' || rule.inputType === null" type="number" min="1"
+              [value]="getValueForRule(rule)" (input)="setValueForRule(rule, $any($event.target).valueAsNumber)"
+              [disabled]="!selectedTeamId" />
+            <div *ngIf="(rule.inputType === 'int' || rule.inputType === null) && isInvalidIntValue(rule)" class="muted"
+              style="font-size:0.85rem;margin-top:0.25rem;color:var(--danger,#d9534f)">Value must be at least 1</div>
+            <input class="input" *ngIf="rule.inputType === 'string'" type="text" [value]="getValueForRule(rule)"
+              (input)="setValueForRule(rule, $any($event.target).value)" [disabled]="!selectedTeamId" />
+            <button class="btn primary pill" (click)="saveRuleValue(rule)"
+              [disabled]="!selectedTeamId || savingMap[rule.id]">
+              <span *ngIf="!savingMap[rule.id]">Save</span>
+              <span *ngIf="savingMap[rule.id]">Saving...</span>
             </button>
           </div>
-          <div class="rule-action" *ngIf="!r.requiresInput">
+          }
+          @if (!rule.requiresInput) {
+          <div class="rule-action">
             <span class="muted">Fixed rule</span>
           </div>
+          }
         </div>
       </li>
+      }
     </ul>
   </div>
+  }
 </div>

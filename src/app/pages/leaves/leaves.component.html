@@ -5,13 +5,14 @@
     <button class="btn primary pill" (click)="loadLeaves()">Refresh Leaves</button>
     <button class="btn pill" (click)="showLeaveTypeManager = !showLeaveTypeManager">Manage Leave Types</button>
   </div>
-  
 
   <h4>Create Leave</h4>
   <div style="display:flex;gap:0.5rem;align-items:center">
     <select class="input" [(ngModel)]="newLeave.employeeId">
       <option [ngValue]="null">Select employee</option>
-      <option *ngFor="let e of employees" [ngValue]="e.id">{{ e.firstName }} {{ e.lastName }}</option>
+      @for (e of employees; track $index) {
+      <option [ngValue]="e.id">{{ e.firstName }} {{ e.lastName }}</option>
+      }
     </select>
     <select class="input" [(ngModel)]="newLeave.leaveTypeId">
       <option [ngValue]="null">Select leave type</option>
@@ -20,7 +21,8 @@
     <input class="input" type="date" [(ngModel)]="newLeave.startDate" />
     <input class="input" type="date" [(ngModel)]="newLeave.endDate" />
     <input class="input" placeholder="Notes" [(ngModel)]="newLeave.notes" />
-    <button class="btn primary pill" (click)="createLeave()" [disabled]="!newLeave.employeeId || !newLeave.leaveTypeId || !newLeave.startDate">Create</button>
+    <button class="btn primary pill" (click)="createLeave()"
+      [disabled]="!newLeave.employeeId || !newLeave.leaveTypeId || !newLeave.startDate">Create</button>
   </div>
 
   <div style="margin-top:0.75rem">
@@ -36,7 +38,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let l of leaves">
+        @for (l of leaves; track $index) {
+        <tr>
           <ng-container *ngIf="editingLeaveId !== l.id; else editRow">
             <td>{{ l.employee?.firstName }} {{ l.employee?.lastName }}</td>
             <td>{{ l.leaveType?.name }}</td>
@@ -52,7 +55,9 @@
             <td>
               <select class="input" [(ngModel)]="editLeaveModel.employeeId">
                 <option [ngValue]="null">Select employee</option>
-                <option *ngFor="let e of employees" [ngValue]="e.id">{{ e.firstName }} {{ e.lastName }}</option>
+                @for (e of employees; track $index) {
+                <option [ngValue]="e.id">{{ e.firstName }} {{ e.lastName }}</option>
+                }
               </select>
             </td>
             <td>
@@ -70,17 +75,19 @@
             </td>
           </ng-template>
         </tr>
+        }
       </tbody>
     </table>
   </div>
 
-  <div *ngIf="showLeaveTypeManager" class="card" style="margin-top:1rem">
+  @if (showLeaveTypeManager) {
+  <div class="card" style="margin-top:1rem">
     <h4>Leave Types</h4>
     <div style="display:flex;gap:0.5rem;align-items:center">
       <input class="input" placeholder="Name" [(ngModel)]="newLeaveType.name" />
       <input class="input" placeholder="Description" [(ngModel)]="newLeaveType.description" />
       <button class="btn primary pill" (click)="createLeaveType()">Create</button>
-      <button class="btn pill" (click)="newLeaveType = { name: '', description: '' }">Cancel</button>
+      <button class="btn pill" (click)="newLeaveType = createEmptyLeaveType()">Cancel</button>
       <button class="btn pill" (click)="showLeaveTypeManager = false">Close</button>
     </div>
 
@@ -94,7 +101,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let t of leaveTypes">
+          @for (t of leaveTypes; track $index) {
+          <tr>
             <ng-container *ngIf="editingLeaveTypeId !== t.id; else editTypeRow">
               <td>{{ t.name }}</td>
               <td>{{ t.description }}</td>
@@ -111,14 +119,16 @@
                 <input class="input" [(ngModel)]="editLeaveTypeModel.description" />
               </td>
               <td>
-                <button class="btn primary pill" (click)="saveEditLeaveType()" [disabled]="!editLeaveTypeModel?.name">Save</button>
+                <button class="btn primary pill" (click)="saveEditLeaveType()"
+                  [disabled]="!editLeaveTypeModel?.name">Save</button>
                 <button class="btn pill" (click)="cancelEditLeaveType()">Cancel</button>
               </td>
             </ng-template>
           </tr>
+          }
         </tbody>
       </table>
     </div>
   </div>
-
+  }
 </div>

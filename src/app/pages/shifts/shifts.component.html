@@ -11,7 +11,7 @@
   <h3>Create Shift Type</h3>
   <div style="display:flex;gap:0.5rem;align-items:center">
     <input class="input" placeholder="Name" [(ngModel)]="newShift.name" />
-    <input class="input" placeholder="Code (1 char)" maxlength="1" [(ngModel)]="newShift.code" />
+    <input class="input" placeholder="Code (1 char)" maxlength="1" [(ngModel)]="newShift.initialCode" />
     <input class="input" placeholder="Start (HH:MM)" [(ngModel)]="newShift.startTime" />
     <input class="input" placeholder="End (HH:MM)" [(ngModel)]="newShift.endTime" />
     <button class="btn primary pill" (click)="create()">Create</button>
@@ -19,55 +19,59 @@
   <div style="margin-top:0.75rem">
     <div class="table-scroll">
       <table class="shifts-table mat-elevation-z4">
-      <thead>
-        <tr>
-          <th>Code</th>
-          <th>Name</th>
-          <th>Start</th>
-          <th>End</th>
-          <th>Required people</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let s of shifts">
-          <ng-container *ngIf="editingId !== s.id; else editRow">
-            <td class="code-cell">{{ s.initialCode || '-' }}</td>
-            <td>{{ s.name }}</td>
-            <td>{{ s.startTime }}</td>
-            <td>{{ s.endTime }}</td>
-            <td class="muted">{{ s.requiredPeople || 1 }}</td>
-            <td class="actions">
-              <button class="btn pill" (click)="startEdit(s)">Edit</button>
-              <button class="btn pill danger" (click)="deleteShift(s)">Delete</button>
-            </td>
-          </ng-container>
-          <ng-template #editRow>
-            <td class="code-cell">
-              <input class="input" maxlength="1" [(ngModel)]="editModel.code" />
-            </td>
-            <td>
-              <input class="input" [(ngModel)]="editModel.name" />
-            </td>
-            <td>
-              <input class="input" [(ngModel)]="editModel.startTime" />
-            </td>
-            <td>
-              <input class="input" [(ngModel)]="editModel.endTime" />
-            </td>
-            <td>
-              <input class="input" type="number" min="1" [(ngModel)]="editModel.requiredPeople" />
-            </td>
-            <td class="actions">
-              <button class="btn" (click)="saveEdit()" [disabled]="!canSaveEdit()">Save</button>
-              <button class="btn" (click)="cancelEdit()">Cancel</button>
-            </td>
-          </ng-template>
-        </tr>
-      </tbody>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Required people</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (shift of shifts; track $index) {
+          <tr>
+            <ng-container *ngIf="editingId !== shift.id; else editRow">
+              <td class="code-cell">{{ shift.initialCode || '-' }}</td>
+              <td>{{ shift.name }}</td>
+              <td>{{ shift.startTime }}</td>
+              <td>{{ shift.endTime }}</td>
+              <td class="muted">{{ shift.requiredPeople || 1 }}</td>
+              <td class="actions">
+                <button class="btn pill" (click)="startEdit(shift)">Edit</button>
+                <button class="btn pill danger" (click)="deleteShift(shift)">Delete</button>
+              </td>
+            </ng-container>
+            <ng-template #editRow>
+              <td class="code-cell">
+                <input class="input" maxlength="1" [(ngModel)]="editModel.code" />
+              </td>
+              <td>
+                <input class="input" [(ngModel)]="editModel.name" />
+              </td>
+              <td>
+                <input class="input" [(ngModel)]="editModel.startTime" />
+              </td>
+              <td>
+                <input class="input" [(ngModel)]="editModel.endTime" />
+              </td>
+              <td>
+                <input class="input" type="number" min="1" [(ngModel)]="editModel.requiredPeople" />
+              </td>
+              <td class="actions">
+                <button class="btn" (click)="saveEdit()" [disabled]="!canSaveEdit()">Save</button>
+                <button class="btn" (click)="cancelEdit()">Cancel</button>
+              </td>
+            </ng-template>
+          </tr>
+          }
+        </tbody>
       </table>
     </div>
   </div>
 </div>
 
-<div *ngIf="loading" class="muted">Loading…</div>
+@if (loading) {
+<div class="muted">Loading…</div>
+}

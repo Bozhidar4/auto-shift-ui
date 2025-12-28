@@ -1,0 +1,8 @@
+<div class="toast-container">
+    @for (message of (toast.messages$ | async); track message.id) {
+    <div class="toast" [attr.data-type]="message.type">
+        <div class="toast-body">{{ message.text }}</div>
+        <button class="toast-close" (click)="toast.dismiss(message.id)">✕</button>
+    </div>
+    }
+</div>

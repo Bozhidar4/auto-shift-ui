@@ -1,57 +1,83 @@
 <div class="card">
-<div class="page-header header-row">
-  <div class="page-title">Employees</div>
-  <div class="controls">
-    <button class="btn pill" (click)="addNew()">Add Employee</button>
-    <button class="btn pill" (click)="load()">Refresh</button>
+  <div class="page-header header-row">
+    <div class="page-title">Employees</div>
+    <div class="controls">
+      <button class="btn pill" (click)="addNew()">Add Employee</button>
+      <button class="btn pill" (click)="load()">Refresh</button>
+    </div>
   </div>
-</div>
 
-<table class="employees-table mat-elevation-z3">
-  <thead>
-    <tr>
-      <th>First name</th>
-      <th>Last name</th>
-      <th>Monthly target</th>
-      <th>Active</th>
-      <th>Team</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let e of employees" [class.row-editing]="e._editing">
-      <td>
-        <div *ngIf="!e._editing">{{ e.firstName }}</div>
-        <input *ngIf="e._editing" [(ngModel)]="e.firstName" class="input tight" />
-      </td>
-      <td>
-        <div *ngIf="!e._editing">{{ e.lastName }}</div>
-        <input *ngIf="e._editing" [(ngModel)]="e.lastName" class="input tight" />
-      </td>
-      <td>
-        <div *ngIf="!e._editing">{{ e.monthlyHoursTarget }}</div>
-        <input *ngIf="e._editing" type="number" [(ngModel)]="e.monthlyHoursTarget" class="input tight" />
-      </td>
-      <td>
-        <div *ngIf="!e._editing">{{ e.isActive ? 'Yes' : 'No' }}</div>
-        <select *ngIf="e._editing" [(ngModel)]="e.isActive" class="input small-select tight">
-          <option [ngValue]="true">Yes</option>
-          <option [ngValue]="false">No</option>
-        </select>
-      </td>
-      <td>
-        <div *ngIf="!e._editing">{{ e.teamId }}</div>
-        <select *ngIf="e._editing" [(ngModel)]="e.teamId" class="input tight">
-          <option [ngValue]="null" disabled selected>Select a team</option>
-          <option *ngFor="let t of teams" [ngValue]="t.id">{{ t.name }}</option>
-        </select>
-      </td>
-      <td class="actions">
-        <button *ngIf="!e._editing" class="btn pill" (click)="edit(e)">Edit</button>
-        <button *ngIf="e._editing" class="btn primary pill" (click)="save(e)">Save</button>
-        <button class="btn danger pill" (click)="remove(e)">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <table class="employees-table mat-elevation-z3">
+    <thead>
+      <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Monthly target</th>
+        <th>Active</th>
+        <th>Team</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (e of employees; track $index) {
+      <tr [class.row-editing]="e._editing">
+        <td>
+          @if (!e._editing) {
+          <div>{{ e.firstName }}</div>
+          }
+          @if (e._editing) {
+          <input [(ngModel)]="e.firstName" class="input tight" />
+          }
+        </td>
+        <td>
+          @if (!e._editing) {
+          <div>{{ e.lastName }}</div>
+          }
+          @if (e._editing) {
+          <input [(ngModel)]="e.lastName" class="input tight" />
+          }
+        </td>
+        <td>
+          @if (!e._editing) {
+          <div>{{ e.monthlyHoursTarget }}</div>
+          }
+          @if (e._editing) {
+          <input type="number" [(ngModel)]="e.monthlyHoursTarget" class="input tight" />
+          }
+        </td>
+        <td>
+          @if (!e._editing) {
+          <div>{{ e.isActive ? 'Yes' : 'No' }}</div>
+          }
+          @if (e._editing) {
+          <select [(ngModel)]="e.isActive" class="input small-select tight">
+            <option [ngValue]="true">Yes</option>
+            <option [ngValue]="false">No</option>
+          </select>
+          }
+        </td>
+        <td>
+          @if (!e._editing) {
+          <div>{{ e.teamId }}</div>
+          }
+          @if (e._editing) {
+          <select [(ngModel)]="e.teamId" class="input tight">
+            <option [ngValue]="null" disabled selected>Select a team</option>
+            <option *ngFor="let t of teams" [ngValue]="t.id">{{ t.name }}</option>
+          </select>
+          }
+        </td>
+        <td class="actions">
+          @if (!e._editing) {
+          <button class="btn pill" (click)="edit(e)">Edit</button>
+          }
+          @if (e._editing) {
+          <button class="btn primary pill" (click)="save(e)">Save</button>
+          }
+          <button class="btn danger pill" (click)="remove(e)">Delete</button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
 </div>
