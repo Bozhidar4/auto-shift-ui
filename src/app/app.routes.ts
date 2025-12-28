@@ -10,5 +10,6 @@ export const routes: Routes = [
 	{ path: 'employees', loadComponent: () => import('./pages/employees/employees.component').then(m => m.EmployeesComponent) },
 	{ path: 'shifts', loadComponent: () => import('./pages/shifts/shifts.component').then(m => m.ShiftsComponent) },
 	{ path: 'rules', loadComponent: () => import('./pages/rules/rules.component').then(m => m.RulesComponent) },
-	{ path: 'schedules', loadComponent: () => import('./pages/schedules/schedules.component').then(m => m.SchedulesComponent) }
+	{ path: 'schedules', loadComponent: () => import('./pages/schedules/schedules.component').then(m => m.SchedulesComponent) },
+	{ path: 'leaves', loadComponent: () => import('./pages/leaves/leaves.component').then(m => m.LeavesComponent) }
 ];

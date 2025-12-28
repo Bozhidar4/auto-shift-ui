@@ -23,6 +23,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           if (typeof payload === 'string') return payload;
           if (payload.error && typeof payload.error === 'string') return payload.error;
           if (payload.message && typeof payload.message === 'string') return payload.message;
+          if (payload.title && typeof payload.title === 'string') return payload.title;
           if (Array.isArray(payload)) return payload.map((p:any) => p.description || p || JSON.stringify(p)).join('; ');
           if (payload.errors) {
             if (Array.isArray(payload.errors)) return payload.errors.map((p:any) => p.description || p).join('; ');
@@ -36,7 +37,8 @@ export class ErrorInterceptor implements HttpInterceptor {
             }
             if (parts.length) return parts.join('; ');
           }
-          return JSON.stringify(payload);
+
+          return 'Something went wrong';
         };
 
         let msg = 'An error occurred';

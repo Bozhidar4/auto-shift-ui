@@ -44,7 +44,7 @@ export class AuthComponent {
               this.router.navigate(['/dashboard']);
             },
             error: (e2) => {
-              this.error = e2?.error?.message || e2?.statusText || 'Login failed';
+              this.error = 'Login failed';
             }
           });
         }
@@ -62,7 +62,7 @@ export class AuthComponent {
             this.error = payload.map((it: any) => it.description || it).join('; ');
             return;
           }
-          this.error = payload?.message || e?.statusText || 'Registration failed';
+          this.error = 'Registration failed';
         }
       });
     }

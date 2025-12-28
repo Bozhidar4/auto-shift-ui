@@ -1,1 +1,49 @@
-h2 { margin-top: 0; }
+.rules-list {
+    margin-top: 0.5rem;
+    list-style: none;
+    padding: 0;
+}
+
+.rules-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.rule-row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rule-info {
+    flex: 1;
+}
+
+.rule-info .desc {
+    color: var(--muted);
+    margin-top: 0.25rem;
+}
+
+.rule-action {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.rule-action input[type="number"],
+.rule-action input[type="text"] {
+    padding: 0.35rem 0.5rem;
+    border-radius: 6px;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.rules-team-select {
+    width: auto;
+}

@@ -15,7 +15,7 @@ export class ShiftsComponent implements OnInit {
   teams: any[] = [];
   selectedTeamId: number = 0;
   // simple form model for creating a shift type
-  newShift: any = { name: '', code: '', startTime: '', endTime: '' };
+  newShift: any = { name: '', code: '', startTime: '', endTime: '', requiredPeople: 0 };
   loading = false;
   editingId: number | null = null;
   editModel: any = null;
@@ -50,7 +50,8 @@ export class ShiftsComponent implements OnInit {
       ...this.newShift,
       teamId: Number(this.selectedTeamId),
       startTime: ensureSeconds(this.newShift.startTime),
-      endTime: ensureSeconds(this.newShift.endTime)
+      endTime: ensureSeconds(this.newShift.endTime),
+      requiredPeople: this.newShift.requiredPeople
     };
     this.api.createShiftType(payload).subscribe({
       next: (res: any) => {

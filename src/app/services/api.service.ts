@@ -146,13 +146,161 @@ export class ApiService {
     );
   }
 
+  // Employee leaves endpoints
+  listEmployeeLeaves(employeeId?: number) {
+    const url = `${BASE_URL}/employeeLeaves${employeeId ? `?employeeId=${employeeId}` : ''}`;
+    return this.http.get<any>(url).pipe(
+      map((res:any)=>{ if (!res) return []; if (res.$values && Array.isArray(res.$values)) return res.$values; return res; })
+    );
+  }
+
+  createEmployeeLeave(model: any) {
+    return this.http.post(`${BASE_URL}/employeeLeaves`, model).pipe(
+      map((res:any)=> { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+    );
+  }
+
+  updateEmployeeLeave(id: number, model: any) {
+    return this.http.put(`${BASE_URL}/employeeLeaves/${id}`, model).pipe(
+      map((res:any)=> { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+    );
+  }
+
+  deleteEmployeeLeave(id: number) {
+    return this.http.delete(`${BASE_URL}/employeeLeaves/${id}`).pipe(
+      map((res:any)=> { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+    );
+  }
+
+  // Leave types
+  createLeaveType(model: any) {
+    return this.http.post(`${BASE_URL}/leaveTypes`, model).pipe(
+      map((res:any)=> { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+    );
+  }
+
+  getLeaveTypeById(id: number) {
+    return this.http.get<any>(`${BASE_URL}/leaveTypes/${id}`);
+  }
+
+  getLeaveTypes() {
+    return this.http.get<any>(`${BASE_URL}/leaveTypes`).pipe(
+      map((res:any) => { if (!res) return []; if (res.$values && Array.isArray(res.$values)) return res.$values; return res; })
+    );
+  }
+
+  updateLeaveType(id: number, model: any) {
+    return this.http.put(`${BASE_URL}/leaveTypes/${id}`, model).pipe(
+      map((res:any)=> { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+    );
+  }
+
+  deleteLeaveType(id: number) {
+    return this.http.delete(`${BASE_URL}/leaveTypes/${id}`).pipe(
+      map((res:any)=> { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+    );
+  }
+
   getRules(teamId: string): Observable<ShiftRule[]> {
     return this.http.get<ShiftRule[]>(`${BASE_URL}/teams/${encodeURIComponent(teamId)}/rules`);
+  }
+
+  // Fetch all system rules (not team-specific)
+  getAllRules(): Observable<ShiftRule[]> {
+    return this.http.get<any>(`${BASE_URL}/rules`).pipe(
+      map((res: any) => {
+        if (!res) return [] as ShiftRule[];
+        if (res.$values && Array.isArray(res.$values)) return res.$values as ShiftRule[];
+        return res as ShiftRule[];
+      })
+    );
+  }
+
+  // Team rule values (team-scoped values for rules that require input)
+  getTeamRuleValues(teamId?: number) {
+    const url = `${BASE_URL}/teamRuleValues${teamId ? `?teamId=${teamId}` : ''}`;
+    return this.http.get<any>(url).pipe(
+      map((res: any) => {
+        if (!res) return [] as any[];
+        if (res.$values && Array.isArray(res.$values)) return res.$values as any[];
+        return res as any[];
+      })
+    );
+  }
+
+  createTeamRuleValue(model: any) {
+    return this.http.post(`${BASE_URL}/teamRuleValues`, model).pipe(
+      map((res: any) => { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+    );
+  }
+
+  updateTeamRuleValue(id: number, model: any) {
+    return this.http.put(`${BASE_URL}/teamRuleValues/${id}`, model).pipe(
+      map((res: any) => { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+    );
   }
 
   generateSchedule(teamId: string, startDate: string, endDate: string): Observable<GeneratedSchedule> {
     const params = new HttpParams().set('startDate', startDate).set('endDate', endDate);
     return this.http.post<GeneratedSchedule>(`${BASE_URL}/teams/${encodeURIComponent(teamId)}/generate`, null, { params });
+  }
+
+  // New: generate schedule via schedules controller
+  generateScheduleRequest(model: any) {
+    // Accept either camelCase or PascalCase keys and normalize to PascalCase expected by backend
+    const payload: any = {
+      TeamId: model.TeamId ?? model.teamId ?? model.Teamid ?? model.teamid,
+      StartDate: model.StartDate ?? model.startDate ?? model.start_date,
+      EndDate: model.EndDate ?? model.endDate ?? model.end_date
+    };
+    return this.http.post(`${BASE_URL}/schedules/generate`, payload).pipe(
+      map((res: any) => { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+    );
+  }
+
+  // List schedules (optionally filtered by teamId)
+  getSchedules(teamId?: number) {
+    const url = `${BASE_URL}/schedules${teamId ? `?teamId=${teamId}` : ''}`;
+    return this.http.get<any>(url).pipe(
+      map((res: any) => {
+        if (!res) return [] as any[];
+        if (res.$values && Array.isArray(res.$values)) return res.$values as any[];
+        return res as any[];
+      })
+    );
+  }
+
+  // Get single schedule by id
+  getSchedule(id: number | string) {
+    return this.http.get<any>(`${BASE_URL}/schedules/${id}`).pipe(
+      map((res: any) => {
+        if (!res) return null as any;
+        return res;
+      })
+    );
+  }
+
+  // Update schedule metadata (e.g., endDate)
+  updateSchedule(id: string | number, model: any) {
+    return this.http.put(`${BASE_URL}/schedules/${id}`, model).pipe(
+      map((res: any) => { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+    );
+  }
+
+  // Delete schedule
+  deleteSchedule(id: string | number) {
+    return this.http.delete(`${BASE_URL}/schedules/${id}`).pipe(
+      map((res: any) => { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+    );
+  }
+
+  // Update a single assignment (e.g., change shiftTypeId)
+  // Patch an assignment for a schedule: PATCH /schedules/{id}/assignment
+  // Body: { employeeId, date, newShiftTypeId }
+  patchAssignment(scheduleId: string | number, dto: any) {
+    return this.http.patch(`${BASE_URL}/schedules/${scheduleId}/assignment`, dto).pipe(
+      map((res: any) => { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+    );
   }
 
   login(email: string, password: string): Observable<any> {
