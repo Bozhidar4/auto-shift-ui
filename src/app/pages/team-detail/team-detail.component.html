@@ -1,9 +1,14 @@
 <div class="card">
   <div class="page-title">Team Details</div>
-  <div *ngIf="!team && !loading" class="muted">Team not found</div>
-  <div *ngIf="loading" class="muted">Loading...</div>
+  @if (!team && !loading) {
+  <div class="muted">Team not found</div>
+  }
+  @if (loading) {
+  <div class="muted">Loading...</div>
+  }
 
-  <div *ngIf="team">
+  @if (team) {
+  <div>
     <div style="display:flex;gap:0.75rem;align-items:center;margin-top:0.5rem">
       <input class="input" [(ngModel)]="team.name" placeholder="Team name" />
       <button class="btn pill primary" (click)="save()">Save</button>
@@ -12,22 +17,32 @@
 
     <h3 style="margin-top:1rem">Employees</h3>
     <div class="list">
-      <div *ngFor="let e of (team.employees || [])" style="display:flex;gap:0.5rem;align-items:center;padding:0.35rem 0">
-        <ng-container *ngIf="e.id && e.id !== 0">
-          <div style="min-width:160px">{{ e.firstName }} {{ e.lastName }}</div>
-          <div style="width:110px">{{ e.monthlyHoursTarget || 160 }}</div>
-          <label style="margin-left:0.5rem"><input type="checkbox" [(ngModel)]="e.isActive" disabled="disabled" /> Active</label>
-          <button class="btn pill danger" (click)="removeEmployee(e)">Remove</button>
+      @for (employee of (team.employees || []); track $index) {
+      <div style="display:flex;gap:0.5rem;align-items:center;padding:0.35rem 0">
+        @if (employee.id && employee.id !== 0) {
+        <ng-container>
+          <div style="min-width:160px">{{ employee.firstName }} {{ employee.lastName }}</div>
+          <div style="width:110px">{{ employee.monthlyHoursTarget || 160 }}</div>
+          <label style="margin-left:0.5rem"><input type="checkbox" [(ngModel)]="employee.isActive" disabled="disabled" />
+            Active</label>
+          <button class="btn pill danger" (click)="removeEmployee(employee)">Remove</button>
         </ng-container>
-        <ng-container *ngIf="e.id === 0">
-          <select class="input" [(ngModel)]="e.selectedEmployeeId">
+        }
+        @if (employee.id === 0) {
+        <ng-container>
+          <select class="input" [(ngModel)]="employee.id">
             <option [ngValue]="null">Select employee</option>
-            <option *ngFor="let a of availableEmployees" [ngValue]="a.id">{{ a.firstName }} {{ a.lastName }}</option>
+            @for (availableEmployee of availableEmployees; track $index) {
+            <option [ngValue]="availableEmployee.id">{{ availableEmployee.firstName }} {{ availableEmployee.lastName }}
+            </option>
+            }
           </select>
-          <button class="btn pill" (click)="attachEmployee(e)">Add</button>
-          <button class="btn pill" (click)="removeEmployee(e)">Cancel</button>
+          <button class="btn pill" (click)="attachEmployee(employee)">Add</button>
+          <button class="btn pill" (click)="removeEmployee(employee)">Cancel</button>
         </ng-container>
+        }
       </div>
+      }
       <div style="margin-top:0.5rem">
         <button class="btn pill" (click)="addEmployee()">Add Employee</button>
       </div>
@@ -35,16 +50,19 @@
 
     <h3 style="margin-top:1rem">Shift Types</h3>
     <div class="list">
-      <div *ngFor="let s of (team.shiftTypes || [])" style="display:flex;gap:0.5rem;align-items:center;padding:0.35rem 0">
-        <input class="input" [(ngModel)]="s.name" placeholder="Shift name" />
-        <input class="input" [(ngModel)]="s.startTime" placeholder="Start" />
-        <input class="input" [(ngModel)]="s.endTime" placeholder="End" />
-        <input class="input" type="number" [(ngModel)]="s.requiredPeople" style="width:90px" />
-        <button class="btn pill danger" (click)="removeShift(s)">Remove</button>
+      @for (shiftType of (team.shiftTypes || []); track $index) {
+      <div style="display:flex;gap:0.5rem;align-items:center;padding:0.35rem 0">
+        <input class="input" [(ngModel)]="shiftType.name" placeholder="Shift name" />
+        <input class="input" [(ngModel)]="shiftType.startTime" placeholder="Start" />
+        <input class="input" [(ngModel)]="shiftType.endTime" placeholder="End" />
+        <input class="input" type="number" [(ngModel)]="shiftType.requiredPeople" style="width:90px" />
+        <button class="btn pill danger" (click)="removeShift(shiftType)">Remove</button>
       </div>
+      }
       <div style="margin-top:0.5rem">
         <button class="btn pill" (click)="addShift()">Add Shift Type</button>
       </div>
     </div>
   </div>
+  }
 </div>

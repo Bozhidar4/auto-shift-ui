@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { Team } from '../../models/team';
+import { TeamCreate } from '../../models/team-create..interface';
 
 @Component({
   selector: 'app-teams',
@@ -15,48 +16,74 @@ import { Team } from '../../models/team';
 export class TeamsComponent implements OnInit {
   teams: Team[] = [];
   loading = false;
-  constructor(private api: ApiService) {}
-  ngOnInit() {
+
+  constructor(
+    private apiService: ApiService
+  ) { }
+
+  ngOnInit(): void {
     this.loading = true;
-    this.api.getTeams().subscribe({ next: (t) => (this.teams = t), complete: () => (this.loading = false) });
+
+    this.apiService
+      .getTeams()
+      .subscribe({ next: (t) => (this.teams = t), complete: () => (this.loading = false) });
   }
 
-  load() {
+  load(): void {
     this.loading = true;
-    this.api.getTeams().subscribe({ next: (t) => (this.teams = t), complete: () => (this.loading = false) });
+
+    this.apiService
+      .getTeams()
+      .subscribe({ next: (t) => (this.teams = t), complete: () => (this.loading = false) });
   }
 
-  addNew() {
+  addNew(): void {
     this.teams.unshift({ id: 0, name: '', _editing: true });
   }
 
-  edit(t: Team) {
-    t._editing = true;
+  edit(
+    team: Team
+  ): void {
+    team._editing = true;
   }
 
-  save(t: Team) {
-    const isNew = t.id === 0;
-    const model: any = { name: t.name };
+  save(
+    team: Team
+  ): void {
+    if (!team
+      || !team.name
+      || team.name.trim().length === 0) {
+      return;
+    }
+
+    const isNew = team.id === 0;
+    const model: TeamCreate = { name: team.name };
     if (isNew) {
-      this.api.createTeam(model).subscribe({ next: () => this.load() });
+      this.apiService.createTeam(model).subscribe({ next: () => this.load() });
     } else {
-      this.api.updateTeam(t.id, model).subscribe({ next: () => this.load() });
+      this.apiService.updateTeam(team.id, model).subscribe({ next: () => this.load() });
     }
   }
 
-  remove(t: Team) {
-    if (t.id === 0) {
-      this.teams = this.teams.filter(x => x !== t);
+  remove(
+    team: Team
+  ): void {
+    if (team.id === 0) {
+      this.teams = this.teams.filter(x => x !== team);
       return;
     }
-    this.api.deleteTeam(t.id).subscribe({ next: () => this.load() });
+
+    this.apiService.deleteTeam(team.id).subscribe({ next: () => this.load() });
   }
 
-  cancelEdit(t: Team) {
-    if (t.id === 0) {
-      this.teams = this.teams.filter(x => x !== t);
+  cancelEdit(
+    team: Team
+  ): void {
+    if (team.id === 0) {
+      this.teams = this.teams.filter(x => x !== team);
       return;
     }
-    t._editing = false;
+
+    team._editing = false;
   }
 }

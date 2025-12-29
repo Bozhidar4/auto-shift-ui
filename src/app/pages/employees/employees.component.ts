@@ -2,17 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
-import { Employee } from '../../models/employee';
-
-interface EmployeeRow {
-  id?: number;
-  firstName: string;
-  lastName: string;
-  monthlyHoursTarget: number;
-  isActive: boolean;
-  teamId?: number | null;
-  _editing?: boolean;
-}
+import { Employee } from '../../models/employee.interface';
 
 interface SimpleTeam {
   id: number | string;

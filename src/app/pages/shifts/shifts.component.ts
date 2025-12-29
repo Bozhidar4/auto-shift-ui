@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
-import { createEmptyShift, ShiftType } from '../../models/shift';
+import { createEmptyShift, ShiftType } from '../../models/shift-type.interface';
 import { Team } from '../../models/team';
 
 @Component({
@@ -67,7 +67,7 @@ export class ShiftsComponent implements OnInit {
     }
 
     const ensureSeconds = (t: string) => t && t.length === 5 ? `${t}:00` : t;
-    const payload = {
+    const payload: ShiftType = {
       ...this.newShift,
       teamId: Number(this.selectedTeamId),
       startTime: ensureSeconds(this.newShift.startTime),

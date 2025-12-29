@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { Team } from '../../models/team';
+import { createEmptyEmployee, Employee } from '../../models/employee.interface';
+import { createEmptyShift, ShiftType } from '../../models/shift-type.interface';
+import { TeamCreate } from '../../models/team-create..interface';
 
 @Component({
   selector: 'app-team-detail',
@@ -16,92 +19,152 @@ export class TeamDetailComponent implements OnInit {
   teamId = 0;
   team: Team | null = null;
   loading = false;
-  availableEmployees: any[] = [];
+  availableEmployees: Employee[] = [];
 
-  constructor(private route: ActivatedRoute, private api: ApiService, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute, 
+    private apiService: ApiService, 
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(pm => {
-      const idStr = pm.get('id');
-      if (!idStr) { this.router.navigate(['/teams']); return; }
-      this.teamId = parseInt(idStr, 10);
+      const idString = pm.get('id');
+
+      if (!idString) { 
+        this.router.navigate(['/teams']); return; 
+      }
+
+      this.teamId = parseInt(idString, 10);
       this.load();
     });
   }
 
-  load() {
+  load(): void {
     this.loading = true;
-    this.api.getTeamById(this.teamId).subscribe({ next: (t) => {
+    this.apiService.getTeamById(this.teamId).subscribe({
+      next: (team: Team | null) => {
         // ensure arrays are present (server may return null or $values-wrapped objects)
         const unwrap = (val: any) => {
-          if (!val) return [];
-          if (Array.isArray(val)) return val;
-          if (val.$values && Array.isArray(val.$values)) return val.$values;
+          if (!val) {
+            return [];
+          }
+
+          if (Array.isArray(val)) {
+            return val;
+          }
+
+          if (val.$values && Array.isArray(val.$values)) {
+            return val.$values;
+          }
+
           return [];
         };
-        if (t) {
-          (t as any).employees = unwrap((t as any).employees);
-          (t as any).shiftTypes = unwrap((t as any).shiftTypes);
-          (t as any).rules = unwrap((t as any).rules);
+        if (team) {
+          team.employees = unwrap((team).employees);
+          team.shiftTypes = unwrap((team).shiftTypes);
+          team.rules = unwrap((team).rules);
         }
-      this.team = t;
-      this.loadAvailableEmployees();
-    }, complete: () => (this.loading = false) });
+
+        this.team = team;
+        this.loadAvailableEmployees();
+      }, complete: () => (this.loading = false)
+    });
   }
 
-  loadAvailableEmployees() {
+  loadAvailableEmployees(): void {
     // load all employees for the user and exclude those already in the team
-    this.api.listEmployees().subscribe((list: any[]) => {
-      const existing = new Set((this.team?.employees || []).map((e:any) => e.id));
+    this.apiService.listEmployees().subscribe((list: Employee[]) => {
+      const existing = new Set((this.team?.employees || []).map((e:Employee) => e.id));
       this.availableEmployees = list.filter(e => !existing.has(e.id));
     });
   }
 
-  save() {
-    if (!this.team) return;
-    this.api.updateTeam(this.team.id, this.team).subscribe({ next: () => this.load() });
+  save(): void {
+    if (!this.team || !this.team.name || this.team.name.trim().length === 0) {
+      return;
+    }
+
+    const model: TeamCreate = { name: this.team.name };
+
+    this.apiService
+      .updateTeam(this.team.id, model)
+      .subscribe({ next: () => this.load() });
   }
 
-  addEmployee() {
-    if (!this.team) return;
+  addEmployee(): void {
+    if (!this.team) {
+      return;
+    }
+
     this.team.employees = this.team.employees || [];
     // placeholder row: id 0 indicates unsaved selection via dropdown
-    this.team.employees.push({ id: 0, selectedEmployeeId: null });
+    this.team.employees.push(createEmptyEmployee());
   }
 
-  attachEmployee(placeholder: any) {
-    if (!this.team || !placeholder) return;
-    const sel = placeholder.selectedEmployeeId;
-    if (!sel) return;
+  attachEmployee(
+    placeholder: Employee
+  ): void {
+    if (!this.team || !placeholder) {
+      return;
+    }
+
+    const selectedEmployeeId = placeholder.id;
+    if (!selectedEmployeeId) {
+      return;
+    }
+
     // find employee in available list
-    const emp = this.availableEmployees.find(e => e.id === sel);
-    if (!emp) return;
+    const employee = this.availableEmployees.find(e => e.id === selectedEmployeeId);
+    if (!employee) {
+      return;
+    }
+
     // prevent duplicates
-    const exists = (this.team.employees || []).some((e:any) => e.id === emp.id);
-    if (exists) return;
+    const employeeExists = (this.team.employees || []).some((e:any) => e.id === employee.id);
+    if (employeeExists) {
+      return;
+    }
+
     // replace placeholder with selected employee instance
-    const arr = this.team.employees || [];
-    const idx = arr.indexOf(placeholder);
-    if (idx >= 0) arr.splice(idx, 1, emp);
-    this.team.employees = arr;
+    const employeeArray = this.team.employees || [];
+    const index = employeeArray.indexOf(placeholder);
+    if (index >= 0) {
+      employeeArray.splice(index, 1, employee);
+    }
+
+    this.team.employees = employeeArray;
     // refresh available employees
     this.loadAvailableEmployees();
   }
 
-  removeEmployee(emp: any) {
-    if (!this.team) return;
-    this.team.employees = this.team.employees?.filter(e => e !== emp);
+  removeEmployee(
+    employee: Employee
+  ): void {
+    if (!this.team) {
+      return;
+    }
+
+    this.team.employees = this.team.employees?.filter(e => e !== employee);
     this.loadAvailableEmployees();
   }
 
-  addShift() {
-    if (!this.team) return;
+  addShift(): void {
+    if (!this.team) {
+      return;
+    }
+
     this.team.shiftTypes = this.team.shiftTypes || [];
-    this.team.shiftTypes.push({ id: 0, name: '', startTime: '08:00', endTime: '17:00', requiredPeople: 1 });
+    this.team.shiftTypes.push(createEmptyShift());
   }
 
-  removeShift(s: any) {
-    if (!this.team) return;
-    this.team.shiftTypes = this.team.shiftTypes?.filter(x => x !== s);
+  removeShift(
+    shift: ShiftType
+  ): void {
+    if (!this.team) {
+      return;
+    }
+
+    this.team.shiftTypes = this.team.shiftTypes?.filter(x => x !== shift);
   }
 }

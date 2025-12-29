@@ -1,4 +1,4 @@
-import { Employee } from "./employee";
+import { Employee } from "./employee.interface";
 import { LeaveType } from "./leave-type.interface";
 
 export interface EmployeeLeave {

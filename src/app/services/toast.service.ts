@@ -9,7 +9,11 @@ export class ToastService {
   private _messages = new BehaviorSubject<ToastMessage[]>([]);
   messages$ = this._messages.asObservable();
 
-  show(text: string, type: ToastType = 'info', timeout = 7000) {
+  show(
+    text: string,
+    type: ToastType = 'info',
+    timeout = 7000
+  ): string {
     console.debug('[ToastService] show', { text, type, timeout });
     const id = Math.random().toString(36).slice(2, 9);
     const msg: ToastMessage = { id, text, type };
@@ -17,13 +21,18 @@ export class ToastService {
     if (timeout > 0) {
       setTimeout(() => this.dismiss(id), timeout);
     }
+
     return id;
   }
 
-  dismiss(id: string) {
+  dismiss(
+    id: string
+  ): void {
     console.debug('[ToastService] dismiss', id);
     this._messages.next(this._messages.value.filter(m => m.id !== id));
   }
 
-  clear() { this._messages.next([]); }
+  clear(): void {
+    this._messages.next([]);
+  }
 }

@@ -8,3 +8,15 @@ export interface Employee {
   // role?: string;
   isActive: boolean;
 }
+
+export function createEmptyEmployee(): Employee {
+  return {
+    id: 0,
+    teamId: null,
+    firstName: '',
+    lastName: '',
+    monthlyHoursTarget: 160,
+    // isFullTime: true,
+    isActive: true
+  };
+}

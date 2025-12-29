@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { Team } from '../../models/team';
-import { ShiftRule, TeamRuleValue } from '../../models/rule';
+import { ShiftRule } from '../../models/shift-rule.interface';
+import { TeamRuleValue } from '../../models/team-rule-value.interface';
 import { ToastService } from '../../services/toast.service';
 
 @Component({

@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Team } from '../models/team';
-import { Employee } from '../models/employee';
-import { ShiftType } from '../models/shift';
-import { ShiftRule, TeamRuleValue } from '../models/rule';
-import { GeneratedSchedule } from '../models/schedule';
+import { Employee } from '../models/employee.interface';
+import { ShiftType } from '../models/shift-type.interface';
 import { EmployeeLeave } from '../models/employee-leave.interface';
 import { LeaveType } from '../models/leave-type.interface';
 import { ScheduleAssignmentUpdateDto } from '../models/schedule-assignment-update.interface';
+import { TeamCreate } from '../models/team-create..interface';
+import { ShiftRule } from '../models/shift-rule.interface';
+import { TeamRuleValue } from '../models/team-rule-value.interface';
+import { GeneratedSchedule } from '../models/schedule-generated.interface';
 
 const BASE_URL = 'https://localhost:7291/api';
 
@@ -33,40 +35,81 @@ export class ApiService {
     );
   }
 
-  createTeam(model: any) {
+  createTeam(
+    model: TeamCreate
+  ): Observable<Team> {
     return this.http.post(`${BASE_URL}/teams`, model).pipe(
-      map((res: any) => { if (res && (res.error || res.errors || res.success === false)) throw res; return res; })
-    );
-  }
-
-  updateTeam(id: number | string, model: any) {
-    return this.http.put(`${BASE_URL}/teams/${id}`, model).pipe(
-      map((res: any) => { if (res && (res.error || res.errors || res.success === false)) throw res; return res; })
-    );
-  }
-
-  deleteTeam(id: number | string) {
-    return this.http.delete(`${BASE_URL}/teams/${id}`).pipe(
-      map((res: any) => { if (res && (res.error || res.errors || res.success === false)) throw res; return res; })
-    );
-  }
-
-  getTeamById(id: number) {
-    return this.http.get<any>(`${BASE_URL}/teams/${id}`).pipe(
-      map((res: any) => {
-        if (!res) return null as any;
-        if (res.$values && Array.isArray(res.$values)) return res.$values[0] as Team;
-        return res as Team;
+      map((response: any) => { 
+        if (response && (response.error || response.errors || !response.success)) {
+          throw response;
+        } 
+        
+        return response; 
       })
     );
   }
 
-  getEmployees(teamId: string): Observable<Employee[]> {
+  updateTeam(
+    id: number,
+    model: TeamCreate
+  ): Observable<Team> {
+    return this.http.put(`${BASE_URL}/teams/${id}`, model).pipe(
+      map((response: any) => {
+        if (response && (response.error || response.errors || !response.success)) {
+          throw response;
+        }
+
+        return response;
+      })
+    );
+  }
+
+  deleteTeam(
+    id: number
+  ): Observable<void> {
+    return this.http.delete(`${BASE_URL}/teams/${id}`).pipe(
+      map((response: any) => {
+        if (response && (response.error || response.errors || !response.success)) {
+          throw response;
+        }
+
+        return response;
+      })
+    );
+  }
+
+  getTeamById(
+    id: number
+  ): Observable<Team> {
+    return this.http.get<Team>(`${BASE_URL}/teams/${id}`).pipe(
+      map((response: any) => {
+        if (!response) {
+          return null;
+        }
+
+        if (response.$values && Array.isArray(response.$values)) {
+          return response.$values[0];
+        }
+
+        return response;
+      })
+    );
+  }
+
+  getEmployees(
+    teamId: string
+  ): Observable<Employee[]> {
     return this.http.get<any>(`${BASE_URL}/teams/${encodeURIComponent(teamId)}/employees`).pipe(
-      map((res: any) => {
-        if (!res) return [] as Employee[];
-        if (res.$values && Array.isArray(res.$values)) return res.$values as Employee[];
-        return res as Employee[];
+      map((response: any) => {
+        if (!response) {
+          return [];
+        }
+
+        if (response.$values && Array.isArray(response.$values)) {
+          return response.$values;
+        }
+
+        return response;
       })
     );
   }
@@ -90,36 +133,49 @@ export class ApiService {
     );
   }
 
-  createEmployee(model: any) {
+  createEmployee(
+    model: EmployeeRow
+  ): Observable<Employee> {
     return this.http.post(`${BASE_URL}/employees`, model).pipe(
       map((res: any) => {
         // If backend returns { error: '...' } or similar, throw to be handled by ErrorInterceptor
-        if (res && (res.error || res.errors || (res.success === false))) throw res;
+        if (res && (res.error || res.errors || !res.success)) throw res;
         return res;
       })
     );
   }
 
-  updateEmployee(id: number, model: any) {
+  updateEmployee(
+    id: number,
+    model: EmployeeRow
+  ): Observable<Employee> {
     return this.http.put(`${BASE_URL}/employees/${id}`, model).pipe(
-      map((res: any) => {
-        if (res && (res.error || res.errors || (res.success === false))) throw res;
-        return res;
+      map((response: any) => {
+        if (response && (response.error || response.errors || !response.success)) {
+          throw response;
+        }
+
+        return response;
       })
     );
   }
 
-  deleteEmployee(id: number) {
+  deleteEmployee(
+    id: number
+  ): Observable<void> {
     return this.http.delete(`${BASE_URL}/employees/${id}`).pipe(
-      map((res: any) => {
-        if (res && (res.error || res.errors || (res.success === false))) throw res;
-        return res;
+      map((response: any) => {
+        if (response && (response.error || response.errors || !response.success)) {
+          throw response;
+        }
+
+        return response;
       })
     );
   }
 
   getShiftTypes(
-    teamId?: number | string
+    teamId?: number
   ): Observable<ShiftType[]> {
     const options = teamId ? { params: new HttpParams().set('teamId', String(teamId)) } : {};
     return this.http.get<ShiftType[]>(`${BASE_URL}/shifts`, options).pipe(
@@ -139,34 +195,32 @@ export class ApiService {
     );
   }
 
-  // Get shift by id: GET /shifts/{id}
-  getShiftTypeById(id: number) {
+  getShiftTypeById(
+    id: number
+  ): Observable<ShiftType> {
     return this.http.get<ShiftType>(`${BASE_URL}/shifts/${id}`);
   }
 
-  // Create shift: POST /shifts
-  createShiftType(model: any) {
-    // backend expects InitialCode property name; map from `code` if provided
-    const payload = { ...model } as any;
-    if (payload.code !== undefined) { payload.initialCode = payload.code; delete payload.code; }
-    return this.http.post(`${BASE_URL}/shifts`, payload).pipe(
-      map((res: any) => { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+  createShiftType(
+    model: ShiftType
+  ): Observable<ShiftType> {
+    return this.http.post(`${BASE_URL}/shifts`, model).pipe(
+      map((res: any) => {
+        if (res && (res.error || res.errors || !res.success)) {
+          throw res;
+        }
+
+        return res;
+      })
     );
   }
 
   updateShiftType(
     model: ShiftType
   ): Observable<ShiftType> {
-    const id = model.id;
-    const payload = { ...model } as ShiftType;
-    if (payload.initialCode !== undefined) {
-      payload.initialCode = payload.initialCode;
-      delete payload.initialCode;
-    }
-
-    return this.http.put(`${BASE_URL}/shifts/${id}`, payload).pipe(
+    return this.http.put(`${BASE_URL}/shifts/${model.id}`, model).pipe(
       map((res: any) => {
-        if (res && (res.error || res.errors || (!res.success))) {
+        if (res && (res.error || res.errors || !res.success)) {
           throw res;
         }
 
@@ -180,7 +234,7 @@ export class ApiService {
   ): Observable<void> {
     return this.http.delete(`${BASE_URL}/shifts/${id}`).pipe(
       map((res: any) => {
-        if (res && (res.error || res.errors || (!res.success))) {
+        if (res && (res.error || res.errors || !res.success)) {
           throw res;
         }
 
@@ -213,7 +267,7 @@ export class ApiService {
   ): Observable<any> {
     return this.http.post(`${BASE_URL}/employeeLeaves`, model).pipe(
       map((result: any) => {
-        if (result && (result.error || result.errors || (!result.success))) {
+        if (result && (result.error || result.errors || !result.success)) {
           throw result;
         }
 
@@ -228,7 +282,7 @@ export class ApiService {
   ): Observable<EmployeeLeave> {
     return this.http.put(`${BASE_URL}/employeeLeaves/${id}`, model).pipe(
       map((result: any) => {
-        if (result && (result.error || result.errors || (result.success === false))) {
+        if (result && (result.error || result.errors || !result.success)) {
           throw result;
         }
 
@@ -237,21 +291,39 @@ export class ApiService {
     );
   }
 
-  deleteEmployeeLeave(id: number) {
+  deleteEmployeeLeave(
+    id: number
+  ): Observable<void> {
     return this.http.delete(`${BASE_URL}/employeeLeaves/${id}`).pipe(
-      map((res:any)=> { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+      map((res: any) => {
+        if (res && (res.error || res.errors || !res.success)) {
+          throw res;
+        }
+
+        return res;
+      })
     );
   }
 
   // Leave types
-  createLeaveType(model: any) {
+  createLeaveType(
+    model: LeaveType
+  ): Observable<LeaveType> {
     return this.http.post(`${BASE_URL}/leaveTypes`, model).pipe(
-      map((res:any)=> { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+      map((res: any) => {
+        if (res && (res.error || res.errors || !res.success)) {
+          throw res;
+        }
+
+        return res;
+      })
     );
   }
 
-  getLeaveTypeById(id: number) {
-    return this.http.get<any>(`${BASE_URL}/leaveTypes/${id}`);
+  getLeaveTypeById(
+    id: number
+  ): Observable<LeaveType> {
+    return this.http.get<LeaveType>(`${BASE_URL}/leaveTypes/${id}`);
   }
 
   getLeaveTypes(): Observable<LeaveType[]> {
@@ -263,6 +335,7 @@ export class ApiService {
         if (res.$values && Array.isArray(res.$values)) {
           return res.$values;
         }
+
         return res;
       })
     );
@@ -273,7 +346,7 @@ export class ApiService {
   ): Observable<LeaveType> {
     return this.http.put(`${BASE_URL}/leaveTypes/${model.id}`, model).pipe(
       map((res: any) => {
-        if (res && (res.error || res.errors || (!res.success))) {
+        if (res && (res.error || res.errors || !res.success)) {
           throw res;
         }
 
@@ -282,13 +355,23 @@ export class ApiService {
     );
   }
 
-  deleteLeaveType(id: number) {
+  deleteLeaveType(
+    id: number
+  ): Observable<void> {
     return this.http.delete(`${BASE_URL}/leaveTypes/${id}`).pipe(
-      map((res:any)=> { if (res && (res.error || res.errors || (res.success === false))) throw res; return res; })
+      map((res: any) => {
+        if (res && (res.error || res.errors || !res.success)) {
+          throw res;
+        }
+
+        return res;
+      })
     );
   }
 
-  getRules(teamId: string): Observable<ShiftRule[]> {
+  getRules(
+    teamId: string
+  ): Observable<ShiftRule[]> {
     return this.http.get<ShiftRule[]>(`${BASE_URL}/teams/${encodeURIComponent(teamId)}/rules`);
   }
 
@@ -333,7 +416,7 @@ export class ApiService {
   ): Observable<TeamRuleValue> {
     return this.http.post(`${BASE_URL}/teamRuleValues`, model).pipe(
       map((res: any) => {
-        if (res && (res.error || res.errors || (!res.success))) {
+        if (res && (res.error || res.errors || !res.success)) {
           throw res;
         }
 
@@ -348,7 +431,7 @@ export class ApiService {
   ): Observable<TeamRuleValue> {
     return this.http.put(`${BASE_URL}/teamRuleValues/${id}`, model).pipe(
       map((result: any) => {
-        if (result && (result.error || result.errors || (!result.success))) {
+        if (result && (result.error || result.errors || !result.success)) {
           throw result;
         }
 
@@ -357,7 +440,11 @@ export class ApiService {
     );
   }
 
-  generateSchedule(teamId: string, startDate: string, endDate: string): Observable<GeneratedSchedule> {
+  generateSchedule(
+    teamId: string,
+    startDate: string,
+    endDate: string
+  ): Observable<GeneratedSchedule> {
     const params = new HttpParams().set('startDate', startDate).set('endDate', endDate);
     return this.http.post<GeneratedSchedule>(`${BASE_URL}/teams/${encodeURIComponent(teamId)}/generate`, null, { params });
   }
@@ -421,7 +508,7 @@ export class ApiService {
   ) {
     return this.http.put(`${BASE_URL}/schedules/${id}`, model).pipe(
       map((result: any) => {
-        if (result && (result.error || result.errors || (!result.success))) {
+        if (result && (result.error || result.errors || !result.success)) {
           throw result;
         }
 
@@ -435,7 +522,7 @@ export class ApiService {
   ): Observable<void> {
     return this.http.delete(`${BASE_URL}/schedules/${id}`).pipe(
       map((res: any) => { 
-        if (res && (res.error || res.errors || (!res.success))) {
+        if (res && (res.error || res.errors || !res.success)) {
           throw res;
         } 
         
@@ -450,7 +537,7 @@ export class ApiService {
   ): Observable<void> {
     return this.http.patch(`${BASE_URL}/schedules/${scheduleId}/assignment`, dto).pipe(
       map((result: any) => {
-        if (result && (result.error || result.errors || (!result.success))) {
+        if (result && (result.error || result.errors || !result.success)) {
           throw result;
         }
 
@@ -459,14 +546,26 @@ export class ApiService {
     );
   }
 
-  login(email: string, password: string): Observable<any> {
+  login(
+    email: string,
+    password: string
+  ): Observable<any> {
     return this.http.post(`${BASE_URL}/auth/login`, { email, password }).pipe(
-      map((res:any) => { if (res && (res.error || res.errors || res.success === false)) throw res; return res; })
+      map((res: any) => {
+        if (res && (res.error || res.errors || !res.success)) {
+          throw res;
+        }
+
+        return res;
+      })
     );
   }
 
   // Diagnostic: try multiple payload shapes for login; suppress global toasts via header
-  loginFlexible(email: string, password: string) {
+  loginFlexible(
+    email: string, 
+    password: string
+  ): Observable<any> {
     const tries = [
       { email, password },
       { username: email, password },
@@ -487,7 +586,11 @@ export class ApiService {
     return attempt(0);
   }
 
-  register(email: string, password: string, displayName?: string): Observable<any> {
+  register(
+    email: string, 
+    password: string, 
+    displayName?: string
+  ): Observable<any> {
     // Backend expects { Email, Password } (case-insensitive). Include displayName if provided.
     const body: any = { email, password };
     if (displayName) body.displayName = displayName;
@@ -499,6 +602,4 @@ export class ApiService {
   logout(): Observable<any> {
     return this.http.post(`${BASE_URL}/auth/logout`, {});
   }
-
-  // Add other CRUD methods as needed (create/update/delete teams, employees, shifts, rules)
 }

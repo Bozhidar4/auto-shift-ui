@@ -5,7 +5,7 @@ import { ApiService } from '../../services/api.service';
 import { ToastService } from '../../services/toast.service';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Employee } from '../../models/employee';
+import { Employee } from '../../models/employee.interface';
 import { createEmptyEmployeeLeave, EmployeeLeave } from '../../models/employee-leave.interface';
 import { createEmptyLeaveType, LeaveType } from '../../models/leave-type.interface';
 

@@ -5,10 +5,11 @@ import { ApiService } from '../../services/api.service';
 import { ToastService } from '../../services/toast.service';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { Team } from '../../models/team';
-import { GeneratedSchedule, ScheduleAssignment } from '../../models/schedule';
-import { ShiftType } from '../../models/shift';
-import { Employee } from '../../models/employee';
+import { ScheduleAssignment } from '../../models/schedule-assignment.interface';
+import { ShiftType } from '../../models/shift-type.interface';
+import { Employee } from '../../models/employee.interface';
 import { ScheduleAssignmentUpdateDto } from '../../models/schedule-assignment-update.interface';
+import { GeneratedSchedule } from '../../models/schedule-generated.interface';
 
 @Component({
   selector: 'app-schedules',

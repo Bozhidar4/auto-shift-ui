@@ -9,29 +9,35 @@
   </div>
 
   <div class="team-grid" style="margin-top:1rem">
-    <div *ngFor="let t of teams" class="card team-card">
-      <div *ngIf="!t._editing" style="display:flex;justify-content:space-between;align-items:center">
+    @for (team of teams; track $index) {
+    <div class="card team-card">
+      @if (!team._editing) {
+      <div style="display:flex;justify-content:space-between;align-items:center">
         <div>
-          <div style="font-weight:800;font-size:1.05rem">{{ t.name }}</div>
+          <div style="font-weight:800;font-size:1.05rem">{{ team.name }}</div>
           <div class="muted" style="font-size:0.9rem">Team</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.35rem">
           <div>
-            <button class="btn pill" (click)="edit(t)">Edit</button>
-            <button class="btn pill" [routerLink]="['/teams', t.id]">Open</button>
-            <button class="btn pill danger" (click)="remove(t)">Delete</button>
+            <button class="btn pill" (click)="edit(team)">Edit</button>
+            <button class="btn pill" [routerLink]="['/teams', team.id]">Open</button>
+            <button class="btn pill danger" (click)="remove(team)">Delete</button>
           </div>
         </div>
       </div>
-      <div *ngIf="t._editing">
+      }
+      @if (team._editing) {
+      <div>
         <div style="display:flex;gap:0.5rem;align-items:center">
-          <input class="input" [(ngModel)]="t.name" placeholder="Team name" />
+          <input class="input" [(ngModel)]="team.name" placeholder="Team name" />
           <div style="margin-left:auto">
-            <button class="btn pill primary" (click)="save(t)">Save</button>
-            <button class="btn pill" (click)="cancelEdit(t)">Cancel</button>
+            <button class="btn pill primary" (click)="save(team)">Save</button>
+            <button class="btn pill" (click)="cancelEdit(team)">Cancel</button>
           </div>
         </div>
       </div>
+      }
     </div>
+    }
   </div>
 </div>
