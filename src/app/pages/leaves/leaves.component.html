@@ -1,14 +1,14 @@
 <div class="card">
-  <div class="page-title">Employee Leaves</div>
-
-  <div class="controls">
-    <button class="btn primary pill" (click)="loadLeaves()">Refresh Leaves</button>
-    <button class="btn pill" (click)="showLeaveTypeManager = !showLeaveTypeManager">Manage Leave Types</button>
+  <div class="page-header">
+    <div class="page-title">Employee Leaves</div>
+    <div class="controls">
+      <button class="btn primary pill" (click)="loadLeaves()">Refresh Leaves</button>
+      <button class="btn pill" (click)="showLeaveTypeManager = !showLeaveTypeManager">Manage Leave Types</button>
+    </div>
   </div>
 
-  <h4>Create Leave</h4>
-  <div style="display:flex;gap:0.5rem;align-items:center">
-    <select class="input" [(ngModel)]="newLeave.employeeId">
+  <div class="create-leave-container">
+    <select class="input" [(ngModel)]="newLeave.employeeId" (ngModelChange)="onEmployeeSelect($event)">
       <option [ngValue]="null">Select employee</option>
       @for (e of employees; track $index) {
       <option [ngValue]="e.id">{{ e.firstName }} {{ e.lastName }}</option>
@@ -16,7 +16,9 @@
     </select>
     <select class="input" [(ngModel)]="newLeave.leaveTypeId">
       <option [ngValue]="null">Select leave type</option>
-      <option *ngFor="let t of leaveTypes" [ngValue]="t.id">{{ t.name }}</option>
+      @for (leaveType of leaveTypes; track $index) {
+      <option [ngValue]="leaveType.id">{{ leaveType.name }}</option>
+      }
     </select>
     <input class="input" type="date" [(ngModel)]="newLeave.startDate" />
     <input class="input" type="date" [(ngModel)]="newLeave.endDate" />
@@ -25,8 +27,8 @@
       [disabled]="!newLeave.employeeId || !newLeave.leaveTypeId || !newLeave.startDate">Create</button>
   </div>
 
-  <div style="margin-top:0.75rem">
-    <table class="shifts-table">
+  <div class="table-container">
+    <table class="leave-table mat-elevation-z3">
       <thead>
         <tr>
           <th>Employee</th>
@@ -37,6 +39,7 @@
           <th></th>
         </tr>
       </thead>
+      @if (leaves && leaves.length > 0) {
       <tbody>
         @for (l of leaves; track $index) {
         <tr>
@@ -46,7 +49,7 @@
             <td>{{ l.startDate | date }}</td>
             <td>{{ l.endDate | date }}</td>
             <td>{{ l.notes }}</td>
-            <td>
+            <td class="leave-action-container">
               <button class="btn pill" (click)="startEditLeave(l)">Edit</button>
               <button class="btn pill danger" (click)="deleteLeave(l)">Delete</button>
             </td>
@@ -69,30 +72,42 @@
             <td><input class="input" type="date" [(ngModel)]="editLeaveModel.startDate" /></td>
             <td><input class="input" type="date" [(ngModel)]="editLeaveModel.endDate" /></td>
             <td><input class="input" [(ngModel)]="editLeaveModel.notes" /></td>
-            <td>
-              <button class="btn" (click)="saveEditLeave()" [disabled]="!canSaveLeave()">Save</button>
-              <button class="btn" (click)="cancelEditLeave()">Cancel</button>
+            <td class="leave-action-container">
+              <button class="btn primary pill" (click)="saveEditLeave()" [disabled]="!canSaveLeave()">Save</button>
+              <button class="btn pill" (click)="cancelEditLeave()">Cancel</button>
             </td>
           </ng-template>
         </tr>
         }
       </tbody>
+      }
+      @else {
+      @if (!selectedEmployeeId) {
+      <div class="muted">Please select an employee to view their leaves.</div>
+      }
+      @else {
+      <div class="muted">No leaves found for the selected employee.</div>
+      }
+      }
     </table>
   </div>
 
   @if (showLeaveTypeManager) {
-  <div class="card" style="margin-top:1rem">
-    <h4>Leave Types</h4>
-    <div style="display:flex;gap:0.5rem;align-items:center">
+  <div class="card leave-type-container">
+    <div class="leave-type-title-container">
+      <div class="page-title">Leave Types</div>
+      <button class="btn pill" aria-label="Close"
+        (click)="showLeaveTypeManager = false; newLeaveType = createEmptyLeaveType()">✕</button>
+    </div>
+    <div class="leave-type-input-container">
       <input class="input" placeholder="Name" [(ngModel)]="newLeaveType.name" />
       <input class="input" placeholder="Description" [(ngModel)]="newLeaveType.description" />
       <button class="btn primary pill" (click)="createLeaveType()">Create</button>
       <button class="btn pill" (click)="newLeaveType = createEmptyLeaveType()">Cancel</button>
-      <button class="btn pill" (click)="showLeaveTypeManager = false">Close</button>
     </div>
 
     <div style="margin-top:0.5rem">
-      <table class="shifts-table">
+      <table class="leave-type-table">
         <thead>
           <tr>
             <th>Name</th>
@@ -106,7 +121,7 @@
             <ng-container *ngIf="editingLeaveTypeId !== t.id; else editTypeRow">
               <td>{{ t.name }}</td>
               <td>{{ t.description }}</td>
-              <td>
+              <td class="leave-type-action-container">
                 <button class="btn pill" (click)="startEditLeaveType(t)">Edit</button>
                 <button class="btn pill danger" (click)="deleteLeaveType(t)">Delete</button>
               </td>
@@ -118,9 +133,9 @@
               <td>
                 <input class="input" [(ngModel)]="editLeaveTypeModel.description" />
               </td>
-              <td>
+              <td class="leave-type-action-container">
                 <button class="btn primary pill" (click)="saveEditLeaveType()"
-                  [disabled]="!editLeaveTypeModel?.name">Save</button>
+                  [disabled]="!editLeaveTypeModel.name">Save</button>
                 <button class="btn pill" (click)="cancelEditLeaveType()">Cancel</button>
               </td>
             </ng-template>
@@ -131,4 +146,7 @@
     </div>
   </div>
   }
+  <app-confirm [visible]="confirmState.visible" [title]="confirmState.title" [message]="confirmState.message"
+    [confirmLabel]="confirmState.confirmLabel || null" [cancelLabel]="confirmState.cancelLabel || null"
+    (confirmed)="onConfirmedDelete()" (cancelled)="onCancelledDelete()"></app-confirm>
 </div>

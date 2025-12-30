@@ -3,13 +3,16 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { ToastService } from '../../services/toast.service';
+import { DateUtilsService } from '../../services/date-utils.service';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
+import { ConfirmState, createEmptyConfirmState } from '../../models/confirm-state.interface';
 import { Team } from '../../models/team';
 import { ScheduleAssignment } from '../../models/schedule-assignment.interface';
 import { ShiftType } from '../../models/shift-type.interface';
 import { Employee } from '../../models/employee.interface';
 import { ScheduleAssignmentUpdateDto } from '../../models/schedule-assignment-update.interface';
 import { GeneratedSchedule } from '../../models/schedule-generated.interface';
+import { EmployeeHoursDto } from '../../models/employee-hours.interface';
 
 @Component({
   selector: 'app-schedules',
@@ -36,14 +39,19 @@ export class SchedulesComponent implements OnInit {
   tableEmployees: any[] = [];
   tableDates: string[] = [];
   tableCells: Record<string, any> = {};
+  employeeHoursMap: Record<number, number> = {};
+  changedCells: Record<string, boolean> = {};
   // temporary models for creating empty cells before saving
   emptyCellModel: Record<string, any> = {};
+  // track which cells were created locally and are pending save (key => true)
+  newlyCreatedCells: Record<string, boolean> = {};
   // confirm dialog state
-  confirmState: { visible: boolean; title: string | null; message: string | null; target?: any } = { visible: false, title: null, message: null };
+  confirmState: ConfirmState = createEmptyConfirmState();
 
   constructor(
     private apiService: ApiService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private dateUtilsService: DateUtilsService
   ) { }
 
   ngOnInit(): void {
@@ -196,13 +204,23 @@ export class SchedulesComponent implements OnInit {
 
   // called when confirm component emits confirmed
   onConfirmedDelete(): void {
-    const schedule = this.confirmState.target;
+    const scheduleOrAction = this.confirmState.target;
     this.confirmState.visible = false;
 
-    if (!schedule) {
+    if (!scheduleOrAction) {
       return;
     }
 
+    // Special action: close modal but first save changes
+    if (scheduleOrAction.action === 'close-with-changes') {
+      this.saveAll(() => {
+        this.clearViewState();
+        this.viewingSchedule = null;
+      });
+      return;
+    }
+
+    const schedule = scheduleOrAction as GeneratedSchedule;
     this.apiService
       .deleteSchedule(schedule.id)
       .subscribe({
@@ -217,7 +235,14 @@ export class SchedulesComponent implements OnInit {
   }
 
   onCancelledDelete(): void {
+    const scheduleOrAction = this.confirmState.target;
     this.confirmState.visible = false;
+
+    // If cancelling the unsaved-close confirm means the user wants to discard changes and close
+    if (scheduleOrAction && scheduleOrAction.action === 'close-with-changes') {
+      this.clearViewState();
+      this.viewingSchedule = null;
+    }
   }
 
   // Open view modal — build table model
@@ -229,6 +254,8 @@ export class SchedulesComponent implements OnInit {
       next: (full: GeneratedSchedule) => this.buildViewTable(full || schedule),
       error: () => this.buildViewTable(schedule)
     });
+    // fetch aggregated employee hours for this schedule
+    this.loadEmployeeHours(schedule.id);
   }
 
   private buildViewTable(
@@ -302,6 +329,17 @@ export class SchedulesComponent implements OnInit {
         date: dateKey
       };
     });
+    // Initialize emptyCellModel for cells that have no assignment so selects show OFF by default
+    this.emptyCellModel = this.emptyCellModel || {};
+    for (const emp of this.tableEmployees) {
+      for (const d of this.tableDates) {
+        const key = `${emp.id}__${d}`;
+        if (!this.tableCells[key]) {
+          // explicitly set to 0 to map to OFF option in the template
+          this.emptyCellModel[key] = 0;
+        }
+      }
+    }
     // Prefer names from preloaded teamEmployees (already applied above)
     this.tableEmployees = Object.values(empMap);
 
@@ -421,7 +459,7 @@ export class SchedulesComponent implements OnInit {
   ): void {
     const key = `${employeeId}__${date}`;
     const selected = this.emptyCellModel[key];
-    const newShiftTypeId = selected ? Number(selected) : null;
+    const newShiftTypeId = Number(selected ?? 0);
     // Create a local cell so UI shows selection during save
     const emp = this.tableEmployees.find(e => String(e.id) === String(employeeId));
     const cell = {
@@ -431,17 +469,42 @@ export class SchedulesComponent implements OnInit {
       date: date
     };
     this.tableCells[key] = cell;
+    // mark as newly created so saveCell can restore UI on failure
+    this.newlyCreatedCells[key] = true;
 
     this.saveCell(String(employeeId), date);
-    // clear temp model
-    delete this.emptyCellModel[key];
+    // once we've moved the cell to tableCells the emptyCellModel binding is no longer used by template
+    // keep the temp value in case save fails; saveCell will restore it on error if needed
   }
 
   closeView(): void {
+    // If there are unsaved changes, ask the user whether to save first
+    const hasChanges = Object.keys(this.changedCells || {}).length > 0;
+    if (hasChanges) {
+      this.confirmState = {
+        visible: true,
+        title: 'Unsaved changes',
+        message: 'There are unsaved changes. Save changes and close the schedule?',
+        confirmLabel: 'Yes',
+        cancelLabel: 'No',
+        target: { action: 'close-with-changes' }
+      };
+      return;
+    }
+
+    // No pending changes — just clear view
+    this.clearViewState();
+  }
+
+  // Clear the modal view state and temporary models
+  private clearViewState(): void {
     this.viewingSchedule = null;
     this.tableEmployees = [];
     this.tableDates = [];
     this.tableCells = {};
+    this.emptyCellModel = {};
+    this.changedCells = {};
+    this.employeeHoursMap = {};
   }
 
   // Save single cell change (assignment) — calls updateAssignment
@@ -466,23 +529,57 @@ export class SchedulesComponent implements OnInit {
       date: new Date(date),
       newShiftTypeId: cell.shiftTypeId ? Number(cell.shiftTypeId) : 0
     };
-    // call patchAssignment on the schedule
+    // Decide whether to create/update (patch) or delete first, then call the correct API
+    if (!dto.newShiftTypeId) {
+      // Delete assignment (OFF)
+      const dateStr = this.dateUtilsService.toApiDate(dto.date);
+      this.apiService.deleteAssignment(scheduleId, dto.employeeId, dateStr ?? '').subscribe({
+        next: () => {
+          delete this.tableCells[`${employeeId}__${date}`];
+          this.emptyCellModel[`${employeeId}__${date}`] = 0;
+          this.clearCellChanged(`${employeeId}__${date}`);
+          this.loadEmployeeHours(scheduleId);
+        },
+        error: (err) => {
+          // If delete fails, still clear local cell to keep UI responsive, but report error
+          delete this.tableCells[`${employeeId}__${date}`];
+          this.emptyCellModel[`${employeeId}__${date}`] = 0;
+          this.clearCellChanged(`${employeeId}__${date}`);
+          this.loadEmployeeHours(scheduleId);
+        }
+      });
+      return;
+    }
+
+    // Otherwise, create/update via patchAssignment
     this.apiService.patchAssignment(scheduleId, dto).subscribe({
       next: (response: any) => {
-        // if server returned a created object, use its id; if returned Ok(existing) use it; if NoContent (delete) we'll remove from table
-        if (!dto.newShiftTypeId) {
-          // deletion: remove cell
-          delete this.tableCells[`${employeeId}__${date}`];
-        } else if (response && response.id) {
-          // creation or update returned the assignment
+        if (response && response.id) {
           this.tableCells[`${employeeId}__${date}`] = { ...response };
         } else {
           // best-effort: update the local cell shiftTypeId
           this.tableCells[`${employeeId}__${date}`].shiftTypeId = dto.newShiftTypeId;
         }
-        this.toastService.show('Assignment saved', 'success');
+
+        // If this was a locally-created cell, clear its created marker
+        if (this.newlyCreatedCells[`${employeeId}__${date}`]) {
+          delete this.newlyCreatedCells[`${employeeId}__${date}`];
+        }
+
+        this.clearCellChanged(`${employeeId}__${date}`);
+        this.loadEmployeeHours(scheduleId);
+        this.toastService.show('Assignment saved successfully', 'success');
       },
       error: (error) => {
+        // If this was a newly-created cell and patch failed, revert UI to empty state so user can retry
+        const key = `${employeeId}__${date}`;
+        if (this.newlyCreatedCells[key]) {
+          delete this.tableCells[key];
+          // restore empty cell default to OFF
+          this.emptyCellModel[key] = 0;
+          delete this.newlyCreatedCells[key];
+          this.clearCellChanged(key);
+        }
         this.toastService.show('Failed to save assignment', 'error');
       }
     });
@@ -494,5 +591,72 @@ export class SchedulesComponent implements OnInit {
     const date = new Date(dateIso);
     const today = new Date();
     return date.setHours(0, 0, 0, 0) <= today.setHours(0, 0, 0, 0);
+  }
+
+  // Mark a cell as changed (pending save)
+  markCellChanged(key: string): void {
+    this.changedCells[key] = true;
+  }
+
+  // Clear changed marker for a cell
+  clearCellChanged(key: string): void {
+    delete this.changedCells[key];
+  }
+
+  // Save all changed cells in sequence
+  saveAll(onComplete?: () => void): void {
+    const keys = Object.keys(this.changedCells || {});
+    if (!keys.length) {
+      this.toastService.show('No changes to save', 'info');
+      return;
+    }
+
+    // sequentially save each changed cell to avoid bombarding the API
+    const saveNext = (idx: number) => {
+      if (idx >= keys.length) {
+        this.toastService.show('Schedule changes saved successfully', 'success');
+        if (onComplete) {
+          onComplete();
+        }
+
+        return;
+      }
+      const key = keys[idx];
+      const [empId, date] = key.split('__');
+      // If the cell doesn't exist yet (employee is currently OFF and uses emptyCellModel),
+      // create the cell and save it; otherwise save existing cell
+      if (!this.tableCells[key]) {
+        this.createEmptyCellAndSave(empId, date);
+      } else {
+        // call existing saveCell which will clear the changed flag on success
+        this.saveCell(empId, date);
+      }
+      // small delay to let UI update before continuing
+      setTimeout(() => saveNext(idx + 1), 150);
+    };
+
+    saveNext(0);
+  }
+
+  private loadEmployeeHours(
+    scheduleId: number
+  ): void {
+    this.apiService.getEmployeeHours(scheduleId).subscribe({
+      next: (hoursArr: EmployeeHoursDto[]) => {
+        this.employeeHoursMap = {};
+        (hoursArr || []).forEach(employeeHours => {
+          if (!employeeHours) {
+            return;
+          }
+
+          this.employeeHoursMap[employeeHours.employeeId] = employeeHours.totalHours
+            ? employeeHours.totalHours
+            : 0;
+        });
+      },
+      error: () => {
+        this.employeeHoursMap = {};
+      }
+    });
   }
 }

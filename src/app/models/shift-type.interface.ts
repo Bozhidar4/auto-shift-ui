@@ -5,7 +5,7 @@ export interface ShiftType {
   initialCode?: string;
   startTime: string; // HH:mm:ss
   endTime: string; // HH:mm:ss
-  requiredPeople: number;
+  requiredPeople: number | null;
 }
 
 export function createEmptyShift(): ShiftType {
@@ -16,6 +16,6 @@ export function createEmptyShift(): ShiftType {
     initialCode: '',
     startTime: '',
     endTime: '',
-    requiredPeople: 0
+    requiredPeople: null
   };
 }

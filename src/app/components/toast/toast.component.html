@@ -1,7 +1,21 @@
 <div class="toast-container">
     @for (message of (toast.messages$ | async); track message.id) {
-    <div class="toast" [attr.data-type]="message.type">
-        <div class="toast-body">{{ message.text }}</div>
+    <div class="toast" [attr.data-type]="message.type" (mouseenter)="onMouseEnter(message.id)"
+        (mouseleave)="onMouseLeave(message.id)">
+        <div style="display:flex;align-items:center;gap:0.6rem;flex:1">
+            <div class="toast-timer" title="Remaining" style="flex:0 0 auto">
+                <svg viewBox="0 0 36 36" class="progress-ring">
+                    <path class="progress-bg" d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path class="progress" [attr.style]="'stroke-dashoffset:' + (100 - getProgress(message.id)) + ';'"
+                        d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+            </div>
+            <div class="toast-body" style="flex:1">{{ message.text }}</div>
+        </div>
         <button class="toast-close" (click)="toast.dismiss(message.id)">✕</button>
     </div>
     }

@@ -5,6 +5,9 @@
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
+/* Global styles entry — import the app theme so CSS variables are available */
+@use '@angular/material/prebuilt-themes/indigo-pink.css';
+@use './app/app.scss';
 
 html {
   @include mat.theme((
@@ -33,9 +36,6 @@ body {
   // Reset the user agent margin.
   margin: 0;
 }
-/* Global styles entry — import the app theme so CSS variables are available */
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
-@import './app/app.scss';
 
 /* You can add additional global styles here */
 

@@ -4,18 +4,25 @@ h2 {
 
 .employees-table {
     width: 100%;
-    border-collapse: collapse
+    border-collapse: collapse;
+    margin-top: 1.5rem;
 }
 
 .employees-table th,
 .employees-table td {
-    padding: 0.35rem 0.5rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
     border-bottom: 1px solid rgba(16, 16, 24, 0.04);
-    text-align: left
+    text-align: left;
 }
 
 .employees-table thead th {
     font-weight: 700
+}
+
+.employees-table .actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
 }
 
 /* Use global .input styles from app.scss. Keep component-specific min-width where needed. */

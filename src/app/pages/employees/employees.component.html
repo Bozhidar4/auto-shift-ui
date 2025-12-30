@@ -19,65 +19,71 @@
       </tr>
     </thead>
     <tbody>
-      @for (e of employees; track $index) {
-      <tr [class.row-editing]="e._editing">
+      @for (employee of employees; track $index) {
+      <tr [class.row-editing]="employee._editing">
         <td>
-          @if (!e._editing) {
-          <div>{{ e.firstName }}</div>
+          @if (!employee._editing) {
+          <div>{{ employee.firstName }}</div>
           }
-          @if (e._editing) {
-          <input [(ngModel)]="e.firstName" class="input tight" />
+          @if (employee._editing) {
+          <input [(ngModel)]="employee.firstName" class="input tight" />
           }
         </td>
         <td>
-          @if (!e._editing) {
-          <div>{{ e.lastName }}</div>
+          @if (!employee._editing) {
+          <div>{{ employee.lastName }}</div>
           }
-          @if (e._editing) {
-          <input [(ngModel)]="e.lastName" class="input tight" />
-          }
-        </td>
-        <td>
-          @if (!e._editing) {
-          <div>{{ e.monthlyHoursTarget }}</div>
-          }
-          @if (e._editing) {
-          <input type="number" [(ngModel)]="e.monthlyHoursTarget" class="input tight" />
+          @if (employee._editing) {
+          <input [(ngModel)]="employee.lastName" class="input tight" />
           }
         </td>
         <td>
-          @if (!e._editing) {
-          <div>{{ e.isActive ? 'Yes' : 'No' }}</div>
+          @if (!employee._editing) {
+          <div>{{ employee.monthlyHoursTarget }}</div>
           }
-          @if (e._editing) {
-          <select [(ngModel)]="e.isActive" class="input small-select tight">
+          @if (employee._editing) {
+          <input type="number" [(ngModel)]="employee.monthlyHoursTarget" class="input tight" />
+          }
+        </td>
+        <td>
+          @if (!employee._editing) {
+          <div>{{ employee.isActive ? 'Yes' : 'No' }}</div>
+          }
+          @if (employee._editing) {
+          <select [(ngModel)]="employee.isActive" class="input small-select tight">
             <option [ngValue]="true">Yes</option>
             <option [ngValue]="false">No</option>
           </select>
           }
         </td>
         <td>
-          @if (!e._editing) {
-          <div>{{ e.teamId }}</div>
+          @if (!employee._editing) {
+          <div>{{ employee.team?.name ?? employee.teamId }}</div>
           }
-          @if (e._editing) {
-          <select [(ngModel)]="e.teamId" class="input tight">
+          @if (employee._editing) {
+          <select [(ngModel)]="employee.teamId" class="input tight">
             <option [ngValue]="null" disabled selected>Select a team</option>
-            <option *ngFor="let t of teams" [ngValue]="t.id">{{ t.name }}</option>
+            @for (team of teams; track $index) {
+              <option [ngValue]="team.id">{{ team.name }}</option>
+            }
           </select>
           }
         </td>
         <td class="actions">
-          @if (!e._editing) {
-          <button class="btn pill" (click)="edit(e)">Edit</button>
+          @if (!employee._editing) {
+          <button class="btn pill" (click)="edit(employee)">Edit</button>
           }
-          @if (e._editing) {
-          <button class="btn primary pill" (click)="save(e)">Save</button>
+          @if (employee._editing) {
+          <button class="btn primary pill" (click)="save(employee)">Save</button>
+          <button class="btn pill" (click)="cancel(employee)">Cancel</button>
           }
-          <button class="btn danger pill" (click)="remove(e)">Delete</button>
+          <button class="btn danger pill" (click)="remove(employee)">Delete</button>
         </td>
       </tr>
       }
     </tbody>
   </table>
+  <app-confirm [visible]="confirmState.visible" [title]="confirmState.title" [message]="confirmState.message"
+    [confirmLabel]="confirmState.confirmLabel ?? null" [cancelLabel]="confirmState.cancelLabel ?? null"
+    (confirmed)="onConfirmedRemove()" (cancelled)="onCancelledRemove()"></app-confirm>
 </div>

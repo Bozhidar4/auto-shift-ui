@@ -3,16 +3,19 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { ToastService } from '../../services/toast.service';
+import { DateUtilsService } from '../../services/date-utils.service';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Employee } from '../../models/employee.interface';
-import { createEmptyEmployeeLeave, EmployeeLeave } from '../../models/employee-leave.interface';
+import { createEmptyEmployeeLeave, EmployeeLeave, EmployeeLeaveDto } from '../../models/employee-leave.interface';
 import { createEmptyLeaveType, LeaveType } from '../../models/leave-type.interface';
+import { ConfirmComponent } from '../../components/confirm/confirm.component';
+import { ConfirmState } from '../../models/confirm-state.interface';
 
 @Component({
   selector: 'app-leaves',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ConfirmComponent],
   templateUrl: './leaves.component.html',
   styleUrls: ['./leaves.component.scss']
 })
@@ -29,10 +32,12 @@ export class LeavesComponent implements OnInit {
   // leave types inline edit
   editingLeaveTypeId: number | null = null;
   editLeaveTypeModel: LeaveType = createEmptyLeaveType();
+  confirmState: ConfirmState = { visible: false, title: '', message: '', target: null };
 
   constructor(
     private apiService: ApiService,
-    private toast: ToastService
+    private toastService: ToastService,
+    private dateUtilsService: DateUtilsService
   ) { }
 
   ngOnInit(): void {
@@ -45,7 +50,7 @@ export class LeavesComponent implements OnInit {
     const observable = this.apiService.listEmployees().pipe(
       tap((e: Employee[]) => this.employees = e || []),
       catchError((err) => {
-        this.employees = []; this.toast.show('Failed to load employees', 'error'); return of([]);
+        this.employees = []; this.toastService.show('Failed to load employees', 'error'); return of([]);
       })
     );
 
@@ -65,7 +70,15 @@ export class LeavesComponent implements OnInit {
       return;
     }
 
-    this.apiService.listEmployeeLeaves(this.selectedEmployeeId).subscribe({ next: (leave: EmployeeLeave[]) => this.leaves = leave || [] });
+    this.apiService
+      .listEmployeeLeaves(this.selectedEmployeeId)
+      .subscribe({
+        next: (leave: EmployeeLeave[]) => this.leaves = leave || [],
+        error: () => {
+          this.leaves = [];
+          this.toastService.show('Failed to load leaves', 'error');
+        }
+      });
   }
 
   loadLeaveTypes(): void {
@@ -79,24 +92,39 @@ export class LeavesComponent implements OnInit {
       return;
     }
 
-    this.apiService.createEmployeeLeave(this.newLeave).subscribe({
-      next: (result) => {
-        this.newLeave = createEmptyEmployeeLeave();
-        this.loadLeaves();
-      }
-    });
+    // Ensure dates are Date objects to match EmployeeLeave model
+    const createPayload = {
+      id: this.newLeave.id,
+      employeeId: this.newLeave.employeeId,
+      leaveTypeId: this.newLeave.leaveTypeId,
+      startDate: this.dateUtilsService.toApiDate((this.newLeave as any).startDate),
+      endDate: this.dateUtilsService.toApiDate((this.newLeave as any).endDate),
+      notes: this.newLeave.notes
+    } as EmployeeLeaveDto;
+
+    this.apiService
+      .createEmployeeLeave(createPayload)
+      .subscribe({
+        next: (result) => {
+          this.newLeave = createEmptyEmployeeLeave();
+          this.loadLeaves();
+          this.toastService.show('Leave created successfully.', 'success');
+        },
+        error: () => {
+          this.toastService.show('Failed to create leave.', 'error');
+        }
+      });
   }
 
   deleteLeave(
     leave: EmployeeLeave
   ): void {
-    if (!confirm('Delete leave?')) {
-      return;
-    }
-
-    this.apiService
-      .deleteEmployeeLeave(leave.id)
-      .subscribe({ next: () => this.loadLeaves() });
+    this.confirmState = {
+      visible: true,
+      title: 'Delete leave',
+      message: 'Delete leave?',
+      target: leave
+    };
   }
 
   startEditLeave(
@@ -105,10 +133,10 @@ export class LeavesComponent implements OnInit {
     this.editingLeaveId = leave.id;
     this.editLeaveModel = {
       id: leave.id,
-      employeeId: leave.employeeId || leave.employee?.id || 0,
-      leaveTypeId: leave.leaveTypeId || leave.leaveType?.id || 0,
-      startDate: leave.startDate,
-      endDate: leave.endDate,
+      employeeId: leave.employeeId ?? leave.employee?.id ?? null,
+      leaveTypeId: leave.leaveTypeId ?? leave.leaveType?.id ?? null,
+      startDate: this.dateUtilsService.toInputDate(leave.startDate),
+      endDate: this.dateUtilsService.toInputDate(leave.endDate),
       notes: leave.notes
     };
   }
@@ -139,23 +167,38 @@ export class LeavesComponent implements OnInit {
       id: this.editLeaveModel.id,
       employeeId: this.editLeaveModel.employeeId,
       leaveTypeId: this.editLeaveModel.leaveTypeId,
-      startDate: this.editLeaveModel.startDate,
-      endDate: this.editLeaveModel.endDate,
+      startDate: this.dateUtilsService.toApiDate((this.editLeaveModel).startDate),
+      endDate: this.dateUtilsService.toApiDate((this.editLeaveModel).endDate),
       notes: this.editLeaveModel.notes
-    };
+    } as EmployeeLeaveDto;
 
     this.apiService
       .updateEmployeeLeave(id, payload)
-      .subscribe({ next: () => { this.cancelEditLeave(); this.loadLeaves(); } });
+      .subscribe({
+        next: () => {
+          this.cancelEditLeave();
+          this.loadLeaves();
+          this.toastService.show('Leave updated successfully.', 'success');
+        },
+        error: () => {
+          this.toastService.show('Failed to update leave.', 'error');
+        }
+      });
   }
 
   createLeaveType(): void {
-    this.apiService.createLeaveType(this.newLeaveType).subscribe({
-      next: (type) => {
-        this.newLeaveType = createEmptyLeaveType();
-        this.loadLeaveTypes();
-      }
-    });
+    this.apiService
+      .createLeaveType(this.newLeaveType)
+      .subscribe({
+        next: (type) => {
+          this.newLeaveType = createEmptyLeaveType();
+          this.loadLeaveTypes();
+          this.toastService.show('Leave type created successfully.', 'success');
+        },
+        error: () => {
+          this.toastService.show('Failed to create leave type.', 'error');
+        }
+      });
   }
 
   createEmptyLeaveType(): LeaveType {
@@ -165,13 +208,52 @@ export class LeavesComponent implements OnInit {
   deleteLeaveType(
     leaveType: LeaveType
   ): void {
-    if (!confirm('Delete leave type?')) {
+    this.confirmState = {
+      visible: true,
+      title: 'Delete leave type',
+      message: 'Delete leave type?',
+      target: leaveType
+    };
+  }
+
+  onConfirmedDelete(): void {
+    const payload = this.confirmState.target;
+    if (!payload) {
       return;
     }
 
-    this.apiService
-      .deleteLeaveType(leaveType.id)
-      .subscribe({ next: () => this.loadLeaveTypes() });
+    // distinguish by presence of id properties
+    if ((payload as EmployeeLeave).startDate !== undefined) {
+      const leave = payload as EmployeeLeave;
+      this.apiService.deleteEmployeeLeave(leave.id).subscribe({
+        next: () => {
+          this.loadLeaves();
+          this.toastService.show('Leave deleted successfully.', 'success');
+        },
+        error: () => {
+          this.toastService.show('Failed to delete leave.', 'error');
+        }
+      });
+    } else {
+      const leaveType = payload as LeaveType;
+      this.apiService.deleteLeaveType(leaveType.id).subscribe({
+        next: () => {
+          this.loadLeaveTypes();
+          this.toastService.show('Leave type deleted successfully.', 'success');
+        },
+        error: () => {
+          this.toastService.show('Failed to delete leave type.', 'error');
+        }
+      });
+    }
+
+    this.confirmState.visible = false;
+    this.confirmState.target = null;
+  }
+
+  onCancelledDelete(): void {
+    this.confirmState.visible = false;
+    this.confirmState.target = null;
   }
 
   startEditLeaveType(
@@ -207,7 +289,19 @@ export class LeavesComponent implements OnInit {
         next: () => {
           this.cancelEditLeaveType();
           this.loadLeaveTypes();
+          this.toastService.show('Leave type updated successfully.', 'success');
+        },
+        error: () => {
+          this.toastService.show('Failed to update leave type.', 'error');
         }
       });
   }
+
+  onEmployeeSelect(
+    employeeId: number | null
+  ): void {
+    this.selectedEmployeeId = employeeId;
+    this.loadLeaves();
+  }
+  // Date helpers moved to DateUtilsService
 }

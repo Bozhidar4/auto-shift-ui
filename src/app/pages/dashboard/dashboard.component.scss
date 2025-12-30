@@ -2,10 +2,14 @@ h2 {
     margin-top: 0;
 }
 
-.stat-card {
-    text-decoration: none;
+.stats-container {
+    margin-top: 1.5rem;
 
-    .stat-value {
-        margin-top: 1rem;
+    .stat-card {
+        text-decoration: none;
+
+        .stat-value {
+            margin-top: 1rem;
+        }
     }
 }

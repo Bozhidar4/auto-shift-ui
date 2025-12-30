@@ -5,8 +5,9 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { Team } from '../../models/team';
 import { createEmptyEmployee, Employee } from '../../models/employee.interface';
-import { createEmptyShift, ShiftType } from '../../models/shift-type.interface';
+import { ShiftType } from '../../models/shift-type.interface';
 import { TeamCreate } from '../../models/team-create..interface';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-team-detail',
@@ -24,7 +25,8 @@ export class TeamDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute, 
     private apiService: ApiService, 
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -45,24 +47,24 @@ export class TeamDetailComponent implements OnInit {
     this.apiService.getTeamById(this.teamId).subscribe({
       next: (team: Team | null) => {
         // ensure arrays are present (server may return null or $values-wrapped objects)
-        const unwrap = (val: any) => {
+        const unwrap = <T>(val: any) => {
           if (!val) {
             return [];
           }
 
           if (Array.isArray(val)) {
-            return val;
+            return val as T[];
           }
 
           if (val.$values && Array.isArray(val.$values)) {
-            return val.$values;
+            return val.$values as T[];
           }
 
           return [];
         };
         if (team) {
-          team.employees = unwrap((team).employees);
-          team.shiftTypes = unwrap((team).shiftTypes);
+          team.employees = unwrap<Employee>((team).employees);
+          team.shiftTypes = unwrap<ShiftType>((team).shiftTypes);
           team.rules = unwrap((team).rules);
         }
 
@@ -85,11 +87,23 @@ export class TeamDetailComponent implements OnInit {
       return;
     }
 
-    const model: TeamCreate = { name: this.team.name };
+    const model: TeamCreate = {
+      name: this.team.name,
+      employees: this.team.employees?.filter(e => e.id !== 0), // exclude placeholders
+      shiftTypes: this.team.shiftTypes
+    };
 
     this.apiService
       .updateTeam(this.team.id, model)
-      .subscribe({ next: () => this.load() });
+      .subscribe({
+        next: () => {
+          this.load();
+          this.toastService.show('Team saved successfully.', 'success');
+        },
+        error: (error) => {
+          this.toastService.show('Failed to save team.', 'error');
+        }
+      });
   }
 
   addEmployee(): void {
@@ -100,42 +114,6 @@ export class TeamDetailComponent implements OnInit {
     this.team.employees = this.team.employees || [];
     // placeholder row: id 0 indicates unsaved selection via dropdown
     this.team.employees.push(createEmptyEmployee());
-  }
-
-  attachEmployee(
-    placeholder: Employee
-  ): void {
-    if (!this.team || !placeholder) {
-      return;
-    }
-
-    const selectedEmployeeId = placeholder.id;
-    if (!selectedEmployeeId) {
-      return;
-    }
-
-    // find employee in available list
-    const employee = this.availableEmployees.find(e => e.id === selectedEmployeeId);
-    if (!employee) {
-      return;
-    }
-
-    // prevent duplicates
-    const employeeExists = (this.team.employees || []).some((e:any) => e.id === employee.id);
-    if (employeeExists) {
-      return;
-    }
-
-    // replace placeholder with selected employee instance
-    const employeeArray = this.team.employees || [];
-    const index = employeeArray.indexOf(placeholder);
-    if (index >= 0) {
-      employeeArray.splice(index, 1, employee);
-    }
-
-    this.team.employees = employeeArray;
-    // refresh available employees
-    this.loadAvailableEmployees();
   }
 
   removeEmployee(
@@ -149,13 +127,29 @@ export class TeamDetailComponent implements OnInit {
     this.loadAvailableEmployees();
   }
 
-  addShift(): void {
-    if (!this.team) {
+  onAvailableSelected(
+    placeholder: Employee,
+    selectedId: number
+  ): void {
+    if (!this.team || !placeholder || !selectedId) {
       return;
     }
 
-    this.team.shiftTypes = this.team.shiftTypes || [];
-    this.team.shiftTypes.push(createEmptyShift());
+    const foundEmployee = this.availableEmployees.find(e => e.id === selectedId);
+    if (!foundEmployee) {
+      return;
+    }
+
+    const employeeArray = this.team.employees || [];
+    const index = employeeArray.indexOf(placeholder);
+
+    if (index >= 0) {
+      foundEmployee.teamId = this.team.id;
+      employeeArray.splice(index, 1, { ...foundEmployee });
+      this.team.employees = employeeArray;
+    }
+
+    this.loadAvailableEmployees();
   }
 
   removeShift(

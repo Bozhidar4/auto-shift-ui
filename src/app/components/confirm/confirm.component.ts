@@ -12,6 +12,9 @@ export class ConfirmComponent {
   @Input() title: string | null = null;
   @Input() message: string | null = null;
   @Input() visible = false;
+  // Optional custom labels for the action buttons. If not provided, template falls back to defaults.
+  @Input() confirmLabel: string | null = null;
+  @Input() cancelLabel: string | null = null;
   @Output() confirmed = new EventEmitter<void>();
   @Output() cancelled = new EventEmitter<void>();
 

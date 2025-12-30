@@ -4,11 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { createEmptyShift, ShiftType } from '../../models/shift-type.interface';
 import { Team } from '../../models/team';
+import { ToastService } from '../../services/toast.service';
+import { ConfirmComponent } from '../../components/confirm/confirm.component';
+import { ConfirmState, createEmptyConfirmState } from '../../models/confirm-state.interface';
 
 @Component({
   selector: 'app-shifts',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ConfirmComponent],
   templateUrl: './shifts.component.html',
   styleUrls: ['./shifts.component.scss']
 })
@@ -19,10 +22,12 @@ export class ShiftsComponent implements OnInit {
   newShift: ShiftType = createEmptyShift();
   loading = false;
   editingId: number | null = null;
-  editModel: any = null;
+  editModel: ShiftType = createEmptyShift();
+  confirmState: ConfirmState = createEmptyConfirmState();
 
   constructor(
-    private apiService: ApiService
+    private apiService: ApiService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -72,12 +77,17 @@ export class ShiftsComponent implements OnInit {
       teamId: Number(this.selectedTeamId),
       startTime: ensureSeconds(this.newShift.startTime),
       endTime: ensureSeconds(this.newShift.endTime),
-      requiredPeople: this.newShift.requiredPeople
+      requiredPeople: this.newShift.requiredPeople ?? 0
     };
     this.apiService.createShiftType(payload).subscribe({
       next: (response) => {
         this.newShift = createEmptyShift();
+        this.loadTeams();
         this.load(this.selectedTeamId);
+        this.toastService.show('Shift type created successfully.', 'success');
+      },
+      error: () => {
+        this.toastService.show('Error creating shift type.', 'error');
       }
     });
   }
@@ -116,18 +126,35 @@ export class ShiftsComponent implements OnInit {
   deleteShift(
     shift: ShiftType
   ): void {
-    if (!confirm(`Delete shift type "${shift.name}"?`)) {
-      return;
-    }
+    this.confirmState = {
+      visible: true,
+      title: 'Delete shift type',
+      message: `Delete shift type "${shift.name}"?`,
+      target: shift
+    };
+  }
 
-    this.apiService
-      .deleteShiftType(shift.id)
-      .subscribe({
-        next: () => {
-          this.load(this.selectedTeamId);
-          this.shifts = this.shifts.filter(x => x.id !== shift.id);
-        }
-      });
+  onConfirmedDelete(): void {
+    const shift: ShiftType = this.confirmState.target;
+    if (!shift) return;
+
+    this.apiService.deleteShiftType(shift.id).subscribe({
+      next: () => {
+        this.load(this.selectedTeamId);
+        this.shifts = this.shifts.filter(x => x.id !== shift.id);
+        this.toastService.show('Shift type deleted.', 'success');
+      },
+      error: () => {
+        this.toastService.show('Failed to delete shift type.', 'error');
+      }
+    });
+    this.confirmState.visible = false;
+    this.confirmState.target = null;
+  }
+
+  onCancelledDelete(): void {
+    this.confirmState.visible = false;
+    this.confirmState.target = null;
   }
 
   startEdit(
@@ -140,7 +167,7 @@ export class ShiftsComponent implements OnInit {
 
   cancelEdit(): void {
     this.editingId = null;
-    this.editModel = null;
+    this.editModel = createEmptyShift();
   }
 
   canSaveEdit(): boolean {
@@ -148,7 +175,7 @@ export class ShiftsComponent implements OnInit {
       return false;
     }
 
-    const code = (this.editModel.code || '').toString().trim();
+    const code = (this.editModel.initialCode || '').toString().trim();
     // allow empty code, but if present must be single alphanumeric char
     if (code && !/^[A-Za-z0-9]$/.test(code)) {
       return false;
@@ -177,10 +204,17 @@ export class ShiftsComponent implements OnInit {
         next: () => {
           this.cancelEdit();
           this.load(this.selectedTeamId);
-          const idx = this.shifts.findIndex(x => x.id === this.editModel.id);
+          const idx = this.shifts.findIndex(x => x.id === this.editModel?.id);
           if (idx > -1) {
-            this.shifts[idx] = this.editModel;
+            this.shifts[idx] = this.editModel
+              ? { ...this.editModel }
+              : this.shifts[idx];
           }
+
+          this.toastService.show('Shift type updated successfully.', 'success');
+        },
+        error: () => {
+          this.toastService.show('Failed to update shift type.', 'error');
         }
       });
   }

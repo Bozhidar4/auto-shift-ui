@@ -36,3 +36,33 @@
     cursor: pointer;
     color: inherit
 }
+
+.toast-timer {
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.6rem;
+}
+
+.progress-ring {
+    width: 20px;
+    height: 20px;
+    transform: rotate(-90deg);
+}
+
+.progress-ring .progress-bg {
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.06);
+    stroke-width: 2.4;
+}
+
+.progress-ring .progress {
+    fill: none;
+    stroke: #0ea5a4;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+}

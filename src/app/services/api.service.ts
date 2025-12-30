@@ -4,7 +4,7 @@ import { Observable, map } from 'rxjs';
 import { Team } from '../models/team';
 import { Employee } from '../models/employee.interface';
 import { ShiftType } from '../models/shift-type.interface';
-import { EmployeeLeave } from '../models/employee-leave.interface';
+import { EmployeeLeave, EmployeeLeaveDto } from '../models/employee-leave.interface';
 import { LeaveType } from '../models/leave-type.interface';
 import { ScheduleAssignmentUpdateDto } from '../models/schedule-assignment-update.interface';
 import { TeamCreate } from '../models/team-create..interface';
@@ -55,7 +55,7 @@ export class ApiService {
   ): Observable<Team> {
     return this.http.put(`${BASE_URL}/teams/${id}`, model).pipe(
       map((response: any) => {
-        if (response && (response.error || response.errors || !response.success)) {
+        if (response && (response.error || response.errors)) {
           throw response;
         }
 
@@ -134,24 +134,26 @@ export class ApiService {
   }
 
   createEmployee(
-    model: EmployeeRow
+    model: Employee
   ): Observable<Employee> {
     return this.http.post(`${BASE_URL}/employees`, model).pipe(
-      map((res: any) => {
-        // If backend returns { error: '...' } or similar, throw to be handled by ErrorInterceptor
-        if (res && (res.error || res.errors || !res.success)) throw res;
-        return res;
+      map((response: any) => {
+        if (response && (response.error || response.errors)) {
+          throw response;
+        }
+
+        return response;
       })
     );
   }
 
   updateEmployee(
     id: number,
-    model: EmployeeRow
+    model: Employee
   ): Observable<Employee> {
     return this.http.put(`${BASE_URL}/employees/${id}`, model).pipe(
       map((response: any) => {
-        if (response && (response.error || response.errors || !response.success)) {
+        if (response && (response.error || response.errors)) {
           throw response;
         }
 
@@ -206,7 +208,7 @@ export class ApiService {
   ): Observable<ShiftType> {
     return this.http.post(`${BASE_URL}/shifts`, model).pipe(
       map((res: any) => {
-        if (res && (res.error || res.errors || !res.success)) {
+        if (res && (res.error || res.errors)) {
           throw res;
         }
 
@@ -220,7 +222,7 @@ export class ApiService {
   ): Observable<ShiftType> {
     return this.http.put(`${BASE_URL}/shifts/${model.id}`, model).pipe(
       map((res: any) => {
-        if (res && (res.error || res.errors || !res.success)) {
+        if (res && (res.error || res.errors)) {
           throw res;
         }
 
@@ -234,7 +236,7 @@ export class ApiService {
   ): Observable<void> {
     return this.http.delete(`${BASE_URL}/shifts/${id}`).pipe(
       map((res: any) => {
-        if (res && (res.error || res.errors || !res.success)) {
+        if (res && (res.error || res.errors)) {
           throw res;
         }
 
@@ -263,30 +265,30 @@ export class ApiService {
   }
 
   createEmployeeLeave(
-    model: EmployeeLeave
+    model: EmployeeLeaveDto
   ): Observable<any> {
     return this.http.post(`${BASE_URL}/employeeLeaves`, model).pipe(
-      map((result: any) => {
-        if (result && (result.error || result.errors || !result.success)) {
-          throw result;
+      map((response: any) => {
+        if (response && (response.error || response.errors)) {
+          throw response;
         }
 
-        return result;
+        return response;
       })
     );
   }
 
   updateEmployeeLeave(
     id: number,
-    model: EmployeeLeave
+    model: EmployeeLeaveDto
   ): Observable<EmployeeLeave> {
     return this.http.put(`${BASE_URL}/employeeLeaves/${id}`, model).pipe(
-      map((result: any) => {
-        if (result && (result.error || result.errors || !result.success)) {
-          throw result;
+      map((response: any) => {
+        if (response && (response.error || response.errors)) {
+          throw response;
         }
 
-        return result;
+        return response;
       })
     );
   }
@@ -296,7 +298,7 @@ export class ApiService {
   ): Observable<void> {
     return this.http.delete(`${BASE_URL}/employeeLeaves/${id}`).pipe(
       map((res: any) => {
-        if (res && (res.error || res.errors || !res.success)) {
+        if (res && (res.error || res.errors)) {
           throw res;
         }
 
@@ -311,7 +313,7 @@ export class ApiService {
   ): Observable<LeaveType> {
     return this.http.post(`${BASE_URL}/leaveTypes`, model).pipe(
       map((res: any) => {
-        if (res && (res.error || res.errors || !res.success)) {
+        if (res && (res.error || res.errors)) {
           throw res;
         }
 
@@ -346,7 +348,7 @@ export class ApiService {
   ): Observable<LeaveType> {
     return this.http.put(`${BASE_URL}/leaveTypes/${model.id}`, model).pipe(
       map((res: any) => {
-        if (res && (res.error || res.errors || !res.success)) {
+        if (res && (res.error || res.errors)) {
           throw res;
         }
 
@@ -360,7 +362,7 @@ export class ApiService {
   ): Observable<void> {
     return this.http.delete(`${BASE_URL}/leaveTypes/${id}`).pipe(
       map((res: any) => {
-        if (res && (res.error || res.errors || !res.success)) {
+        if (res && (res.error || res.errors)) {
           throw res;
         }
 
@@ -416,7 +418,7 @@ export class ApiService {
   ): Observable<TeamRuleValue> {
     return this.http.post(`${BASE_URL}/teamRuleValues`, model).pipe(
       map((res: any) => {
-        if (res && (res.error || res.errors || !res.success)) {
+        if (res && (res.error || res.errors)) {
           throw res;
         }
 
@@ -430,12 +432,12 @@ export class ApiService {
     model: TeamRuleValue
   ): Observable<TeamRuleValue> {
     return this.http.put(`${BASE_URL}/teamRuleValues/${id}`, model).pipe(
-      map((result: any) => {
-        if (result && (result.error || result.errors || !result.success)) {
-          throw result;
+      map((response: any) => {
+        if (response && (response.error || response.errors)) {
+          throw response;
         }
 
-        return result;
+        return response;
       })
     );
   }
@@ -459,12 +461,12 @@ export class ApiService {
     //   EndDate: model.EndDate ?? model.endDate ?? model.end_date
     // };
     return this.http.post(`${BASE_URL}/schedules/generate`, model).pipe(
-      map((result: any) => {
-        if (result && (result.error || result.errors || (!result.success))) {
-          throw result;
+      map((response: any) => {
+        if (response && (response.error || response.errors)) {
+          throw response;
         }
 
-        return result;
+        return response;
       })
     );
   }
@@ -507,12 +509,12 @@ export class ApiService {
     model: GeneratedSchedule
   ) {
     return this.http.put(`${BASE_URL}/schedules/${id}`, model).pipe(
-      map((result: any) => {
-        if (result && (result.error || result.errors || !result.success)) {
-          throw result;
+      map((response: any) => {
+        if (response && (response.error || response.errors)) {
+          throw response;
         }
 
-        return result;
+        return response;
       })
     );
   }
@@ -522,7 +524,7 @@ export class ApiService {
   ): Observable<void> {
     return this.http.delete(`${BASE_URL}/schedules/${id}`).pipe(
       map((res: any) => { 
-        if (res && (res.error || res.errors || !res.success)) {
+        if (res && (res.error || res.errors)) {
           throw res;
         } 
         
@@ -536,12 +538,45 @@ export class ApiService {
     dto: ScheduleAssignmentUpdateDto
   ): Observable<void> {
     return this.http.patch(`${BASE_URL}/schedules/${scheduleId}/assignment`, dto).pipe(
-      map((result: any) => {
-        if (result && (result.error || result.errors || !result.success)) {
-          throw result;
+      map((response: any) => {
+        if (response && (response.error || response.errors)) {
+          throw response;
         }
 
-        return result;
+        return response;
+      })
+    );
+  }
+
+  // Delete an assignment (used when marking a day as OFF / null shift)
+  deleteAssignment(
+    scheduleId: number,
+    employeeId: number,
+    dateStr: string
+  ): Observable<void> {
+    const params = new HttpParams()
+      .set('employeeId', String(employeeId))
+      .set('date', dateStr);
+
+    return this.http.delete(`${BASE_URL}/schedules/${scheduleId}/assignment`, { params }).pipe(
+      map((res: any) => {
+        if (res && (res.error || res.errors)) {
+          throw res;
+        }
+
+        return;
+      })
+    );
+  }
+
+  getEmployeeHours(
+    scheduleId: number
+  ): Observable<any> {
+    return this.http.get<any>(`${BASE_URL}/schedules/${scheduleId}/hours`).pipe(
+      map((res: any) => {
+        if (!res) return [];
+        if (res.$values && Array.isArray(res.$values)) return res.$values;
+        return res;
       })
     );
   }
@@ -552,7 +587,7 @@ export class ApiService {
   ): Observable<any> {
     return this.http.post(`${BASE_URL}/auth/login`, { email, password }).pipe(
       map((res: any) => {
-        if (res && (res.error || res.errors || !res.success)) {
+        if (res && (res.error || res.errors)) {
           throw res;
         }
 

@@ -1,24 +1,28 @@
 <div class="card">
   <div class="page-title">Shifts</div>
   <div class="header-row">
-    <div class="controls">
+    <div class="controls shift-header-controls">
       <select class="input small-select" [(ngModel)]="selectedTeamId" (change)="load(+selectedTeamId)">
-        <option *ngFor="let t of teams" [value]="t.id">{{ t.name }}</option>
+        @for (team of teams; track $index) {
+        <option [value]="team.id">{{ team.name }}</option>
+        }
       </select>
       <button class="btn primary pill" (click)="load(+selectedTeamId)">Refresh</button>
     </div>
   </div>
-  <h3>Create Shift Type</h3>
-  <div style="display:flex;gap:0.5rem;align-items:center">
+
+  <div class="create-shift-container">
     <input class="input" placeholder="Name" [(ngModel)]="newShift.name" />
     <input class="input" placeholder="Code (1 char)" maxlength="1" [(ngModel)]="newShift.initialCode" />
     <input class="input" placeholder="Start (HH:MM)" [(ngModel)]="newShift.startTime" />
     <input class="input" placeholder="End (HH:MM)" [(ngModel)]="newShift.endTime" />
+    <input class="input" type="number" min="1" placeholder="Required people" [(ngModel)]="newShift.requiredPeople"
+      style="width:160px" />
     <button class="btn primary pill" (click)="create()">Create</button>
   </div>
   <div style="margin-top:0.75rem">
     <div class="table-scroll">
-      <table class="shifts-table mat-elevation-z4">
+      <table class="shifts-table mat-elevation-z3">
         <thead>
           <tr>
             <th>Code</th>
@@ -45,7 +49,7 @@
             </ng-container>
             <ng-template #editRow>
               <td class="code-cell">
-                <input class="input" maxlength="1" [(ngModel)]="editModel.code" />
+                <input class="input" maxlength="1" [(ngModel)]="editModel.initialCode" />
               </td>
               <td>
                 <input class="input" [(ngModel)]="editModel.name" />
@@ -60,8 +64,8 @@
                 <input class="input" type="number" min="1" [(ngModel)]="editModel.requiredPeople" />
               </td>
               <td class="actions">
-                <button class="btn" (click)="saveEdit()" [disabled]="!canSaveEdit()">Save</button>
-                <button class="btn" (click)="cancelEdit()">Cancel</button>
+                <button class="btn primary pill" (click)="saveEdit()" [disabled]="!canSaveEdit()">Save</button>
+                <button class="btn pill" (click)="cancelEdit()">Cancel</button>
               </td>
             </ng-template>
           </tr>
@@ -75,3 +79,8 @@
 @if (loading) {
 <div class="muted">Loading…</div>
 }
+
+<app-confirm [visible]="confirmState.visible" [title]="confirmState.title" [message]="confirmState.message"
+  [confirmLabel]="confirmState.confirmLabel ?? null" [cancelLabel]="confirmState.cancelLabel ?? null"
+  (confirmed)="onConfirmedDelete()" (cancelled)="onCancelledDelete()">
+</app-confirm>

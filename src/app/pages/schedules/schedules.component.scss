@@ -44,31 +44,45 @@ h2 {
 .view-table thead th {
     position: sticky;
     top: 0;
-    z-index: 5;
+    z-index: 5; /* base z for header cells */
 }
 
-.sticky-col {
+/* Sticky first column in the header should sit above other header cells */
+.view-table thead th.sticky-col {
     position: sticky;
     left: 0;
-    z-index: 6;
+    top: 0;
+    z-index: 15; /* high so header-first-col overlays other headers */
     background: #fff;
 }
 
-/* Let table columns auto-size to their content */
-.view-table {
-    table-layout: auto;
+/* Sticky first column cells in the body should sit below the header but above normal cells */
+.view-table tbody td.sticky-col {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background: #fff;
 }
 
-/* Prevent cell contents from overflowing */
 .view-table {
+    table-layout: auto;
     border-collapse: collapse;
+
+    .employee-total-hours {
+        padding: 6px;
+        text-align: center;
+        font-weight: bold;
+    }
 }
+
 
 .view-table td,
 .view-table th {
     border: 1px solid #eee;
     padding: 6px;
     vertical-align: middle;
+    background:#fff;
+    white-space:nowrap;
 }
 
 .emp-cell {
@@ -99,11 +113,16 @@ h2 {
     margin-top: 6px;
 }
 
+/* Highlight changed cells awaiting save */
+.view-table td.changed {
+    background: #fff7e6; /* light yellow */
+    box-shadow: inset 0 0 0 2px rgba(250, 200, 70, 0.08);
+}
+
 /* Ensure sticky header and first column properly overlay cells */
 .view-table thead th {
     background: #fff;
 }
 
-.sticky-col {
-    background: #fff;
-}
+/* fallback for any other uses */
+.sticky-col { background: #fff; }

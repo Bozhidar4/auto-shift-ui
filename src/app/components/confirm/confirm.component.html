@@ -4,8 +4,8 @@
         <div class="confirm-title">{{ title || 'Confirm' }}</div>
         <div class="confirm-message">{{ message }}</div>
         <div class="confirm-actions">
-            <button class="btn pill" (click)="onCancel()">Cancel</button>
-            <button class="btn danger pill" (click)="onConfirm()">Delete</button>
+            <button class="btn pill" (click)="onCancel()">{{ cancelLabel || 'Cancel' }}</button>
+            <button class="btn danger pill" (click)="onConfirm()">{{ confirmLabel || 'Delete' }}</button>
         </div>
     </div>
 </div>

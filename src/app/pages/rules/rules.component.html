@@ -1,8 +1,7 @@
 <div class="card">
   <div class="page-title">Rules</div>
 
-  <div class="controls" style="margin-bottom:0.75rem">
-    <label style="display:flex;align-items:center;gap:0.5rem">Select Team:</label>
+  <div class="controls rule-controls-container">
     <select class="input rules-team-select" [(ngModel)]="selectedTeamId" (change)="onTeamChange()">
       <option [ngValue]="null">-- choose team --</option>
       @for (t of teams; track $index) {

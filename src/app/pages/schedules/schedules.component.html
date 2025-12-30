@@ -20,7 +20,6 @@
 	</div>
 
 	<div style="margin-top:1rem">
-		<div class="muted" style="margin-bottom:0.5rem">Existing schedules for selected team</div>
 		@if (!selectedTeamId) {
 		<div class="muted" style="padding:1rem">
 			Select a team to see existing schedules.
@@ -47,7 +46,8 @@
 
 				<!-- Reusable confirm modal -->
 				<app-confirm [visible]="confirmState.visible" [title]="confirmState.title"
-					[message]="confirmState.message" (confirmed)="onConfirmedDelete()"
+					[message]="confirmState.message" [confirmLabel]="confirmState.confirmLabel ?? null"
+					[cancelLabel]="confirmState.cancelLabel ?? null" (confirmed)="onConfirmedDelete()"
 					(cancelled)="onCancelledDelete()"></app-confirm>
 
 			</div>
@@ -56,26 +56,29 @@
 		}
 
 		<!-- Modal: view schedule -->
-		<div *ngIf="viewingSchedule" class="modal-overlay">
+		@if (viewingSchedule) {
+		<div class="modal-overlay">
 			<div class="modal-card card">
 				<div class="modal-header"
 					style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
 					<div style="font-weight:700">Schedule {{ viewingSchedule.id }} — {{ viewingSchedule.startDate |
 						date:'dd MMM yyyy' }} → {{ viewingSchedule.endDate | date:'dd MMM yyyy' }}</div>
-					<button class="btn pill" aria-label="Close" (click)="closeView()">✕</button>
+					<div style="display:flex;gap:.5rem;align-items:center">
+						<button class="btn primary pill" (click)="saveAll()">Save</button>
+						<button class="btn pill" aria-label="Close" (click)="closeView()">✕</button>
+					</div>
 				</div>
 				<div class="modal-body" style="overflow:auto;height:85vh">
 					<div class="table-wrapper">
 						<table class="view-table" style="width:100%;border-collapse:collapse;table-layout:auto">
 							<thead>
 								<tr>
-									<th class="sticky-col" style="border:1px solid #eee;padding:6px;background:#fff">
+									<th class="sticky-col">
 										Employee</th>
 									@for (date of tableDates; track $index) {
-									<th style="border:1px solid #eee;padding:6px;background:#fff;white-space:nowrap">{{
-										formatDateHeader(date) }}
-									</th>
+									<th>{{ formatDateHeader(date) }}</th>
 									}
+									<th class="employee-total-hours">Total hours</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -83,39 +86,47 @@
 								<tr>
 									<td class="sticky-col emp-cell">{{ employee.name }}</td>
 									@for (d of tableDates; track $index) {
-									<td class="data-cell">
+									<td class="data-cell" [class.changed]="changedCells[employee.id + '__' + d]">
 										<ng-container [ngSwitch]="!!tableCells[employee.id + '__' + d]">
 											<div *ngSwitchCase="true" class="cell-content">
 												<select class="input full-width"
 													[(ngModel)]="tableCells[employee.id + '__' + d].shiftTypeId"
+													(change)="markCellChanged(employee.id + '__' + d)"
 													[disabled]="isPastDate(d)">
-													<option [ngValue]="null">-</option>
-													<option *ngFor="let st of shiftTypes" [ngValue]="st.id">{{
-														st.initialCode }}</option>
+													<option [ngValue]="0">OFF</option>
+													@for (shiftType of shiftTypes; track $index) {
+													<option [ngValue]="shiftType.id">{{ shiftType.initialCode }}
+													</option>
+													}
 												</select>
-												<div class="cell-actions">
+												<!-- <div class="cell-actions">
 													<button class="btn primary pill" (click)="saveCell(employee.id, d)"
 														[disabled]="isPastDate(d)">Save</button>
-												</div>
+												</div> -->
 											</div>
 											<div *ngSwitchDefault class="cell-content">
 												<!-- editable empty cell -->
 												<select class="input full-width"
 													[(ngModel)]="emptyCellModel[employee.id + '__' + d]"
+													(change)="markCellChanged(employee.id + '__' + d)"
 													[disabled]="isPastDate(d)">
-													<option [ngValue]="null">-</option>
-													<option *ngFor="let st of shiftTypes" [ngValue]="st.id">{{
-														st.initialCode }}</option>
+													<option [ngValue]="0">OFF</option>
+													@for (shiftType of shiftTypes; track $index) {
+													<option [ngValue]="shiftType.id">{{ shiftType.initialCode }}
+													</option>
+													}
 												</select>
-												<div class="cell-actions">
+												<!-- <div class="cell-actions">
 													<button class="btn primary pill"
 														(click)="createEmptyCellAndSave(employee.id, d)"
 														[disabled]="isPastDate(d)">Save</button>
-												</div>
+												</div> -->
 											</div>
 										</ng-container>
 									</td>
 									}
+									<td class="employee-total-hours">{{ (employeeHoursMap[employee.id]) | number:'1.0-2'
+										}}</td>
 								</tr>
 								}
 							</tbody>
@@ -124,5 +135,6 @@
 				</div>
 			</div>
 		</div>
+		}
 	</div>
 </div>

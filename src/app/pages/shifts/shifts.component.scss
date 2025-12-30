@@ -2,6 +2,17 @@ h2 {
     margin-top: 0;
 }
 
+.shift-header-controls {
+    margin-top: 1.5rem;
+}
+
+.create-shift-container {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
 .shifts-table {
     width: 100%;
     border-collapse: collapse;
@@ -11,8 +22,8 @@ h2 {
 .shifts-table th,
 .shifts-table td {
     text-align: left;
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .shifts-table thead th {
@@ -27,7 +38,7 @@ h2 {
 }
 
 .muted {
-    color: rgba(0,0,0,0.5);
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .code-cell {
@@ -40,7 +51,7 @@ h2 {
     max-height: 320px;
     overflow: auto;
     border-radius: 6px;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.02);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.02);
 }
 
 .shifts-table thead th {

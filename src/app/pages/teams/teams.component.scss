@@ -8,4 +8,13 @@ h2 {
 
 .header-row .btn {
     margin-left: 0.5rem;
+
+    .header-title {
+        display: block;
+    }
+}
+
+.team-buttons-container {
+    margin-left: auto;
+    display: flex;
 }
