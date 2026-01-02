@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 import { ApiService } from '../../services/api.service';
 import { Team } from '../../models/team';
 import { createEmptyEmployee, Employee } from '../../models/employee.interface';
@@ -12,7 +13,7 @@ import { ToastService } from '../../services/toast.service';
 @Component({
   selector: 'app-team-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, MatIconModule],
   templateUrl: './team-detail.component.html',
   styleUrls: ['./team-detail.component.scss']
 })

@@ -13,11 +13,12 @@ import { Employee } from '../../models/employee.interface';
 import { ScheduleAssignmentUpdateDto } from '../../models/schedule-assignment-update.interface';
 import { GeneratedSchedule } from '../../models/schedule-generated.interface';
 import { EmployeeHoursDto } from '../../models/employee-hours.interface';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-schedules',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmComponent],
+  imports: [CommonModule, FormsModule, ConfirmComponent, MatIconModule],
   templateUrl: './schedules.component.html',
   styleUrls: ['./schedules.component.scss']
 })

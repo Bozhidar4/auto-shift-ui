@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { Employee } from '../../models/employee.interface';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
+import { MatIconModule } from '@angular/material/icon';
 import { ConfirmState } from '../../models/confirm-state.interface';
 import { EmployeeRow } from '../../models/employee-row.interface';
 import { Team } from '../../models/team';
@@ -12,7 +13,7 @@ import { ToastService } from '../../services/toast.service';
 @Component({
   selector: 'app-employees',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmComponent],
+  imports: [CommonModule, FormsModule, ConfirmComponent, MatIconModule],
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.scss']
 })

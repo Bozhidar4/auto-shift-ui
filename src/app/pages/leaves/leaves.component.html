@@ -1,6 +1,6 @@
 <div class="card">
   <div class="page-header">
-    <div class="page-title">Employee Leaves</div>
+    <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">person_off</mat-icon>Employee Leaves</div>
     <div class="controls">
       <button class="btn primary pill" (click)="loadLeaves()">Refresh Leaves</button>
       <button class="btn pill" (click)="showLeaveTypeManager = !showLeaveTypeManager">Manage Leave Types</button>
@@ -83,10 +83,10 @@
       }
       @else {
       @if (!selectedEmployeeId) {
-      <div class="muted">Please select an employee to view their leaves.</div>
+      <div class="muted no-leave-found">Please select an employee to view their leaves.</div>
       }
       @else {
-      <div class="muted">No leaves found for the selected employee.</div>
+      <div class="muted no-leave-found">No leaves found for the selected employee.</div>
       }
       }
     </table>
@@ -95,7 +95,7 @@
   @if (showLeaveTypeManager) {
   <div class="card leave-type-container">
     <div class="leave-type-title-container">
-      <div class="page-title">Leave Types</div>
+      <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">personal_injury</mat-icon>Leave Types</div>
       <button class="btn pill" aria-label="Close"
         (click)="showLeaveTypeManager = false; newLeaveType = createEmptyLeaveType()">✕</button>
     </div>

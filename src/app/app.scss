@@ -163,6 +163,13 @@ body {
   font-size: 1.25rem
 }
 
+.page-title-icon {
+  vertical-align: middle;
+  margin-right: 0.5rem;
+  font-size: 20px;
+  color: var(--primary-600);
+}
+
 .btn {
   background: transparent;
   border: 1px solid rgba(16, 16, 24, 0.06);

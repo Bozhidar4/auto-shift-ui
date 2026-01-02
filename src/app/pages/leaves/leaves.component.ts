@@ -10,12 +10,13 @@ import { Employee } from '../../models/employee.interface';
 import { createEmptyEmployeeLeave, EmployeeLeave, EmployeeLeaveDto } from '../../models/employee-leave.interface';
 import { createEmptyLeaveType, LeaveType } from '../../models/leave-type.interface';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
+import { MatIconModule } from '@angular/material/icon';
 import { ConfirmState } from '../../models/confirm-state.interface';
 
 @Component({
   selector: 'app-leaves',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmComponent],
+  imports: [CommonModule, FormsModule, ConfirmComponent, MatIconModule],
   templateUrl: './leaves.component.html',
   styleUrls: ['./leaves.component.scss']
 })

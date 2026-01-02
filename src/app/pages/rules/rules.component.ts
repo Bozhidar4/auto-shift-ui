@@ -6,11 +6,12 @@ import { Team } from '../../models/team';
 import { ShiftRule } from '../../models/shift-rule.interface';
 import { TeamRuleValue } from '../../models/team-rule-value.interface';
 import { ToastService } from '../../services/toast.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-rules',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatIconModule],
   templateUrl: './rules.component.html',
   styleUrls: ['./rules.component.scss']
 })

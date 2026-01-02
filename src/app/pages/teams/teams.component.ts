@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 import { ApiService } from '../../services/api.service';
 import { Team } from '../../models/team';
 import { TeamCreate } from '../../models/team-create..interface';
@@ -12,7 +13,7 @@ import { ConfirmState, createEmptyConfirmState } from '../../models/confirm-stat
 @Component({
   selector: 'app-teams',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ConfirmComponent],
+  imports: [CommonModule, FormsModule, RouterModule, ConfirmComponent, MatIconModule],
   templateUrl: './teams.component.html',
   styleUrls: ['./teams.component.scss']
 })

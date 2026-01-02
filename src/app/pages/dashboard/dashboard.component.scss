@@ -7,9 +7,26 @@ h2 {
 
     .stat-card {
         text-decoration: none;
-
-        .stat-value {
-            margin-top: 1rem;
-        }
     }
+}
+
+.stat-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--primary-600);
+
+    .stat-icon {
+        font-size: 36px;
+        color: var(--primary-600);
+        width: auto;
+        height: auto;
+    }
+}
+
+.page-title-icon {
+    vertical-align: middle;
+    margin-right: 0.5rem;
+    font-size: 20px;
+    color: var(--primary-600);
 }

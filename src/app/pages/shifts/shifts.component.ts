@@ -6,12 +6,13 @@ import { createEmptyShift, ShiftType } from '../../models/shift-type.interface';
 import { Team } from '../../models/team';
 import { ToastService } from '../../services/toast.service';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
+import { MatIconModule } from '@angular/material/icon';
 import { ConfirmState, createEmptyConfirmState } from '../../models/confirm-state.interface';
 
 @Component({
   selector: 'app-shifts',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmComponent],
+  imports: [CommonModule, FormsModule, ConfirmComponent, MatIconModule],
   templateUrl: './shifts.component.html',
   styleUrls: ['./shifts.component.scss']
 })
