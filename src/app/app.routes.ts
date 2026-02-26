@@ -1,15 +1,26 @@
 import { Routes } from '@angular/router';
-import { provideRoutes } from '@angular/router';
 
 export const routes: Routes = [
-	{ path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-	{ path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent) },
+	// Top-level marketing/auth routes (no app shell)
+	{ path: '', pathMatch: 'full', loadComponent: () => import('./pages/landing/landing.component').then(m => m.LandingComponent) },
 	{ path: 'login', loadComponent: () => import('./pages/auth/auth.component').then(m => m.AuthComponent) },
-	{ path: 'teams', loadComponent: () => import('./pages/teams/teams.component').then(m => m.TeamsComponent) },
-	{ path: 'teams/:id', loadComponent: () => import('./pages/team-detail/team-detail.component').then(m => m.TeamDetailComponent) },
-	{ path: 'employees', loadComponent: () => import('./pages/employees/employees.component').then(m => m.EmployeesComponent) },
-	{ path: 'shifts', loadComponent: () => import('./pages/shifts/shifts.component').then(m => m.ShiftsComponent) },
-	{ path: 'rules', loadComponent: () => import('./pages/rules/rules.component').then(m => m.RulesComponent) },
-	{ path: 'schedules', loadComponent: () => import('./pages/schedules/schedules.component').then(m => m.SchedulesComponent) },
-	{ path: 'leaves', loadComponent: () => import('./pages/leaves/leaves.component').then(m => m.LeavesComponent) }
+
+	// App shell routes — LayoutComponent contains the header/sidebar and a router-outlet for children
+	{
+		path: '',
+		loadComponent: () => import('./layout/layout.component').then(m => m.LayoutComponent),
+		children: [
+			{ path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent) },
+			{ path: 'teams', loadComponent: () => import('./pages/teams/teams.component').then(m => m.TeamsComponent) },
+			{ path: 'teams/:id', loadComponent: () => import('./pages/team-detail/team-detail.component').then(m => m.TeamDetailComponent) },
+			{ path: 'employees', loadComponent: () => import('./pages/employees/employees.component').then(m => m.EmployeesComponent) },
+			{ path: 'shifts', loadComponent: () => import('./pages/shifts/shifts.component').then(m => m.ShiftsComponent) },
+			{ path: 'rules', loadComponent: () => import('./pages/rules/rules.component').then(m => m.RulesComponent) },
+			{ path: 'schedules', loadComponent: () => import('./pages/schedules/schedules.component').then(m => m.SchedulesComponent) },
+			{ path: 'leaves', loadComponent: () => import('./pages/leaves/leaves.component').then(m => m.LeavesComponent) }
+		]
+	},
+
+	// fallback
+	{ path: '**', redirectTo: '' }
 ];

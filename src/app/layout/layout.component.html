@@ -1,5 +1,5 @@
-<div class="app-root" [class.auth-mode]="isAuthRoute()">
-  @if (!isAuthRoute()) {
+<div class="app-root" [class.auth-mode]="isAuth" [class.landing-mode]="isLanding">
+  @if (!isAuth && !isLanding) {
   <aside class="app-sidebar">
     <div class="brand">
       <span class="brand-logo" aria-hidden="true"></span>
@@ -19,11 +19,10 @@
   </aside>
   }
 
-  @if (!isAuthRoute()) {
+  @if (!isAuth && !isLanding) {
   <header class="app-header">
     <div class="brand">AutoShift</div>
     <div class="header-actions">
-      <button class="btn pill">Profile</button>
       <button class="btn pill" (click)="logout()">Log out</button>
     </div>
   </header>

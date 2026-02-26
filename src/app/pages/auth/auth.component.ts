@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 
 @Component({
@@ -20,8 +20,16 @@ export class AuthComponent {
 
   constructor(
     private api: ApiService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
+
+  ngOnInit(): void {
+    const qp = this.route.snapshot.queryParamMap.get('mode');
+    if (qp === 'register' || qp === 'login') {
+      this.mode = qp as 'login' | 'register';
+    }
+  }
 
   toggleMode() {
     this.mode = this.mode === 'login' ? 'register' : 'login';

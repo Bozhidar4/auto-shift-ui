@@ -37,6 +37,10 @@
         <a (click)="mode = mode === 'login' ? 'register' : 'login'" class="muted auth-toggle" role="button">{{ mode ===
           'login' ? "Don't have an account? Sign up" : 'Already have an account? Sign in' }}</a>
       </div>
+
+      <div class="auth-message">
+        <a routerLink="/" class="muted auth-toggle" role="button">Home</a>
+      </div>
     </div>
   </div>
 </div>

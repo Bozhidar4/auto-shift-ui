@@ -1,0 +1,115 @@
+<div class="landing-root">
+    <header class="landing-header">
+        <div style="display:flex; align-items:center">
+            <div class="brand-logo"></div>
+            <div class="brand-name">AutoShift</div>
+        </div>
+        <nav class="landing-nav">
+            <a href="#features" class="menu-link">Features</a>
+            <a href="#pricing" class="menu-link">Pricing</a>
+            <a class="menu-link" routerLink="/login">Sign in</a>
+            <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">Get started</a>
+        </nav>
+    </header>
+
+    <main class="landing-main">
+        <section class="hero">
+            <div class="hero-left">
+                <h1>Smart shift scheduling that scales with your business</h1>
+                <p class="lead">Create, publish and manage shift schedules in minutes — safer staffing, less churn,
+                    and time saved for managers and teams.</p>
+                <ul class="hero-features">
+                    <li>Auto-assigned shifts with custom rules</li>
+                    <li>Per-team permissions and approvals</li>
+                    <li>Create your own shift types</li>
+                </ul>
+                <div style="margin-top: 2rem;">
+                    <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">Start Free Trial</a>
+                    <a class="btn outline" routerLink="/login">Sign In</a>
+                </div>
+                <div style="margin-top:1rem; color:var(--muted)">Free for up to 5 employees · 1 month trial ·
+                    $1/additional
+                    employee</div>
+            </div>
+            <div class="hero-right">
+                <div class="mockup">
+                    <img src="../../../assets/images/office-1.jpg" alt="Office" class="device-frame" style="width: 100%; max-width:100%; height:auto;" />
+                </div>
+            </div>
+        </section>
+
+        <section class="features" id="features">
+            <div class="features-grid">
+                <div class="feature card">
+                    <div class="f-title">Auto-assign shifts</div>
+                    <div class="f-desc">Create rules and let AutoShift suggest the best assignments.</div>
+                </div>
+                <div class="feature card">
+                    <div class="f-title">Team rules</div>
+                    <div class="f-desc">Set team rules which will be used for auto generation of schedules.</div>
+                </div>
+                <div class="feature card">
+                    <div class="f-title">Create shifts</div>
+                    <div class="f-desc">Create your own shift types to match your business needs.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pricing" id="pricing">
+            <h2 style="margin-bottom:0.75rem">Pricing</h2>
+            <div class="pricing-grid">
+                <div class="card plan">
+                    <div class="plan-inner">
+                        <div class="plan-name">Free</div>
+                        <div class="plan-price">$0<span style="font-size:0.9rem; font-weight:600">/mo</span></div>
+                        <div class="plan-sub">Up to 5 employees<br>No credit card required</div>
+                        <div class="plan-cta"><a class="btn primary" routerLink="/login"
+                                [queryParams]="{ mode: 'register' }">Start Free</a></div>
+                    </div>
+                </div>
+
+                <div class="card plan popular">
+                    <span class="plan-badge">Popular</span>
+                    <div class="plan-inner">
+                        <div class="plan-name">Starter</div>
+                        <div class="plan-price">$49<span style="font-size:0.9rem; font-weight:600">/mo</span></div>
+                        <div class="plan-sub">Up to 20 employees · $1/add-on</div>
+                        <div class="plan-cta"><a class="btn primary" routerLink="/login"
+                                [queryParams]="{ mode: 'register' }">Choose Starter</a></div>
+                    </div>
+                </div>
+
+                <div class="card plan">
+                    <div class="plan-inner">
+                        <div class="plan-name">Growth</div>
+                        <div class="plan-price">$199<span style="font-size:0.9rem; font-weight:600">/mo</span></div>
+                        <div class="plan-sub">Up to 100 employees · $1/add-on</div>
+                        <div class="plan-cta"><a class="btn primary" routerLink="/login"
+                                [queryParams]="{ mode: 'register' }">Choose Growth</a></div>
+                    </div>
+                </div>
+
+                <div class="card plan enterprise">
+                    <div class="plan-inner">
+                        <div class="plan-name">Enterprise</div>
+                        <div class="plan-price">100+<span style="font-size:0.9rem; font-weight:600"> employees</span>
+                        </div>
+                        <div class="plan-sub">Custom capacity &amp; SLAs · Dedicated support</div>
+                        <div class="plan-cta"><a class="btn primary"
+                                href="mailto:sales@autoshift.com?subject=Enterprise%20pricing">Contact Sales</a></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="landing-footer">
+        <div style="display:flex; justify-content:space-between; align-items:center">
+            <div>© AutoShift · Built with care</div>
+            <div style="display:flex; gap:1rem">
+                <a class="menu-link" routerLink="/login">Dashboard</a>
+                <a class="menu-link" href="#">Privacy</a>
+            </div>
+        </div>
+    </footer>
+</div>

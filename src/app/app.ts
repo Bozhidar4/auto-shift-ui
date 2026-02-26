@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { LayoutComponent } from './layout/layout.component';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [LayoutComponent],
+  imports: [CommonModule, RouterModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   standalone: true

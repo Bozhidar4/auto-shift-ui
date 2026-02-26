@@ -1,0 +1,305 @@
+.landing-root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, #f7f8fb, #ffffff);
+    color: #0f172a
+}
+
+.landing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: linear-gradient(90deg, #6f5bd6, #7dd3fc);
+    color: #fff;
+    box-shadow: 0 8px 30px rgba(111, 91, 214, 0.08)
+}
+
+.brand-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #7dd3fc, #6f5bd6);
+    box-shadow: 0 10px 30px rgba(111, 91, 214, 0.12)
+}
+
+.brand-name {
+    font-weight: 800;
+    margin-left: 0.5rem
+}
+
+.landing-nav {
+    display: flex;
+    gap: 1rem;
+    align-items: center
+}
+
+.menu-link {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-weight: 600
+}
+
+.muted {
+    color: rgba(15,23,42,0.5);
+}
+
+.card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 28px rgba(12,8,30,0.06);
+    padding: 0.75rem;
+}
+
+.btn {
+    padding: 0.6rem 1rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 700
+}
+
+.btn.primary {
+    background: linear-gradient(90deg, #0ea5e9, #6f5bd6);
+    color: #fff;
+    border: none;
+    box-shadow: 0 8px 24px rgba(111, 91, 214, 0.12)
+}
+
+.btn.outline {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: transparent;
+    color: #fff
+}
+
+/* Hero-specific override: make outline visible on light hero background */
+.hero .btn.outline {
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    color: #0f172a;
+    background: rgba(15, 23, 42, 0.03);
+    box-shadow: none;
+    transition: transform 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
+}
+
+.hero .btn.outline:hover {
+    background: rgba(15, 23, 42, 0.06);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(12, 8, 30, 0.06);
+}
+
+.landing-main {
+    flex: 1;
+    max-width: 1200px;
+    margin: 2rem auto;
+    width: 100%;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column
+}
+
+.hero {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    padding: 3rem 0;
+    min-height: 320px
+}
+
+.hero-left {
+    flex: 1;
+    min-width: 0
+}
+
+.hero-left h1 {
+    font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+    line-height: 1.12;
+    margin: 0 0 0.75rem;
+    color: #0f172a;
+    word-break: break-word
+}
+
+.lead {
+    color: #475569;
+    margin-bottom: 1.25rem
+}
+
+.hero-features {
+    display: flex;
+    gap: 1rem;
+    padding: 0;
+    margin: 0 0 1rem 0;
+    list-style: none;
+    color: #475569;
+}
+
+.hero-features li {
+    background: rgba(15,23,42,0.04);
+    padding: 0.45rem 1rem 0.45rem 1rem;
+    border-radius: 999px;
+    font-size: 0.95rem;
+}
+
+.hero-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    height: stretch;
+}
+
+.mockup {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(12, 8, 30, 0.06);
+    background: #fff
+}
+
+.device-frame {
+    width: 320px;
+    height: 220px;
+    border-radius: 10px;
+    background: linear-gradient(180deg,#f8fafc,#ffffff);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color: #94a3b8;
+    font-weight:700;
+    border: 1px solid rgba(15,23,42,0.04);
+}
+
+.features {
+    padding: 1rem 0
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem
+}
+
+.feature {
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+    min-height: 100px
+}
+
+.f-title {
+    font-weight: 700;
+    margin-bottom: 0.25rem
+}
+
+.f-desc {
+    font-size: 0.95rem
+}
+
+.pricing {
+    padding: 1.25rem 0
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.plan {
+    padding: 0;
+    border-radius: 12px;
+    overflow: hidden
+}
+
+.plan .plan-inner {
+    padding: 1.25rem;
+    text-align: center;
+    background: linear-gradient(180deg, #fff, #fbfbff);
+    box-shadow: 0 10px 30px rgba(12, 8, 30, 0.04);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center
+}
+
+.plan .plan-name {
+    font-weight: 800;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem
+}
+
+.plan .plan-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem
+}
+
+.plan .plan-sub {
+    color: var(--muted);
+    margin-bottom: 0.75rem
+}
+
+.plan .plan-cta {
+    margin-top: 0.5rem
+}
+
+.plan.popular {
+    position: relative
+}
+
+.plan.enterprise .plan-inner {
+    background: linear-gradient(180deg,#fff, #f7f9ff);
+    border: 1px solid rgba(111,91,214,0.06);
+}
+
+.plan .plan-cta .btn {
+    width: 100%;
+}
+
+.plan-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #6f5bd6;
+    color: #fff;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.8rem
+}
+
+.landing-footer {
+    margin-top: auto;
+    padding: 1.25rem 2rem;
+    background: linear-gradient(180deg, #0c1220, #060914);
+    color: #cbd5e1
+}
+
+@media (max-width:900px) {
+    .hero {
+        flex-direction: column;
+        padding: 2rem 0
+    }
+
+    .hero-left {
+        text-align: center
+    }
+
+    .hero-right {
+        order: -1
+    }
+
+    .hero-left h1 {
+        font-size: 1.8rem
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr
+    }
+
+    .pricing-grid {
+        flex-direction: column
+    }
+}
