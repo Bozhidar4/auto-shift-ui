@@ -1,46 +1,43 @@
-<div class="auth-root">
-  <div class="auth-card card">
-    <div class="auth-brand">
-      <div class="brand-logo" aria-hidden="true"></div>
-      <div>
-        <div class="brand-name">AutoShift</div>
-        <div class="muted">Schedule smarter. Ship happier.</div>
-      </div>
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="logo"></div>
+            <h1>{{ mode === 'login' ? 'Welcome back' : 'Create an account' }}</h1>
+            <p>Schedule smarter. Ship happier.</p>
+        </div>
+
+        <div class="auth-form">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" [(ngModel)]="email" class="auth-input" placeholder="name@company.com" />
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" [(ngModel)]="password" class="auth-input" placeholder="••••••••" />
+            </div>
+
+            @if (error) {
+            <div
+                style="color: #ef4444; font-size: 0.875rem; background: #fef2f2; padding: 0.75rem; border-radius: 8px; border: 1px solid #fecaca;">
+                {{ error }}
+            </div>
+            }
+
+            <button class="btn primary"
+                style="padding: 0.875rem; font-size: 1rem; border-radius: 12px; margin-top: 0.5rem;" (click)="submit()">
+                {{ mode === 'login' ? 'Sign in' : 'Create account' }}
+            </button>
+        </div>
+
+        <div class="auth-footer">
+            <a (click)="toggleMode()" style="cursor: pointer; display: inline-block;">
+                {{ mode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Log in' }}
+            </a>
+            <div style="margin-top: 0.5rem;">
+                <a routerLink="/" style="cursor: pointer; color: #94a3b8; font-size: 0.85rem; font-weight: 500;">&larr;
+                    Back to Home</a>
+            </div>
+        </div>
     </div>
-
-    <h2 class="page-title">{{ mode === 'login' ? 'Sign in' : 'Create account' }}</h2>
-
-    <div class="form">
-      <label class="muted">Email</label>
-      <input type="email" [(ngModel)]="email" class="input" />
-
-      <label class="muted">Password</label>
-      <input type="password" [(ngModel)]="password" class="input" />
-
-      @if (mode === 'register') {
-      <div>
-        <label class="muted">Full name</label>
-        <input [(ngModel)]="displayName" class="input" />
-      </div>
-      }
-
-      @if (error) {
-        <div class="error">{{ error }}</div>
-      }
-
-      <div class="controls auth-actions">
-        <button class="btn primary pill" (click)="submit()">{{ mode === 'login' ? 'Sign in' : 'Create account'
-          }}</button>
-      </div>
-
-      <div class="auth-message">
-        <a (click)="mode = mode === 'login' ? 'register' : 'login'" class="muted auth-toggle" role="button">{{ mode ===
-          'login' ? "Don't have an account? Sign up" : 'Already have an account? Sign in' }}</a>
-      </div>
-
-      <div class="auth-message">
-        <a routerLink="/" class="muted auth-toggle" role="button">Home</a>
-      </div>
-    </div>
-  </div>
 </div>

@@ -39,12 +39,12 @@ export class ApiService {
     model: TeamCreate
   ): Observable<Team> {
     return this.http.post(`${BASE_URL}/teams`, model).pipe(
-      map((response: any) => { 
+      map((response: any) => {
         if (response && (response.error || response.errors || !response.success)) {
           throw response;
-        } 
-        
-        return response; 
+        }
+
+        return response;
       })
     );
   }
@@ -523,12 +523,12 @@ export class ApiService {
     id: string | number
   ): Observable<void> {
     return this.http.delete(`${BASE_URL}/schedules/${id}`).pipe(
-      map((res: any) => { 
+      map((res: any) => {
         if (res && (res.error || res.errors)) {
           throw res;
-        } 
-        
-        return; 
+        }
+
+        return;
       })
     );
   }
@@ -598,7 +598,7 @@ export class ApiService {
 
   // Diagnostic: try multiple payload shapes for login; suppress global toasts via header
   loginFlexible(
-    email: string, 
+    email: string,
     password: string
   ): Observable<any> {
     const tries = [
@@ -613,7 +613,7 @@ export class ApiService {
       const payload = tries[idx];
       const headers = { 'x-skip-toast': '1' } as any;
       return this.http.post(`${BASE_URL}/auth/login`, payload, { headers }).pipe(
-        map((res:any) => { return res; })
+        map((res: any) => { return res; })
       );
     };
 
@@ -622,15 +622,12 @@ export class ApiService {
   }
 
   register(
-    email: string, 
-    password: string, 
-    displayName?: string
+    email: string,
+    password: string
   ): Observable<any> {
-    // Backend expects { Email, Password } (case-insensitive). Include displayName if provided.
-    const body: any = { email, password };
-    if (displayName) body.displayName = displayName;
+    const body = { email, password };
     return this.http.post(`${BASE_URL}/auth/register`, body).pipe(
-      map((res:any) => { if (res && (res.error || res.errors || res.success === false)) throw res; return res; })
+      map((res: any) => { if (res && (res.error || res.errors || res.success === false)) throw res; return res; })
     );
   }
 

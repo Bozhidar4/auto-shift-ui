@@ -1,35 +1,39 @@
-  <div class="card">
+<div class="card">
   <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">work_history</mat-icon>Shifts</div>
   <div class="header-row">
     <div class="controls shift-header-controls">
-      <select class="input small-select" [(ngModel)]="selectedTeamId" (change)="load(+selectedTeamId)">
+      <select class="input" [(ngModel)]="selectedTeamId" (change)="load(+selectedTeamId)">
         @for (team of teams; track $index) {
         <option [value]="team.id">{{ team.name }}</option>
         }
       </select>
-      <button class="btn primary pill" (click)="load(+selectedTeamId)">Refresh</button>
+      <button class="btn pill" (click)="load(+selectedTeamId)">
+        <mat-icon>refresh</mat-icon>Refresh
+      </button>
     </div>
   </div>
 
-  <div class="create-shift-container">
+  <div class="create-shift-container card" style="margin-top: 1rem; flex-direction: row; gap: 0.75rem;">
     <input class="input" placeholder="Name" [(ngModel)]="newShift.name" />
-    <input class="input" placeholder="Code (1 char)" maxlength="1" [(ngModel)]="newShift.initialCode" />
-    <input class="input" placeholder="Start (HH:MM)" [(ngModel)]="newShift.startTime" />
-    <input class="input" placeholder="End (HH:MM)" [(ngModel)]="newShift.endTime" />
-    <input class="input" type="number" min="1" placeholder="Required people" [(ngModel)]="newShift.requiredPeople"
-      style="width:160px" />
-    <button class="btn primary pill" (click)="create()">Create</button>
+    <input class="input" placeholder="Code" maxlength="1" [(ngModel)]="newShift.initialCode" style="width: 80px" />
+    <input class="input" placeholder="Start" [(ngModel)]="newShift.startTime" style="width: 100px" />
+    <input class="input" placeholder="End" [(ngModel)]="newShift.endTime" style="width: 100px" />
+    <input class="input" type="number" min="1" placeholder="People" [(ngModel)]="newShift.requiredPeople"
+      style="width:100px" />
+    <button class="btn primary pill" (click)="create()">
+        <mat-icon>add</mat-icon>Create
+    </button>
   </div>
-  <div style="margin-top:0.75rem">
+  <div style="margin-top:1.5rem">
     <div class="table-scroll">
-      <table class="shifts-table mat-elevation-z3">
+      <table class="app-table">
         <thead>
           <tr>
             <th>Code</th>
             <th>Name</th>
             <th>Start</th>
             <th>End</th>
-            <th>Required people</th>
+            <th>People</th>
             <th></th>
           </tr>
         </thead>
@@ -37,35 +41,43 @@
           @for (shift of shifts; track $index) {
           <tr>
             <ng-container *ngIf="editingId !== shift.id; else editRow">
-              <td class="code-cell">{{ shift.initialCode || '-' }}</td>
-              <td>{{ shift.name }}</td>
+              <td><span class="shift-badge shift-t-{{ ($index % 10) + 1 }}">{{ shift.initialCode || '-' }}</span></td>
+              <td style="font-weight: 600;">{{ shift.name }}</td>
               <td>{{ shift.startTime }}</td>
               <td>{{ shift.endTime }}</td>
               <td class="muted">{{ shift.requiredPeople || 1 }}</td>
               <td class="actions">
-                <button class="btn pill" (click)="startEdit(shift)">Edit</button>
-                <button class="btn pill danger" (click)="deleteShift(shift)">Delete</button>
+                <button class="btn pill" (click)="startEdit(shift)">
+                    <mat-icon>edit</mat-icon>Edit
+                </button>
+                <button class="btn pill danger" (click)="deleteShift(shift)">
+                    <mat-icon>delete</mat-icon>Delete
+                </button>
               </td>
             </ng-container>
             <ng-template #editRow>
-              <td class="code-cell">
-                <input class="input" maxlength="1" [(ngModel)]="editModel.initialCode" />
+              <td>
+                <input class="input" maxlength="1" [(ngModel)]="editModel.initialCode" style="width: 60px" />
               </td>
               <td>
                 <input class="input" [(ngModel)]="editModel.name" />
               </td>
               <td>
-                <input class="input" [(ngModel)]="editModel.startTime" />
+                <input class="input" [(ngModel)]="editModel.startTime" style="width: 100px" />
               </td>
               <td>
-                <input class="input" [(ngModel)]="editModel.endTime" />
+                <input class="input" [(ngModel)]="editModel.endTime" style="width: 100px" />
               </td>
               <td>
-                <input class="input" type="number" min="1" [(ngModel)]="editModel.requiredPeople" />
+                <input class="input" type="number" min="1" [(ngModel)]="editModel.requiredPeople" style="width: 80px" />
               </td>
               <td class="actions">
-                <button class="btn primary pill" (click)="saveEdit()" [disabled]="!canSaveEdit()">Save</button>
-                <button class="btn pill" (click)="cancelEdit()">Cancel</button>
+                <button class="btn primary pill" (click)="saveEdit()" [disabled]="!canSaveEdit()">
+                    <mat-icon>save</mat-icon>Save
+                </button>
+                <button class="btn pill" (click)="cancelEdit()">
+                    <mat-icon>close</mat-icon>Cancel
+                </button>
               </td>
             </ng-template>
           </tr>
@@ -74,13 +86,9 @@
       </table>
     </div>
   </div>
+
+  <app-confirm [visible]="confirmState.visible" [title]="confirmState.title" [message]="confirmState.message"
+    [confirmLabel]="confirmState.confirmLabel ?? null" [cancelLabel]="confirmState.cancelLabel ?? null"
+    (confirmed)="onConfirmedDelete()" (cancelled)="onCancelledDelete()">
+  </app-confirm>
 </div>
-
-@if (loading) {
-<div class="muted">Loading…</div>
-}
-
-<app-confirm [visible]="confirmState.visible" [title]="confirmState.title" [message]="confirmState.message"
-  [confirmLabel]="confirmState.confirmLabel ?? null" [cancelLabel]="confirmState.cancelLabel ?? null"
-  (confirmed)="onConfirmedDelete()" (cancelled)="onCancelledDelete()">
-</app-confirm>

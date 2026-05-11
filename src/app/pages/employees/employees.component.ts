@@ -29,19 +29,17 @@ export class EmployeesComponent implements OnInit {
 
   ngOnInit(): void {
     this.api.getTeams().subscribe((t) => {
-      (
-        this.teams = t.filter(team => team.name !== null).map(team => ({
-          id: team.id,
-          name: team.name ?? ''
-        }))
-      );
+      this.teams = (t || []).filter(team => team.name !== null).map(team => ({
+        id: team.id,
+        name: team.name ?? ''
+      }));
       this.load();
     });
   }
 
   load(): void {
     this.api.listEmployees().subscribe((list: Employee[]) => {
-      this.employees = list.map((e) => ({
+      this.employees = (list || []).map((e) => ({
         id: e.id,
         firstName: e.firstName,
         lastName: e.lastName,
@@ -49,7 +47,6 @@ export class EmployeesComponent implements OnInit {
         isActive: e.isActive ?? true,
         teamId: e.teamId,
         team: this.teams.find(t => t.id === e.teamId) || null
-
       }));
     });
   }
@@ -65,24 +62,21 @@ export class EmployeesComponent implements OnInit {
     });
   }
 
-  edit(
-    row: EmployeeRow
-  ): void {
+  edit(row: EmployeeRow): void {
     row._editing = true;
   }
 
-  cancel(
-    row: EmployeeRow
-  ): void {
-    row._editing = false;
+  cancel(row: EmployeeRow): void {
+    if (!row.id) {
+      this.employees = this.employees.filter(e => e !== row);
+    } else {
+      row._editing = false;
+      this.load();
+    }
   }
 
-  save(
-    row: EmployeeRow
-  ): void {
-    if (!row) {
-      return;
-    }
+  save(row: EmployeeRow): void {
+    if (!row) return;
 
     const model: Employee = {
       firstName: row.firstName,
@@ -92,30 +86,28 @@ export class EmployeesComponent implements OnInit {
       teamId: row.teamId || null,
       id: row.id || 0
     };
-    debugger
+
     if (model.id) {
-      this.api.updateEmployee(model.id, model).subscribe(() => {
-        row._editing = false;
-        this.load();
-        this.toastService.show('Employee updated successfully.', 'success');
-      },
-        (error) => {
-          this.toastService.show('Failed to update employee.', 'error');
-        });
+      this.api.updateEmployee(model.id, model).subscribe({
+        next: () => {
+          row._editing = false;
+          this.load();
+          this.toastService.show('Employee updated successfully.', 'success');
+        },
+        error: () => this.toastService.show('Failed to update employee.', 'error')
+      });
     } else {
-      this.api.createEmployee(model).subscribe(() => {
-        this.load();
-        this.toastService.show('Employee created successfully.', 'success');
-      },
-        (error) => {
-          this.toastService.show('Failed to create employee.', 'error');
-        });
+      this.api.createEmployee(model).subscribe({
+        next: () => {
+          this.load();
+          this.toastService.show('Employee created successfully.', 'success');
+        },
+        error: () => this.toastService.show('Failed to create employee.', 'error')
+      });
     }
   }
 
-  remove(
-    row: EmployeeRow
-  ): void {
+  remove(row: EmployeeRow): void {
     if (!row.id) {
       this.employees = this.employees.filter((r) => r !== row);
       return;
@@ -131,17 +123,15 @@ export class EmployeesComponent implements OnInit {
 
   onConfirmedRemove(): void {
     const row: EmployeeRow = this.confirmState.target;
-    if (!row || !row.id) {
-      return;
-    }
+    if (!row || !row.id) return;
 
-    this.api.deleteEmployee(row.id).subscribe(() => {
-      this.load();
-      this.toastService.show('Employee deleted successfully.', 'success');
-    },
-      (error) => {
-        this.toastService.show('Failed to delete employee.', 'error');
-      });
+    this.api.deleteEmployee(row.id).subscribe({
+      next: () => {
+        this.load();
+        this.toastService.show('Employee deleted successfully.', 'success');
+      },
+      error: () => this.toastService.show('Failed to delete employee.', 'error')
+    });
     this.confirmState.visible = false;
     this.confirmState.target = null;
   }
@@ -149,5 +139,10 @@ export class EmployeesComponent implements OnInit {
   onCancelledRemove(): void {
     this.confirmState.visible = false;
     this.confirmState.target = null;
+  }
+
+  getInitials(firstName: string, lastName: string): string {
+    if (!firstName && !lastName) return '??';
+    return ((firstName?.[0] || '') + (lastName?.[0] || '')).toUpperCase();
   }
 }

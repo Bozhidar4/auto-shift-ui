@@ -10,36 +10,34 @@
     </div>
   </div>
 
-  <div class="stats-grid stats-container">
-    <a class="card surface-dark stat-card" routerLink="/teams">
-      <div class="muted">Teams</div>
+  <div class="dashboard-grid">
+    <a class="card stat-card" routerLink="/teams">
+      <div class="stat-icon primary">
+        <mat-icon>groups</mat-icon>
+      </div>
       <div class="stat-content">
-        <div>
-          <div class="stat-value">{{ teamsCount }}</div>
-        </div>
-        <div>
-          <mat-icon class="stat-icon" aria-hidden="true">people_alt</mat-icon>
-        </div>
+        <div class="stat-value">{{ teamsCount }}</div>
+        <div class="stat-label">Active Teams</div>
       </div>
     </a>
 
-    <a class="card surface-dark stat-card" routerLink="/employees">
-      <div class="muted">Employees</div>
+    <a class="card stat-card" routerLink="/employees">
+      <div class="stat-icon success">
+        <mat-icon>person</mat-icon>
+      </div>
       <div class="stat-content">
-        <div>
-          <div class="stat-value">{{ employeesCount }}</div>
-        </div>
-        <mat-icon class="stat-icon" aria-hidden="true">person</mat-icon>
+        <div class="stat-value">{{ employeesCount }}</div>
+        <div class="stat-label">Staff Members</div>
       </div>
     </a>
 
-    <a class="card surface-dark stat-card" routerLink="/shifts">
-      <div class="muted">Shift Types</div>
+    <a class="card stat-card" routerLink="/shifts">
+      <div class="stat-icon warning">
+        <mat-icon>work_history</mat-icon>
+      </div>
       <div class="stat-content">
-        <div>
-          <div class="stat-value">{{ shiftTypesCount }}</div>
-        </div>
-        <mat-icon class="stat-icon" aria-hidden="true">work_history</mat-icon>
+        <div class="stat-value">{{ shiftTypesCount }}</div>
+        <div class="stat-label">Shift Definitions</div>
       </div>
     </a>
   </div>

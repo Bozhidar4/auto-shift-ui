@@ -3,12 +3,13 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet, NavigationEnd } fro
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../services/api.service';
 import { ToastComponent } from '../components/toast/toast.component';
+import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, ToastComponent],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, ToastComponent, MatIconModule],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']
 })

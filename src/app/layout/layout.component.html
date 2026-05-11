@@ -1,35 +1,61 @@
-<div class="app-root" [class.auth-mode]="isAuth" [class.landing-mode]="isLanding">
-  @if (!isAuth && !isLanding) {
-  <aside class="app-sidebar">
-    <div class="brand">
-      <span class="brand-logo" aria-hidden="true"></span>
-      <span>AutoShift</span>
-    </div>
-    <nav style="margin-top:1rem">
-      <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-      <a class="nav-link" routerLink="/teams" routerLinkActive="active">Teams</a>
-      <a class="nav-link" routerLink="/employees" routerLinkActive="active">Employees</a>
-      <a class="nav-link" routerLink="/leaves" routerLinkActive="active">Leaves</a>
-      <a class="nav-link" routerLink="/shifts" routerLinkActive="active">Shifts</a>
-      <a class="nav-link" routerLink="/rules" routerLinkActive="active">Rules</a>
-      <a class="nav-link" routerLink="/schedules" routerLinkActive="active">Schedules</a>
-    </nav>
-
-    <div class="sidebar-footer">Version 0.1</div>
-  </aside>
-  }
-
-  @if (!isAuth && !isLanding) {
-  <header class="app-header">
-    <div class="brand">AutoShift</div>
-    <div class="header-actions">
-      <button class="btn pill" (click)="logout()">Log out</button>
-    </div>
-  </header>
-  }
-
-  <main class="app-main">
+@if (isLanding) {
     <router-outlet></router-outlet>
-    <app-toasts></app-toasts>
-  </main>
-</div>
+}
+@else if (isAuth) {
+    <router-outlet></router-outlet>
+}
+@else {
+    <div class="app-root">
+        <aside class="app-sidebar">
+            <div class="sidebar-brand">
+                <div class="logo">AS</div>
+                <div class="brand-name">AutoShift</div>
+            </div>
+            
+            <nav class="nav-group">
+                <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+                    <mat-icon>dashboard</mat-icon> <span>Dashboard</span>
+                </a>
+                <a routerLink="/schedules" routerLinkActive="active" class="nav-link">
+                    <mat-icon>calendar_month</mat-icon> <span>Schedules</span>
+                </a>
+                <a routerLink="/teams" routerLinkActive="active" class="nav-link">
+                    <mat-icon>groups</mat-icon> <span>Teams</span>
+                </a>
+                <a routerLink="/shifts" routerLinkActive="active" class="nav-link">
+                    <mat-icon>work_history</mat-icon> <span>Shifts</span>
+                </a>
+                <a routerLink="/leaves" routerLinkActive="active" class="nav-link">
+                    <mat-icon>person_off</mat-icon> <span>Leaves</span>
+                </a>
+                <a routerLink="/employees" routerLinkActive="active" class="nav-link">
+                    <mat-icon>person</mat-icon> <span>Employees</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a class="nav-link danger" (click)="logout()" style="cursor: pointer;">
+                    <mat-icon>logout</mat-icon> <span>Sign Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <header class="app-header">
+            <div class="header-left">
+                <span class="muted">Platform / Overview</span>
+            </div>
+            <div class="user-profile">
+                <div class="user-info">
+                    <div class="user-name">Administrator</div>
+                </div>
+                <div class="avatar">A</div>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+}
+
+<app-toasts></app-toasts>

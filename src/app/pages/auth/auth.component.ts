@@ -15,7 +15,6 @@ export class AuthComponent {
   mode: 'login' | 'register' = 'login';
   email = '';
   password = '';
-  displayName = '';
   error = '';
 
   constructor(
@@ -67,7 +66,7 @@ export class AuthComponent {
         }
       });
     } else {
-      this.api.register(this.email, this.password, this.displayName).subscribe({
+      this.api.register(this.email, this.password).subscribe({
         next: (res) => {
           const token = res?.token;
           if (token) {

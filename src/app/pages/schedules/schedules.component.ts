@@ -39,6 +39,7 @@ export class SchedulesComponent implements OnInit {
   // Table model: employees array and dates array, and cells map by employeeId/date -> assignment
   tableEmployees: any[] = [];
   tableDates: string[] = [];
+  tableDateChunks: string[][] = [];
   tableCells: Record<string, any> = {};
   employeeHoursMap: Record<number, number> = {};
   changedCells: Record<string, boolean> = {};
@@ -93,6 +94,21 @@ export class SchedulesComponent implements OnInit {
   generate(): void {
     if (!this.selectedTeamId || !this.startDate || !this.endDate) {
       return;
+    }
+
+    const start = new Date(this.startDate);
+    const end = new Date(this.endDate);
+    const diffTime = end.getTime() - start.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 because inclusive
+
+    if (diffTime < 0) {
+        this.toastService.show('Start date must be before end date.', 'error');
+        return;
+    }
+
+    if (diffDays > 31) {
+        this.toastService.show('Cannot generate schedule for more than 31 days.', 'error');
+        return;
     }
 
     const model: GeneratedSchedule = {
@@ -214,7 +230,7 @@ export class SchedulesComponent implements OnInit {
 
     // Special action: close modal but first save changes
     if (scheduleOrAction.action === 'close-with-changes') {
-      this.saveAll(() => {
+      this.saveTableChanges(() => {
         this.clearViewState();
         this.viewingSchedule = null;
       });
@@ -313,6 +329,13 @@ export class SchedulesComponent implements OnInit {
     // }
 
     this.tableDates = Array.from(dateSet).sort();
+    
+    // Split into chunks of 15 days for printing
+    this.tableDateChunks = [];
+    for (let i = 0; i < this.tableDates.length; i += 15) {
+        this.tableDateChunks.push(this.tableDates.slice(i, i + 15));
+    }
+
     this.tableEmployees = Object.values(empMap);
 
     // build cells map
@@ -605,7 +628,7 @@ export class SchedulesComponent implements OnInit {
   }
 
   // Save all changed cells in sequence
-  saveAll(onComplete?: () => void): void {
+  saveTableChanges(onComplete?: () => void): void {
     const keys = Object.keys(this.changedCells || {});
     if (!keys.length) {
       this.toastService.show('No changes to save', 'info');
@@ -639,25 +662,80 @@ export class SchedulesComponent implements OnInit {
     saveNext(0);
   }
 
-  private loadEmployeeHours(
-    scheduleId: number
-  ): void {
-    this.apiService.getEmployeeHours(scheduleId).subscribe({
-      next: (hoursArr: EmployeeHoursDto[]) => {
-        this.employeeHoursMap = {};
-        (hoursArr || []).forEach(employeeHours => {
-          if (!employeeHours) {
-            return;
-          }
+    private loadEmployeeHours(
+        scheduleId: number
+    ): void {
+        this.apiService.getEmployeeHours(scheduleId).subscribe({
+            next: (hoursArr: EmployeeHoursDto[]) => {
+                this.employeeHoursMap = {};
+                (hoursArr || []).forEach(employeeHours => {
+                    if (!employeeHours) {
+                        return;
+                    }
 
-          this.employeeHoursMap[employeeHours.employeeId] = employeeHours.totalHours
-            ? employeeHours.totalHours
-            : 0;
+                    this.employeeHoursMap[employeeHours.employeeId] = employeeHours.totalHours
+                        ? employeeHours.totalHours
+                        : 0;
+                });
+            },
+            error: () => {
+                this.employeeHoursMap = {};
+            }
         });
-      },
-      error: () => {
-        this.employeeHoursMap = {};
-      }
-    });
-  }
+    }
+
+    getInitials(name: string): string {
+        if (!name) return '';
+        const parts = name.split(' ');
+        if (parts.length >= 2) {
+            return (parts[0][0] + parts[1][0]).toUpperCase();
+        }
+        return parts[0].substring(0, 2).toUpperCase();
+    }
+
+    getShiftTimes(shiftTypeId: number): string {
+        const st = this.shiftTypes.find(s => s.id === shiftTypeId);
+        if (!st) return '';
+        // Format HH:mm:ss to HH:mm
+        const format = (t: string) => (t || '').split(':').slice(0, 2).join(':');
+        return `${format(st.startTime)} - ${format(st.endTime)}`;
+    }
+
+    getPrintCellText(employeeId: string, date: string): string {
+        const cell = this.tableCells[employeeId + '__' + date];
+        if (cell && cell.shiftTypeId) {
+            const shift = this.shiftTypes.find(s => s.id === cell.shiftTypeId);
+            if (shift) return shift.initialCode || '';
+        }
+        const empty = this.emptyCellModel[employeeId + '__' + date];
+        if (empty) {
+            const shift = this.shiftTypes.find(s => s.id === empty);
+            if (shift) return shift.initialCode || '';
+        }
+        return 'OFF';
+    }
+
+    printSchedule(schedule?: GeneratedSchedule): void {
+        const schedToPrint = schedule || this.viewingSchedule;
+        if (!schedToPrint) return;
+
+        const originalTitle = document.title;
+        // Format dates nicely for filename
+        const safeStart = schedToPrint.startDate ? schedToPrint.startDate.split('T')[0] : 'Start';
+        const safeEnd = schedToPrint.endDate ? schedToPrint.endDate.split('T')[0] : 'End';
+        document.title = `AutoShift_Schedule_${safeStart}_to_${safeEnd}`;
+
+        const doPrint = () => {
+            window.print();
+            document.title = originalTitle;
+        };
+
+        if (schedule) {
+            this.viewSchedule(schedule);
+            setTimeout(doPrint, 500); // Give it time to render the modal and chunks
+        } else {
+            doPrint();
+        }
+    }
 }
+

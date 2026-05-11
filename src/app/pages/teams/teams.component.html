@@ -2,42 +2,51 @@
   <div class="header-row">
     <div class="header-title">
       <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">people_alt</mat-icon>Teams</div>
-  <div class="muted">Manage teams and their settings</div>
+      <div class="muted">Manage teams and their settings</div>
     </div>
-  <div class="header-row" style="margin-top:0.75rem;justify-content:space-between">
-    <div class="controls">
-      <button class="btn pill primary" (click)="addNew()">Add Team</button>
+    <div class="controls" style="margin-top: 1rem;">
+      <button class="btn pill primary" (click)="addNew()">
+        <mat-icon>add</mat-icon>Add Team
+      </button>
     </div>
-  </div>
   </div>
 
-  <div class="team-grid" style="margin-top:1rem">
+  <div class="team-grid" style="margin-top:1.5rem">
     @for (team of teams; track $index) {
     <div class="card team-card">
       @if (!team._editing) {
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <div style="font-weight:800;font-size:1.05rem">{{ team.name }}</div>
-          <div class="muted" style="font-size:0.9rem">Team</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.35rem">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="avatar" style="background: rgba(79, 70, 229, 0.1); color: var(--primary); border: none;">
+                <mat-icon>groups</mat-icon>
+            </div>
             <div>
-            <button class="btn pill" (click)="edit(team)">Edit</button>
-            <button class="btn pill" [routerLink]="['/teams', team.id]">Open</button>
-            <button class="btn pill danger" (click)="confirmRemove(team)">Delete</button>
-          </div>
+                <div style="font-weight:800;font-size:1.1rem">{{ team.name }}</div>
+                <div class="muted" style="font-size:0.9rem">Internal Team</div>
+            </div>
+        </div>
+        <div class="controls">
+            <button class="btn pill" (click)="edit(team)">
+                <mat-icon>edit</mat-icon>Edit
+            </button>
+            <button class="btn pill" [routerLink]="['/teams', team.id]">
+                <mat-icon>open_in_new</mat-icon>Open
+            </button>
+            <button class="btn pill danger" (click)="confirmRemove(team)">
+                <mat-icon>delete</mat-icon>Delete
+            </button>
         </div>
       </div>
       }
       @if (team._editing) {
-      <div>
-        <div style="display:flex;gap:0.5rem;align-items:center">
+      <div class="controls">
           <input class="input" [(ngModel)]="team.name" placeholder="Team name" />
-          <div class="team-buttons-container">
-            <button class="btn pill primary" [disabled]="!team.name" (click)="save(team)">Save</button>
-            <button class="btn pill" (click)="cancelEdit(team)">Cancel</button>
-          </div>
-        </div>
+          <button class="btn pill primary" [disabled]="!team.name" (click)="save(team)">
+            <mat-icon>save</mat-icon>Save
+          </button>
+          <button class="btn pill" (click)="cancelEdit(team)">
+            <mat-icon>close</mat-icon>Cancel
+          </button>
       </div>
       }
     </div>

@@ -1,128 +1,254 @@
-h2 {
-    margin-top: 0;
+.schedule-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2.5rem;
+  margin-top: 2rem;
 }
 
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
+.schedule-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.75rem;
+  
+  .schedule-info {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    z-index: 1000;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .schedule-actions {
+      margin-top: auto;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid #f1f5f9;
+  }
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1.5rem;
 }
 
 .modal-card {
-    width: 95vw;
-    height: 92vh;
-    max-width: 1400px;
-    background: white;
-    padding: 0.75rem;
-    display: flex;
-    flex-direction: column;
-}
-
-.modal-card table th,
-.modal-card table td {
-    vertical-align: middle;
+  width: 100%;
+  max-width: 1600px;
+  width: 95vw;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 .modal-header {
-    padding: 0.25rem 0.5rem;
+  padding: 1.5rem 2.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  flex-shrink: 0;
 }
 
 .modal-body {
-    flex: 1 1 auto;
-    overflow: auto;
-}
-
-.table-wrapper {
-    overflow: auto;
-}
-
-.view-table thead th {
-    position: sticky;
-    top: 0;
-    z-index: 5; /* base z for header cells */
-}
-
-/* Sticky first column in the header should sit above other header cells */
-.view-table thead th.sticky-col {
-    position: sticky;
-    left: 0;
-    top: 0;
-    z-index: 15; /* high so header-first-col overlays other headers */
-    background: #fff;
-}
-
-/* Sticky first column cells in the body should sit below the header but above normal cells */
-.view-table tbody td.sticky-col {
-    position: sticky;
-    left: 0;
-    z-index: 10;
-    background: #fff;
+  flex: 1;
+  overflow: auto;
+  padding: 0;
 }
 
 .view-table {
-    table-layout: auto;
-    border-collapse: collapse;
-
-    .employee-total-hours {
-        padding: 6px;
-        text-align: center;
-        font-weight: bold;
-    }
-}
-
-
-.view-table td,
-.view-table th {
-    border: 1px solid #eee;
-    padding: 6px;
-    vertical-align: middle;
-    background:#fff;
-    white-space:nowrap;
-}
-
-.emp-cell {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  
+  th, td {
+    padding: 0.25rem 0.5rem;
+    border-right: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+    min-width: 75px;
+    text-align: center;
+  }
+  
+  th {
+    background: #f8fafc;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    font-size: 0.75rem;
     font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    padding: 0.5rem;
+  }
+  
+  .sticky-col {
+    position: sticky;
+    left: 0;
+    background: white;
+    z-index: 11;
+    min-width: 180px;
+    max-width: 200px;
+    border-right: 2px solid #e2e8f0;
+    text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  
+  .data-cell {
+    padding: 0.2rem;
+    &.changed { background: #fffbeb; }
+
+    select.input {
+        padding: 0.2rem;
+        font-size: 0.75rem;
+        height: 24px;
+        font-weight: 700;
+        text-align: center;
+        text-align-last: center;
+    }
+  }
+
+  .cell-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+
+      .shift-time {
+          font-size: 0.65rem;
+          color: #64748b;
+          font-weight: 600;
+          min-height: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
+  }
 }
 
-.data-cell {
-    text-align: center;
+.print-only {
+    display: none;
 }
 
-.cell-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
+@media print {
+    @page {
+        size: landscape;
+        margin: 0.5cm;
+    }
+
+    :host {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+        z-index: 99999;
+    }
+    
+    .card > div:first-child, .controls, .modal-header .controls, .btn, .schedule-list, .schedule-item, .schedule-actions, .controls.shift-header-controls {
+        display: none !important;
+    }
+
+    .modal-overlay {
+        position: static !important;
+        background: transparent !important;
+        width: 100% !important;
+        height: auto !important;
+        padding: 0 !important;
+    }
+
+    .modal-card {
+        box-shadow: none !important;
+        border: none !important;
+        width: 100% !important;
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    .modal-body {
+        overflow: visible !important;
+        height: auto !important;
+        max-height: none !important;
+    }
+
+    .table-wrapper {
+        overflow: visible !important;
+    }
+
+    .view-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+    }
+
+    .screen-only {
+        display: none !important;
+    }
+
+    .print-only {
+        display: block !important;
+    }
+
+    .print-page-break {
+        page-break-after: always;
+        break-after: page;
+        margin-bottom: 2rem;
+    }
+
+    .print-page-break:last-child {
+        page-break-after: auto;
+        break-after: auto;
+    }
+
+    .print-shift-code {
+        font-size: 0.9rem !important;
+        font-weight: 800 !important;
+        text-align: center;
+    }
+
+    .view-table th, .view-table td {
+        border: 1px solid #e2e8f0 !important;
+        color: black !important;
+        padding: 4px !important;
+        font-size: 0.8rem !important;
+    }
+
+    .emp-info .emp-name {
+        font-size: 0.85rem !important;
+    }
+    
+    .emp-info .avatar {
+        width: 20px !important;
+        height: 20px !important;
+        font-size: 0.6rem !important;
+    }
+
+    select.input {
+        border: none !important;
+        background: transparent !important;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        font-weight: bold;
+        padding: 0 !important;
+        font-size: 0.65rem !important;
+        height: auto !important;
+    }
 }
 
-.full-width {
-    display: inline-block;
-    min-width: 30px;
-    box-sizing: border-box;
-}
-
-.cell-actions {
-    margin-top: 6px;
-}
-
-/* Highlight changed cells awaiting save */
-.view-table td.changed {
-    background: #fff7e6; /* light yellow */
-    box-shadow: inset 0 0 0 2px rgba(250, 200, 70, 0.08);
-}
-
-/* Ensure sticky header and first column properly overlay cells */
-.view-table thead th {
-    background: #fff;
-}
-
-/* fallback for any other uses */
-.sticky-col { background: #fff; }

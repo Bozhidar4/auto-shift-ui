@@ -1,7 +1,7 @@
 <div class="card">
 	<div style="display:flex;justify-content:space-between;align-items:center">
-			<div>
-				<div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">schedule</mat-icon>Schedules</div>
+		<div>
+			<div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">schedule</mat-icon>Schedules</div>
 			<div class="muted">Generate and review team schedules</div>
 		</div>
 		<div class="controls">
@@ -25,31 +25,41 @@
 			Select a team to see existing schedules.
 		</div>
 		}
+
 		@if (selectedTeamId && schedules && !schedules.length) {
 		<div class="muted" style="padding:1rem">
 			No schedules found for this team.
 		</div>
 		}
+
 		@if (schedules && schedules.length > 0) {
-		<div style="display:flex;flex-direction:column;gap:0.5rem">
+		<div class="schedule-list">
 			@for (schedule of schedules; track $index) {
-			<div class="card" style="display:flex;justify-content:space-between;align-items:center">
-				<div>
-					<div style="font-weight:700">Schedule: {{ schedule.id }}</div>
-					<div class="muted">Start: {{ schedule.startDate | date:'yyyy-MM-dd' }} — End: {{ schedule.endDate |
-						date:'yyyy-MM-dd' }}</div>
+			<div class="schedule-item card">
+				<div class="schedule-info">
+					<div class="avatar" style="background: rgba(79, 70, 229, 0.1); color: var(--primary); border: none;">
+						<mat-icon>calendar_month</mat-icon>
+					</div>
+					<div>
+						<div style="font-weight: 800; font-size: 1.1rem; color: #0f172a;">Schedule #{{ schedule.id }}</div>
+						<div class="muted">
+							<mat-icon
+								style="font-size: 14px; width: 14px; height: 14px; vertical-align: middle; margin-right: 4px;">history</mat-icon>
+							{{ schedule.startDate | date:'dd MMM' }} — {{ schedule.endDate | date:'dd MMM yyyy' }}
+						</div>
+					</div>
 				</div>
-				<div style="margin-left:auto;display:flex;gap:0.5rem;align-items:center">
-					<button class="btn pill" (click)="viewSchedule(schedule)">View</button>
-					<button class="btn pill danger" (click)="deleteScheduleConfirm(schedule)">Delete</button>
+				<div class="schedule-actions">
+					<button class="btn pill" (click)="viewSchedule(schedule)">
+						<mat-icon>visibility</mat-icon>View
+					</button>
+                    <button class="btn pill" (click)="printSchedule(schedule)">
+						<mat-icon>print</mat-icon>Print
+					</button>
+					<button class="btn pill danger" (click)="deleteScheduleConfirm(schedule)">
+						<mat-icon>delete</mat-icon>Delete
+					</button>
 				</div>
-
-				<!-- Reusable confirm modal -->
-				<app-confirm [visible]="confirmState.visible" [title]="confirmState.title"
-					[message]="confirmState.message" [confirmLabel]="confirmState.confirmLabel ?? null"
-					[cancelLabel]="confirmState.cancelLabel ?? null" (confirmed)="onConfirmedDelete()"
-					(cancelled)="onCancelledDelete()"></app-confirm>
-
 			</div>
 			}
 		</div>
@@ -59,32 +69,46 @@
 		@if (viewingSchedule) {
 		<div class="modal-overlay">
 			<div class="modal-card card">
-				<div class="modal-header"
-					style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
-					<div style="font-weight:700">Schedule {{ viewingSchedule.id }} — {{ viewingSchedule.startDate |
-						date:'dd MMM yyyy' }} → {{ viewingSchedule.endDate | date:'dd MMM yyyy' }}</div>
-					<div style="display:flex;gap:.5rem;align-items:center">
-						<button class="btn primary pill" (click)="saveAll()">Save</button>
-						<button class="btn pill" aria-label="Close" (click)="closeView()">✕</button>
+				<div class="modal-header">
+					<div style="font-weight:700; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+						<mat-icon color="primary">calendar_month</mat-icon>
+						Schedule #{{ viewingSchedule.id }}
+						<span class="muted" style="font-weight: 400; font-size: 0.9rem;">({{ viewingSchedule.startDate |
+							date:'dd MMM yyyy' }} — {{ viewingSchedule.endDate | date:'dd MMM yyyy' }})</span>
+					</div>
+					<div class="controls">
+						<button class="btn primary pill" (click)="saveTableChanges()">
+							<mat-icon>save</mat-icon>Save Changes
+						</button>
+                        <button class="btn pill" (click)="printSchedule()">
+							<mat-icon>print</mat-icon>Print
+						</button>
+						<button class="btn pill" aria-label="Close" (click)="closeView()">
+							<mat-icon>close</mat-icon>Close
+						</button>
 					</div>
 				</div>
-				<div class="modal-body" style="overflow:auto;height:85vh">
-					<div class="table-wrapper">
-						<table class="view-table" style="width:100%;border-collapse:collapse;table-layout:auto">
+				<div class="modal-body">
+					<div class="table-wrapper screen-only">
+						<table class="view-table">
 							<thead>
 								<tr>
-									<th class="sticky-col">
-										Employee</th>
+									<th class="sticky-col">Employee</th>
 									@for (date of tableDates; track $index) {
 									<th>{{ formatDateHeader(date) }}</th>
 									}
-									<th class="employee-total-hours">Total hours</th>
+									<th class="employee-total-hours">Total</th>
 								</tr>
 							</thead>
 							<tbody>
 								@for (employee of tableEmployees; track $index) {
 								<tr>
-									<td class="sticky-col emp-cell">{{ employee.name }}</td>
+									<td class="sticky-col emp-cell">
+										<div class="emp-info">
+											<div class="avatar">{{ getInitials(employee.name) }}</div>
+											<span class="emp-name" style="font-weight: 700;">{{ employee.name }}</span>
+										</div>
+									</td>
 									@for (d of tableDates; track $index) {
 									<td class="data-cell" [class.changed]="changedCells[employee.id + '__' + d]">
 										<ng-container [ngSwitch]="!!tableCells[employee.id + '__' + d]">
@@ -92,35 +116,33 @@
 												<select class="input full-width"
 													[(ngModel)]="tableCells[employee.id + '__' + d].shiftTypeId"
 													(change)="markCellChanged(employee.id + '__' + d)"
-													[disabled]="isPastDate(d)">
+													[disabled]="isPastDate(d)"
+													[class]="'shift-t-' + ((tableCells[employee.id + '__' + d].shiftTypeId % 10) + 1)">
 													<option [ngValue]="0">OFF</option>
 													@for (shiftType of shiftTypes; track $index) {
-													<option [ngValue]="shiftType.id">{{ shiftType.initialCode }}
-													</option>
+													<option [ngValue]="shiftType.id">{{ shiftType.initialCode }}</option>
 													}
 												</select>
-												<!-- <div class="cell-actions">
-													<button class="btn primary pill" (click)="saveCell(employee.id, d)"
-														[disabled]="isPastDate(d)">Save</button>
-												</div> -->
+												<div class="shift-time">
+													{{ tableCells[employee.id + '__' + d].shiftTypeId ? getShiftTimes(tableCells[employee.id + '__' + d].shiftTypeId) : '' }}
+												</div>
 											</div>
 											<div *ngSwitchDefault class="cell-content">
 												<!-- editable empty cell -->
 												<select class="input full-width"
 													[(ngModel)]="emptyCellModel[employee.id + '__' + d]"
 													(change)="markCellChanged(employee.id + '__' + d)"
-													[disabled]="isPastDate(d)">
+													[disabled]="isPastDate(d)"
+													[class]="'shift-t-' + ((emptyCellModel[employee.id + '__' + d] % 10) + 1)">
 													<option [ngValue]="0">OFF</option>
 													@for (shiftType of shiftTypes; track $index) {
 													<option [ngValue]="shiftType.id">{{ shiftType.initialCode }}
 													</option>
 													}
 												</select>
-												<!-- <div class="cell-actions">
-													<button class="btn primary pill"
-														(click)="createEmptyCellAndSave(employee.id, d)"
-														[disabled]="isPastDate(d)">Save</button>
-												</div> -->
+												<div class="shift-time">
+													{{ emptyCellModel[employee.id + '__' + d] ? getShiftTimes(emptyCellModel[employee.id + '__' + d]) : '' }}
+												</div>
 											</div>
 										</ng-container>
 									</td>
@@ -132,9 +154,54 @@
 							</tbody>
 						</table>
 					</div>
+
+                    <!-- Print only chunked tables for horizontal pagination -->
+                    <div class="print-only">
+                        @for (chunk of tableDateChunks; track chunkIndex; let chunkIndex = $index) {
+                            <div class="print-page-break">
+                                <div style="font-weight:700; font-size: 1rem; margin-bottom: 0.5rem;">
+                                    Schedule: {{ viewingSchedule.startDate | date:'MMM dd, yyyy' }} — {{ viewingSchedule.endDate | date:'MMM dd, yyyy' }} (Part {{ chunkIndex + 1 }})
+                                </div>
+                                <table class="view-table print-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="sticky-col">Employee</th>
+                                            @for (date of chunk; track $index) {
+                                            <th>{{ formatDateHeader(date) }}</th>
+                                            }
+                                            <th class="employee-total-hours">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (employee of tableEmployees; track $index) {
+                                        <tr>
+                                            <td class="sticky-col emp-cell">
+                                                <div class="emp-info">
+                                                    <span class="emp-name" style="font-weight: 700;">{{ employee.name }}</span>
+                                                </div>
+                                            </td>
+                                            @for (d of chunk; track $index) {
+                                            <td class="data-cell print-cell">
+                                                <div class="cell-content">
+                                                    <div class="print-shift-code">{{ getPrintCellText(employee.id, d) }}</div>
+                                                </div>
+                                            </td>
+                                            }
+                                            <td class="employee-total-hours">{{ (employeeHoursMap[employee.id]) | number:'1.0-2' }}</td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
 				</div>
 			</div>
 		</div>
 		}
+
+		<app-confirm [visible]="confirmState.visible" [title]="confirmState.title" [message]="confirmState.message"
+			[confirmLabel]="confirmState.confirmLabel ?? null" [cancelLabel]="confirmState.cancelLabel ?? null"
+			(confirmed)="onConfirmedDelete()" (cancelled)="onCancelledDelete()"></app-confirm>
 	</div>
 </div>

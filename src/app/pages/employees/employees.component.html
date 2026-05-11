@@ -1,88 +1,99 @@
 <div class="card">
   <div class="page-header header-row">
     <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">person</mat-icon>Employees</div>
-    <div class="controls">
-      <button class="btn pill" (click)="addNew()">Add Employee</button>
-      <button class="btn pill" (click)="load()">Refresh</button>
+    <div class="controls" style="margin-top: 1rem;">
+      <button class="btn pill primary" (click)="addNew()">
+        <mat-icon>person_add</mat-icon>Add Employee
+      </button>
+      <button class="btn pill" (click)="load()">
+        <mat-icon>refresh</mat-icon>Refresh
+      </button>
     </div>
   </div>
 
-  <table class="employees-table mat-elevation-z3">
-    <thead>
-      <tr>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>Monthly target</th>
-        <th>Active</th>
-        <th>Team</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (employee of employees; track $index) {
-      <tr [class.row-editing]="employee._editing">
-        <td>
-          @if (!employee._editing) {
-          <div>{{ employee.firstName }}</div>
-          }
-          @if (employee._editing) {
-          <input [(ngModel)]="employee.firstName" class="input tight" />
-          }
-        </td>
-        <td>
-          @if (!employee._editing) {
-          <div>{{ employee.lastName }}</div>
-          }
-          @if (employee._editing) {
-          <input [(ngModel)]="employee.lastName" class="input tight" />
-          }
-        </td>
-        <td>
-          @if (!employee._editing) {
-          <div>{{ employee.monthlyHoursTarget }}</div>
-          }
-          @if (employee._editing) {
-          <input type="number" [(ngModel)]="employee.monthlyHoursTarget" class="input tight" />
-          }
-        </td>
-        <td>
-          @if (!employee._editing) {
-          <div>{{ employee.isActive ? 'Yes' : 'No' }}</div>
-          }
-          @if (employee._editing) {
-          <select [(ngModel)]="employee.isActive" class="input small-select tight">
-            <option [ngValue]="true">Yes</option>
-            <option [ngValue]="false">No</option>
-          </select>
-          }
-        </td>
-        <td>
-          @if (!employee._editing) {
-          <div>{{ employee.team?.name ?? employee.teamId }}</div>
-          }
-          @if (employee._editing) {
-          <select [(ngModel)]="employee.teamId" class="input tight">
-            <option [ngValue]="null" disabled selected>Select a team</option>
-            @for (team of teams; track $index) {
-              <option [ngValue]="team.id">{{ team.name }}</option>
+  <div class="table-scroll">
+    <table class="app-table">
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Monthly target</th>
+          <th>Active</th>
+          <th>Team</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (employee of employees; track $index) {
+        <tr [class.row-editing]="employee._editing">
+          <td>
+            <div class="emp-info">
+              <div class="avatar">{{ getInitials(employee.firstName, employee.lastName) }}</div>
+              <div style="display: flex; gap: 0.5rem;">
+                @if (!employee._editing) {
+                <div style="font-weight: 600;">{{ employee.firstName }} {{ employee.lastName }}</div>
+                }
+                @if (employee._editing) {
+                <input [(ngModel)]="employee.firstName" class="input tight" placeholder="First" style="width: 100px;" />
+                <input [(ngModel)]="employee.lastName" class="input tight" placeholder="Last" style="width: 100px;" />
+                }
+              </div>
+            </div>
+          </td>
+          <td>
+            @if (!employee._editing) {
+            <div>{{ employee.monthlyHoursTarget }}h</div>
             }
-          </select>
-          }
-        </td>
-        <td class="actions">
-          @if (!employee._editing) {
-          <button class="btn pill" (click)="edit(employee)">Edit</button>
-          }
-          @if (employee._editing) {
-          <button class="btn primary pill" (click)="save(employee)">Save</button>
-          <button class="btn pill" (click)="cancel(employee)">Cancel</button>
-          }
-          <button class="btn danger pill" (click)="remove(employee)">Delete</button>
-        </td>
-      </tr>
-      }
-    </tbody>
-  </table>
+            @if (employee._editing) {
+            <input type="number" [(ngModel)]="employee.monthlyHoursTarget" class="input tight" style="width: 80px;" />
+            }
+          </td>
+          <td>
+            @if (!employee._editing) {
+            <span class="shift-badge" [style.background]="employee.isActive ? '#dcfce7' : '#fee2e2'"
+              [style.color]="employee.isActive ? '#166534' : '#991b1b'">
+              {{ employee.isActive ? 'Active' : 'Inactive' }}
+            </span>
+            }
+            @if (employee._editing) {
+            <input type="checkbox" [(ngModel)]="employee.isActive" />
+            }
+          </td>
+          <td>
+            @if (!employee._editing) {
+            <div class="muted">{{ employee.team?.name || 'No Team' }}</div>
+            }
+            @if (employee._editing) {
+            <select [(ngModel)]="employee.teamId" class="input tight">
+              <option [ngValue]="null">Select Team</option>
+              @for (team of teams; track $index) {
+              <option [ngValue]="team.id">{{ team.name }}</option>
+              }
+            </select>
+            }
+          </td>
+          <td class="actions">
+            @if (!employee._editing) {
+            <button class="btn pill" (click)="edit(employee)">
+              <mat-icon>edit</mat-icon>Edit
+            </button>
+            }
+            @if (employee._editing) {
+            <button class="btn primary pill" (click)="save(employee)">
+              <mat-icon>save</mat-icon>Save
+            </button>
+            <button class="btn pill" (click)="cancel(employee)">
+              <mat-icon>close</mat-icon>Cancel
+            </button>
+            }
+            <button class="btn danger pill" (click)="remove(employee)">
+              <mat-icon>delete</mat-icon>Delete
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
   <app-confirm [visible]="confirmState.visible" [title]="confirmState.title" [message]="confirmState.message"
     [confirmLabel]="confirmState.confirmLabel ?? null" [cancelLabel]="confirmState.cancelLabel ?? null"
     (confirmed)="onConfirmedRemove()" (cancelled)="onCancelledRemove()"></app-confirm>

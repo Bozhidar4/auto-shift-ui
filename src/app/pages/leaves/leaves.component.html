@@ -2,12 +2,16 @@
   <div class="page-header">
     <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">person_off</mat-icon>Employee Leaves</div>
     <div class="controls">
-      <button class="btn primary pill" (click)="loadLeaves()">Refresh Leaves</button>
-      <button class="btn pill" (click)="showLeaveTypeManager = !showLeaveTypeManager">Manage Leave Types</button>
+      <button class="btn pill" (click)="loadLeaves()">
+        <mat-icon>refresh</mat-icon>Refresh
+      </button>
+      <button class="btn pill" (click)="showLeaveTypeManager = !showLeaveTypeManager">
+        <mat-icon>settings</mat-icon>Manage Leave Types
+      </button>
     </div>
   </div>
 
-  <div class="create-leave-container">
+  <div class="create-leave-container card" style="margin-top: 1rem; flex-direction: row; gap: 0.75rem;">
     <select class="input" [(ngModel)]="newLeave.employeeId" (ngModelChange)="onEmployeeSelect($event)">
       <option [ngValue]="null">Select employee</option>
       @for (e of employees; track $index) {
@@ -24,11 +28,13 @@
     <input class="input" type="date" [(ngModel)]="newLeave.endDate" />
     <input class="input" placeholder="Notes" [(ngModel)]="newLeave.notes" />
     <button class="btn primary pill" (click)="createLeave()"
-      [disabled]="!newLeave.employeeId || !newLeave.leaveTypeId || !newLeave.startDate">Create</button>
+      [disabled]="!newLeave.employeeId || !newLeave.leaveTypeId || !newLeave.startDate">
+        <mat-icon>add</mat-icon>Create
+    </button>
   </div>
 
-  <div class="table-container">
-    <table class="leave-table mat-elevation-z3">
+  <div class="table-container" style="margin-top: 1.5rem;">
+    <table class="app-table">
       <thead>
         <tr>
           <th>Employee</th>
@@ -44,14 +50,23 @@
         @for (l of leaves; track $index) {
         <tr>
           <ng-container *ngIf="editingLeaveId !== l.id; else editRow">
-            <td>{{ l.employee?.firstName }} {{ l.employee?.lastName }}</td>
-            <td>{{ l.leaveType?.name }}</td>
+            <td style="font-weight: 600;">
+              <div class="emp-info">
+                <div class="avatar">{{ (l.employee?.firstName?.[0] || '') + (l.employee?.lastName?.[0] || '') }}</div>
+                {{ l.employee?.firstName }} {{ l.employee?.lastName }}
+              </div>
+            </td>
+            <td><span class="shift-badge shift-t-{{ ($index % 10) + 1 }}">{{ l.leaveType?.name }}</span></td>
             <td>{{ l.startDate | date }}</td>
             <td>{{ l.endDate | date }}</td>
-            <td>{{ l.notes }}</td>
-            <td class="leave-action-container">
-              <button class="btn pill" (click)="startEditLeave(l)">Edit</button>
-              <button class="btn pill danger" (click)="deleteLeave(l)">Delete</button>
+            <td class="muted">{{ l.notes }}</td>
+            <td class="actions">
+              <button class="btn pill" (click)="startEditLeave(l)">
+                <mat-icon>edit</mat-icon>Edit
+              </button>
+              <button class="btn pill danger" (click)="deleteLeave(l)">
+                <mat-icon>delete</mat-icon>Delete
+              </button>
             </td>
           </ng-container>
           <ng-template #editRow>
@@ -66,48 +81,60 @@
             <td>
               <select class="input" [(ngModel)]="editLeaveModel.leaveTypeId">
                 <option [ngValue]="null">Select type</option>
-                <option *ngFor="let t of leaveTypes" [ngValue]="t.id">{{ t.name }}</option>
+                @for (t of leaveTypes; track $index) {
+                <option [ngValue]="t.id">{{ t.name }}</option>
+                }
               </select>
             </td>
             <td><input class="input" type="date" [(ngModel)]="editLeaveModel.startDate" /></td>
             <td><input class="input" type="date" [(ngModel)]="editLeaveModel.endDate" /></td>
             <td><input class="input" [(ngModel)]="editLeaveModel.notes" /></td>
-            <td class="leave-action-container">
-              <button class="btn primary pill" (click)="saveEditLeave()" [disabled]="!canSaveLeave()">Save</button>
-              <button class="btn pill" (click)="cancelEditLeave()">Cancel</button>
+            <td class="actions">
+              <button class="btn primary pill" (click)="saveEditLeave()" [disabled]="!canSaveLeave()">
+                <mat-icon>save</mat-icon>Save
+              </button>
+              <button class="btn pill" (click)="cancelEditLeave()">
+                <mat-icon>close</mat-icon>Cancel
+              </button>
             </td>
           </ng-template>
         </tr>
         }
       </tbody>
       }
-      @else {
-      @if (!selectedEmployeeId) {
-      <div class="muted no-leave-found">Please select an employee to view their leaves.</div>
-      }
-      @else {
-      <div class="muted no-leave-found">No leaves found for the selected employee.</div>
-      }
-      }
     </table>
+    @if (!leaves || leaves.length === 0) {
+      <div style="padding: 2rem; text-align: center;" class="muted">
+        @if (!selectedEmployeeId) {
+          Please select an employee to view their leaves.
+        }
+        @else {
+          No leaves found for the selected employee.
+        }
+      </div>
+    }
   </div>
 
   @if (showLeaveTypeManager) {
-  <div class="card leave-type-container">
-    <div class="leave-type-title-container">
+  <div class="card leave-type-container" style="margin-top: 2rem;">
+    <div class="page-header">
       <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">personal_injury</mat-icon>Leave Types</div>
       <button class="btn pill" aria-label="Close"
         (click)="showLeaveTypeManager = false; newLeaveType = createEmptyLeaveType()">✕</button>
     </div>
-    <div class="leave-type-input-container">
+    <div class="controls" style="margin-top: 1rem;">
       <input class="input" placeholder="Name" [(ngModel)]="newLeaveType.name" />
       <input class="input" placeholder="Description" [(ngModel)]="newLeaveType.description" />
-      <button class="btn primary pill" (click)="createLeaveType()">Create</button>
-      <button class="btn pill" (click)="newLeaveType = createEmptyLeaveType()">Cancel</button>
+      <button class="btn primary pill" (click)="createLeaveType()">
+        <mat-icon>add</mat-icon>Create
+      </button>
+      <button class="btn pill" (click)="newLeaveType = createEmptyLeaveType()">
+        <mat-icon>close</mat-icon>Cancel
+      </button>
     </div>
 
-    <div style="margin-top:0.5rem">
-      <table class="leave-type-table">
+    <div style="margin-top:1.5rem">
+      <table class="app-table">
         <thead>
           <tr>
             <th>Name</th>
@@ -119,11 +146,15 @@
           @for (t of leaveTypes; track $index) {
           <tr>
             <ng-container *ngIf="editingLeaveTypeId !== t.id; else editTypeRow">
-              <td>{{ t.name }}</td>
-              <td>{{ t.description }}</td>
-              <td class="leave-type-action-container">
-                <button class="btn pill" (click)="startEditLeaveType(t)">Edit</button>
-                <button class="btn pill danger" (click)="deleteLeaveType(t)">Delete</button>
+              <td style="font-weight: 600;">{{ t.name }}</td>
+              <td class="muted">{{ t.description }}</td>
+              <td class="actions">
+                <button class="btn pill" (click)="startEditLeaveType(t)">
+                    <mat-icon>edit</mat-icon>Edit
+                </button>
+                <button class="btn pill danger" (click)="deleteLeaveType(t)">
+                    <mat-icon>delete</mat-icon>Delete
+                </button>
               </td>
             </ng-container>
             <ng-template #editTypeRow>
@@ -133,10 +164,14 @@
               <td>
                 <input class="input" [(ngModel)]="editLeaveTypeModel.description" />
               </td>
-              <td class="leave-type-action-container">
+              <td class="actions">
                 <button class="btn primary pill" (click)="saveEditLeaveType()"
-                  [disabled]="!editLeaveTypeModel.name">Save</button>
-                <button class="btn pill" (click)="cancelEditLeaveType()">Cancel</button>
+                  [disabled]="!editLeaveTypeModel.name">
+                    <mat-icon>save</mat-icon>Save
+                </button>
+                <button class="btn pill" (click)="cancelEditLeaveType()">
+                    <mat-icon>close</mat-icon>Cancel
+                </button>
               </td>
             </ng-template>
           </tr>
@@ -146,6 +181,7 @@
     </div>
   </div>
   }
+
   <app-confirm [visible]="confirmState.visible" [title]="confirmState.title" [message]="confirmState.message"
     [confirmLabel]="confirmState.confirmLabel || null" [cancelLabel]="confirmState.cancelLabel || null"
     (confirmed)="onConfirmedDelete()" (cancelled)="onCancelledDelete()"></app-confirm>
