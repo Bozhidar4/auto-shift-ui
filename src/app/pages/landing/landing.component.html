@@ -143,7 +143,8 @@
                 <ul>
                     <li><a href="mailto:support@autoshift.com">{{ 'LANDING.FOOTER.CONTACT' | translate }}</a></li>
                     <li><a href="#">{{ 'LANDING.FOOTER.DOCS' | translate }}</a></li>
-                    <li><a href="#">{{ 'LANDING.FOOTER.PRIVACY' | translate }}</a></li>
+                    <li><a routerLink="/privacy">{{ 'LANDING.FOOTER.PRIVACY' | translate }}</a></li>
+                    <li><a routerLink="/cookies">{{ 'LEGAL.COOKIES_TITLE' | translate }}</a></li>
                 </ul>
             </div>
             <div class="footer-links">
@@ -158,8 +159,8 @@
         <div class="footer-bottom">
             <div>{{ 'LANDING.FOOTER.COPYRIGHT' | translate }}</div>
             <div style="display:flex; gap: 2rem">
-                <a href="#" style="color: inherit; text-decoration: none">{{ 'LANDING.FOOTER.TERMS' | translate }}</a>
-                <a href="#" style="color: inherit; text-decoration: none">{{ 'LANDING.FOOTER.PRIVACY_LINK' | translate }}</a>
+                <a routerLink="/terms" style="color: inherit; text-decoration: none">{{ 'LANDING.FOOTER.TERMS' | translate }}</a>
+                <a routerLink="/privacy" style="color: inherit; text-decoration: none">{{ 'LANDING.FOOTER.PRIVACY_LINK' | translate }}</a>
             </div>
         </div>
     </footer>

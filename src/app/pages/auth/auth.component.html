@@ -31,6 +31,15 @@
                 style="padding: 0.875rem; font-size: 1rem; border-radius: 12px; margin-top: 0.5rem;">
                 {{ mode === 'login' ? ('AUTH.SIGN_IN_BTN' | translate) : ('AUTH.CREATE_BTN' | translate) }}
             </button>
+
+            @if (mode === 'register') {
+            <p style="font-size: 0.75rem; color: #94a3b8; text-align: center; margin-top: 1rem; line-height: 1.4;">
+                {{ 'AUTH.LEGAL_NOTICE' | translate }}
+                <a routerLink="/terms" style="color: var(--primary); text-decoration: none; font-weight: 500;">{{ 'LEGAL.TERMS_TITLE' | translate }}</a>
+                {{ 'AUTH.AND' | translate }}
+                <a routerLink="/privacy" style="color: var(--primary); text-decoration: none; font-weight: 500;">{{ 'LEGAL.PRIVACY_TITLE' | translate }}</a>.
+            </p>
+            }
         </form>
 
         <div class="auth-footer">

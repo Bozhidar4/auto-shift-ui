@@ -1,11 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
+import { CookieConsentComponent } from './components/cookie-consent/cookie-consent.component';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, CookieConsentComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   standalone: true

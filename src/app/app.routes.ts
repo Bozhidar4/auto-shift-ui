@@ -4,6 +4,9 @@ export const routes: Routes = [
 	// Top-level marketing/auth routes (no app shell)
 	{ path: '', pathMatch: 'full', loadComponent: () => import('./pages/landing/landing.component').then(m => m.LandingComponent) },
 	{ path: 'login', loadComponent: () => import('./pages/auth/auth.component').then(m => m.AuthComponent) },
+	{ path: 'terms', loadComponent: () => import('./pages/legal/terms.component').then(m => m.TermsComponent) },
+	{ path: 'privacy', loadComponent: () => import('./pages/legal/privacy.component').then(m => m.PrivacyComponent) },
+	{ path: 'cookies', loadComponent: () => import('./pages/legal/cookie-policy.component').then(m => m.CookiePolicyComponent) },
 
 	// App shell routes — LayoutComponent contains the header/sidebar and a router-outlet for children
 	{
