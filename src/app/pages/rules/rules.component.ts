@@ -7,11 +7,12 @@ import { ShiftRule } from '../../models/shift-rule.interface';
 import { TeamRuleValue } from '../../models/team-rule-value.interface';
 import { ToastService } from '../../services/toast.service';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-rules',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule],
+  imports: [CommonModule, FormsModule, MatIconModule, TranslateModule],
   templateUrl: './rules.component.html',
   styleUrls: ['./rules.component.scss']
 })
@@ -24,8 +25,9 @@ export class RulesComponent implements OnInit {
   savingMap: Record<number, boolean> = {};
 
   constructor(
-    private apiService: ApiService, 
-    private toastService: ToastService
+    private apiService: ApiService,
+    private toastService: ToastService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -143,7 +145,7 @@ export class RulesComponent implements OnInit {
         this.rules = this.rules.map(r => ({ ...r, teamValue: this.teamValues.find(tv => tv.ruleId === r.id) || null } as ShiftRule));
       },
       error: (err) => {
-        this.toastService.show('Failed to load team rule values', 'error');
+        this.toastService.show(this.translate.instant('RULES.ERROR_LOAD'), 'error');
       }
     });
   }
@@ -207,11 +209,11 @@ export class RulesComponent implements OnInit {
     rule: ShiftRule
   ): void {
     if (!this.selectedTeamId) {
-      this.toastService.show('Select a team first to save values', 'warning');
+      this.toastService.show(this.translate.instant('RULES.WARNING_SELECT_TEAM'), 'warning');
       return;
     }
     if (this.isInvalidIntValue(rule)) {
-      this.toastService.show('Please enter a valid integer value (minimum 1)', 'warning');
+      this.toastService.show(this.translate.instant('RULES.WARNING_INVALID_INT'), 'warning');
       return;
     }
 
@@ -228,23 +230,27 @@ export class RulesComponent implements OnInit {
     this.savingMap[rule.id] = true;
 
     if (existing) {
-      this.apiService.updateTeamRuleValue(existing.id, payload).subscribe({ next: (result) => {
-        this.savingMap[rule.id] = false;
-        this.loadTeamValues(this.selectedTeamId as number);
-        this.toastService.show('Rule value updated', 'success');
-      }, error: (error) => {
-        this.savingMap[rule.id] = false;
-        this.toastService.show('Failed to update rule value', 'error');
-      } });
+      this.apiService.updateTeamRuleValue(existing.id, payload).subscribe({
+        next: (result) => {
+          this.savingMap[rule.id] = false;
+          this.loadTeamValues(this.selectedTeamId as number);
+          this.toastService.show(this.translate.instant('RULES.SUCCESS_UPDATE'), 'success');
+        }, error: (error) => {
+          this.savingMap[rule.id] = false;
+          this.toastService.show(this.translate.instant('RULES.ERROR_UPDATE'), 'error');
+        }
+      });
     } else {
-      this.apiService.createTeamRuleValue(payload).subscribe({ next: (result) => {
-        this.savingMap[rule.id] = false;
-        this.loadTeamValues(this.selectedTeamId as number);
-        this.toastService.show('Rule value created', 'success');
-      }, error: (error) => {
-        this.savingMap[rule.id] = false;
-        this.toastService.show('Failed to create rule value', 'error');
-      } });
+      this.apiService.createTeamRuleValue(payload).subscribe({
+        next: (result) => {
+          this.savingMap[rule.id] = false;
+          this.loadTeamValues(this.selectedTeamId as number);
+          this.toastService.show(this.translate.instant('RULES.SUCCESS_CREATE'), 'success');
+        }, error: (error) => {
+          this.savingMap[rule.id] = false;
+          this.toastService.show(this.translate.instant('RULES.ERROR_CREATE'), 'error');
+        }
+      });
     }
   }
 }

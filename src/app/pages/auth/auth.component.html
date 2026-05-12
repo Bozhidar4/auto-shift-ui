@@ -1,20 +1,23 @@
 <div class="auth-container">
+    <div style="position: absolute; top: 2rem; right: 2rem;">
+        <app-language-switcher></app-language-switcher>
+    </div>
     <div class="auth-card">
         <div class="auth-header">
             <div class="logo"></div>
-            <h1>{{ mode === 'login' ? 'Welcome back' : 'Create an account' }}</h1>
-            <p>Schedule smarter. Ship happier.</p>
+            <h1>{{ mode === 'login' ? ('AUTH.WELCOME' | translate) : ('AUTH.CREATE' | translate) }}</h1>
+            <p>{{ 'AUTH.SUBTITLE' | translate }}</p>
         </div>
 
-        <div class="auth-form">
+        <form class="auth-form" (submit)="$event.preventDefault(); submit()">
             <div class="form-group">
-                <label>Email</label>
-                <input type="email" [(ngModel)]="email" class="auth-input" placeholder="name@company.com" />
+                <label>{{ 'AUTH.EMAIL' | translate }}</label>
+                <input type="email" [(ngModel)]="email" name="email" class="auth-input" placeholder="name@company.com" required />
             </div>
 
             <div class="form-group">
-                <label>Password</label>
-                <input type="password" [(ngModel)]="password" class="auth-input" placeholder="••••••••" />
+                <label>{{ 'AUTH.PASSWORD' | translate }}</label>
+                <input type="password" [(ngModel)]="password" name="password" class="auth-input" placeholder="••••••••" required />
             </div>
 
             @if (error) {
@@ -24,19 +27,19 @@
             </div>
             }
 
-            <button class="btn primary"
-                style="padding: 0.875rem; font-size: 1rem; border-radius: 12px; margin-top: 0.5rem;" (click)="submit()">
-                {{ mode === 'login' ? 'Sign in' : 'Create account' }}
+            <button type="submit" class="btn primary"
+                style="padding: 0.875rem; font-size: 1rem; border-radius: 12px; margin-top: 0.5rem;">
+                {{ mode === 'login' ? ('AUTH.SIGN_IN_BTN' | translate) : ('AUTH.CREATE_BTN' | translate) }}
             </button>
-        </div>
+        </form>
 
         <div class="auth-footer">
             <a (click)="toggleMode()" style="cursor: pointer; display: inline-block;">
-                {{ mode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Log in' }}
+                {{ mode === 'login' ? ('AUTH.NO_ACCOUNT' | translate) : ('AUTH.HAS_ACCOUNT' | translate) }}
             </a>
             <div style="margin-top: 0.5rem;">
                 <a routerLink="/" style="cursor: pointer; color: #94a3b8; font-size: 0.85rem; font-weight: 500;">&larr;
-                    Back to Home</a>
+                    {{ 'AUTH.BACK' | translate }}</a>
             </div>
         </div>
     </div>

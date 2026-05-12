@@ -9,10 +9,12 @@ import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfirmState, createEmptyConfirmState } from '../../models/confirm-state.interface';
 
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-shifts',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmComponent, MatIconModule],
+  imports: [CommonModule, FormsModule, ConfirmComponent, MatIconModule, TranslateModule],
   templateUrl: './shifts.component.html',
   styleUrls: ['./shifts.component.scss']
 })
@@ -28,7 +30,8 @@ export class ShiftsComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -85,10 +88,10 @@ export class ShiftsComponent implements OnInit {
         this.newShift = createEmptyShift();
         this.loadTeams();
         this.load(this.selectedTeamId);
-        this.toastService.show('Shift type created successfully.', 'success');
+        this.toastService.show(this.translate.instant('SHIFTS.SUCCESS_ADD'), 'success');
       },
       error: () => {
-        this.toastService.show('Error creating shift type.', 'error');
+        this.toastService.show(this.translate.instant('SHIFTS.ERROR_ADD'), 'error');
       }
     });
   }
@@ -129,8 +132,8 @@ export class ShiftsComponent implements OnInit {
   ): void {
     this.confirmState = {
       visible: true,
-      title: 'Delete shift type',
-      message: `Delete shift type "${shift.name}"?`,
+      title: this.translate.instant('SHIFTS.DELETE'),
+      message: `${this.translate.instant('SHIFTS.CONFIRM_DELETE')} "${shift.name}"?`,
       target: shift
     };
   }
@@ -143,10 +146,10 @@ export class ShiftsComponent implements OnInit {
       next: () => {
         this.load(this.selectedTeamId);
         this.shifts = this.shifts.filter(x => x.id !== shift.id);
-        this.toastService.show('Shift type deleted.', 'success');
+        this.toastService.show(this.translate.instant('SHIFTS.SUCCESS_DELETE'), 'success');
       },
       error: () => {
-        this.toastService.show('Failed to delete shift type.', 'error');
+        this.toastService.show(this.translate.instant('SHIFTS.ERROR_DELETE'), 'error');
       }
     });
     this.confirmState.visible = false;
@@ -212,10 +215,10 @@ export class ShiftsComponent implements OnInit {
               : this.shifts[idx];
           }
 
-          this.toastService.show('Shift type updated successfully.', 'success');
+          this.toastService.show(this.translate.instant('SHIFTS.SUCCESS_UPDATE'), 'success');
         },
         error: () => {
-          this.toastService.show('Failed to update shift type.', 'error');
+          this.toastService.show(this.translate.instant('SHIFTS.ERROR_UPDATE'), 'error');
         }
       });
   }

@@ -1,0 +1,16 @@
+<div class="lang-switcher-container" (click)="$event.stopPropagation()">
+    <div class="lang-switcher-toggle" (click)="toggleDropdown()">
+        <mat-icon>language</mat-icon>
+        <span class="lang-text">{{ currentLang | uppercase }}</span>
+        <mat-icon class="arrow">{{ isOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
+    </div>
+
+    <div class="lang-dropdown" *ngIf="isOpen">
+        <div class="lang-option" [class.active]="currentLang === 'en'" (click)="selectLanguage('en')">
+            <span class="flag">🇺🇸</span> English
+        </div>
+        <div class="lang-option" [class.active]="currentLang === 'bg'" (click)="selectLanguage('bg')">
+            <span class="flag">🇧🇬</span> Български
+        </div>
+    </div>
+</div>

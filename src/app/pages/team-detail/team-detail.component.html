@@ -1,30 +1,30 @@
 <div class="card">
   <div class="header-row">
-    <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">people_alt</mat-icon>Team Details</div>
+    <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">people_alt</mat-icon>{{ 'TEAMS.DETAIL_TITLE' | translate }}</div>
   </div>
   @if (!team && !loading) {
-  <div class="muted">Team not found</div>
+  <div class="muted">{{ 'TEAMS.NOT_FOUND' | translate }}</div>
   }
   @if (loading) {
-  <div class="muted">Loading...</div>
+  <div class="muted">{{ 'COMMON.LOADING' | translate }}</div>
   }
 
   @if (team) {
   <div>
     <div class="team-title-container">
-      <input class="input" [(ngModel)]="team.name" placeholder="Team name" />
-      <button class="btn pill primary" (click)="save()">Save</button>
-      <button class="btn pill" routerLink="/teams">Back</button>
+      <input class="input" [(ngModel)]="team.name" [placeholder]="'TEAMS.NAME' | translate" />
+      <button class="btn pill primary" (click)="save()">{{ 'COMMON.SAVE' | translate }}</button>
+      <button class="btn pill" routerLink="/teams">{{ 'COMMON.BACK' | translate }}</button>
     </div>
 
-    <h3 style="margin-top:1rem">Employees</h3>
+    <h3 style="margin-top:1rem">{{ 'EMPLOYEES.TITLE' | translate }}</h3>
     <div class="list">
       <table class="employee-table">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Hours</th>
-            <th>Active</th>
+            <th>{{ 'EMPLOYEES.NAME' | translate }}</th>
+            <th>{{ 'EMPLOYEES.HOURS' | translate }}</th>
+            <th>{{ 'EMPLOYEES.ACTIVE_LABEL' | translate }}</th>
             <th></th>
           </tr>
         </thead>
@@ -37,43 +37,43 @@
             <td><input type="checkbox" [(ngModel)]="employee.isActive" disabled="disabled" />
             </td>
             <td style="padding:0.5rem; display:flex; justify-content: flex-end;">
-              <button class="btn pill danger" (click)="removeEmployee(employee)">Remove</button>
+              <button class="btn pill danger" (click)="removeEmployee(employee)">{{ 'TEAMS.REMOVE_EMPLOYEE' | translate }}</button>
             </td>
             }
             @if (employee.id === 0) {
             <td style="padding:0.5rem" colspan="1">
               <select class="input" [(ngModel)]="employee.id" (ngModelChange)="onAvailableSelected(employee, $event)">
-                <option [ngValue]="null">Select employee</option>
+                <option [ngValue]="null">{{ 'EMPLOYEES.SELECT_EMPLOYEE' | translate }}</option>
                 @for (availableEmployee of availableEmployees; track $index) {
                 <option [ngValue]="availableEmployee.id">{{ availableEmployee.firstName }} {{ availableEmployee.lastName }}</option>
                 }
               </select>
             </td>
             <td style="padding:0.5rem">
-              <button class="btn pill" (click)="removeEmployee(employee)">Cancel</button>
+              <button class="btn pill" (click)="removeEmployee(employee)">{{ 'COMMON.CANCEL' | translate }}</button>
             </td>
             }
           </tr>
           }
           <tr>
             <td colspan="4" style="padding:0.5rem; text-align:left">
-              <button class="btn pill" (click)="addEmployee()">Add Employee</button>
+              <button class="btn pill" (click)="addEmployee()">{{ 'TEAMS.ADD_EMPLOYEE' | translate }}</button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <h3>Shift Types</h3>
+    <h3>{{ 'SHIFTS.TITLE' | translate }}</h3>
     <div class="list">
       @for (shiftType of (team.shiftTypes || []); track $index) {
       <div class="shift-type-container">
-        <input class="input" [(ngModel)]="shiftType.name" placeholder="Shift name" />
-        <input class="input" [(ngModel)]="shiftType.startTime" placeholder="Start" />
-        <input class="input" [(ngModel)]="shiftType.endTime" placeholder="End" />
-        <input class="input" type="number" [(ngModel)]="shiftType.requiredPeople" placeholder="Required people"
+        <input class="input" [(ngModel)]="shiftType.name" [placeholder]="'SHIFTS.NAME' | translate" />
+        <input class="input" [(ngModel)]="shiftType.startTime" [placeholder]="'SHIFTS.START_TIME' | translate" />
+        <input class="input" [(ngModel)]="shiftType.endTime" [placeholder]="'SHIFTS.END_TIME' | translate" />
+        <input class="input" type="number" [(ngModel)]="shiftType.requiredPeople" [placeholder]="'SHIFTS.REQUIRED_STAFF' | translate"
           style="width:160px" />
-        <button class="btn pill danger" (click)="removeShift(shiftType)">Remove</button>
+        <button class="btn pill danger" (click)="removeShift(shiftType)">{{ 'COMMON.DELETE' | translate }}</button>
       </div>
       }
     </div>

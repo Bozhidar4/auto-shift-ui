@@ -1,35 +1,35 @@
 <div class="card">
   <div class="page-header">
-    <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">person_off</mat-icon>Employee Leaves</div>
+    <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">person_off</mat-icon>{{ 'LEAVES.TITLE' | translate }}</div>
     <div class="controls">
       <button class="btn pill" (click)="loadLeaves()">
-        <mat-icon>refresh</mat-icon>Refresh
+        <mat-icon>refresh</mat-icon>{{ 'EMPLOYEES.REFRESH' | translate }}
       </button>
       <button class="btn pill" (click)="showLeaveTypeManager = !showLeaveTypeManager">
-        <mat-icon>settings</mat-icon>Manage Leave Types
+        <mat-icon>settings</mat-icon>{{ 'LEAVES.MANAGE_TYPES' | translate }}
       </button>
     </div>
   </div>
 
   <div class="create-leave-container card" style="margin-top: 1rem; flex-direction: row; gap: 0.75rem;">
     <select class="input" [(ngModel)]="newLeave.employeeId" (ngModelChange)="onEmployeeSelect($event)">
-      <option [ngValue]="null">Select employee</option>
+      <option [ngValue]="null">{{ 'LEAVES.SELECT_EMPLOYEE' | translate }}</option>
       @for (e of employees; track $index) {
       <option [ngValue]="e.id">{{ e.firstName }} {{ e.lastName }}</option>
       }
     </select>
     <select class="input" [(ngModel)]="newLeave.leaveTypeId">
-      <option [ngValue]="null">Select leave type</option>
+      <option [ngValue]="null">{{ 'LEAVES.SELECT_TYPE' | translate }}</option>
       @for (leaveType of leaveTypes; track $index) {
       <option [ngValue]="leaveType.id">{{ leaveType.name }}</option>
       }
     </select>
     <input class="input" type="date" [(ngModel)]="newLeave.startDate" />
     <input class="input" type="date" [(ngModel)]="newLeave.endDate" />
-    <input class="input" placeholder="Notes" [(ngModel)]="newLeave.notes" />
+    <input class="input" [placeholder]="'LEAVES.NOTES' | translate" [(ngModel)]="newLeave.notes" />
     <button class="btn primary pill" (click)="createLeave()"
       [disabled]="!newLeave.employeeId || !newLeave.leaveTypeId || !newLeave.startDate">
-        <mat-icon>add</mat-icon>Create
+        <mat-icon>add</mat-icon>{{ 'LEAVES.ADD' | translate }}
     </button>
   </div>
 
@@ -37,11 +37,11 @@
     <table class="app-table">
       <thead>
         <tr>
-          <th>Employee</th>
-          <th>Type</th>
-          <th>Start</th>
-          <th>End</th>
-          <th>Notes</th>
+          <th>{{ 'LEAVES.EMPLOYEE' | translate }}</th>
+          <th>{{ 'LEAVES.TYPE' | translate }}</th>
+          <th>{{ 'LEAVES.START_DATE' | translate }}</th>
+          <th>{{ 'LEAVES.END_DATE' | translate }}</th>
+          <th>{{ 'LEAVES.NOTES' | translate }}</th>
           <th></th>
         </tr>
       </thead>
@@ -62,17 +62,17 @@
             <td class="muted">{{ l.notes }}</td>
             <td class="actions">
               <button class="btn pill" (click)="startEditLeave(l)">
-                <mat-icon>edit</mat-icon>Edit
+                <mat-icon>edit</mat-icon>{{ 'LEAVES.EDIT' | translate }}
               </button>
               <button class="btn pill danger" (click)="deleteLeave(l)">
-                <mat-icon>delete</mat-icon>Delete
+                <mat-icon>delete</mat-icon>{{ 'LEAVES.DELETE' | translate }}
               </button>
             </td>
           </ng-container>
           <ng-template #editRow>
             <td>
               <select class="input" [(ngModel)]="editLeaveModel.employeeId">
-                <option [ngValue]="null">Select employee</option>
+                <option [ngValue]="null">{{ 'LEAVES.SELECT_EMPLOYEE' | translate }}</option>
                 @for (e of employees; track $index) {
                 <option [ngValue]="e.id">{{ e.firstName }} {{ e.lastName }}</option>
                 }
@@ -80,7 +80,7 @@
             </td>
             <td>
               <select class="input" [(ngModel)]="editLeaveModel.leaveTypeId">
-                <option [ngValue]="null">Select type</option>
+                <option [ngValue]="null">{{ 'LEAVES.SELECT_TYPE' | translate }}</option>
                 @for (t of leaveTypes; track $index) {
                 <option [ngValue]="t.id">{{ t.name }}</option>
                 }
@@ -91,10 +91,10 @@
             <td><input class="input" [(ngModel)]="editLeaveModel.notes" /></td>
             <td class="actions">
               <button class="btn primary pill" (click)="saveEditLeave()" [disabled]="!canSaveLeave()">
-                <mat-icon>save</mat-icon>Save
+                <mat-icon>save</mat-icon>{{ 'LEAVES.SAVE' | translate }}
               </button>
               <button class="btn pill" (click)="cancelEditLeave()">
-                <mat-icon>close</mat-icon>Cancel
+                <mat-icon>close</mat-icon>{{ 'LEAVES.CANCEL' | translate }}
               </button>
             </td>
           </ng-template>
@@ -106,10 +106,10 @@
     @if (!leaves || leaves.length === 0) {
       <div style="padding: 2rem; text-align: center;" class="muted">
         @if (!selectedEmployeeId) {
-          Please select an employee to view their leaves.
+          {{ 'LEAVES.PLEASE_SELECT_EMPLOYEE' | translate }}
         }
         @else {
-          No leaves found for the selected employee.
+          {{ 'LEAVES.NO_LEAVES_FOUND' | translate }}
         }
       </div>
     }
@@ -118,18 +118,18 @@
   @if (showLeaveTypeManager) {
   <div class="card leave-type-container" style="margin-top: 2rem;">
     <div class="page-header">
-      <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">personal_injury</mat-icon>Leave Types</div>
+      <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">personal_injury</mat-icon>{{ 'LEAVES.TYPES_TITLE' | translate }}</div>
       <button class="btn pill" aria-label="Close"
         (click)="showLeaveTypeManager = false; newLeaveType = createEmptyLeaveType()">✕</button>
     </div>
     <div class="controls" style="margin-top: 1rem;">
-      <input class="input" placeholder="Name" [(ngModel)]="newLeaveType.name" />
-      <input class="input" placeholder="Description" [(ngModel)]="newLeaveType.description" />
+      <input class="input" [placeholder]="'LEAVES.NAME' | translate" [(ngModel)]="newLeaveType.name" />
+      <input class="input" [placeholder]="'LEAVES.DESCRIPTION' | translate" [(ngModel)]="newLeaveType.description" />
       <button class="btn primary pill" (click)="createLeaveType()">
-        <mat-icon>add</mat-icon>Create
+        <mat-icon>add</mat-icon>{{ 'LEAVES.ADD' | translate }}
       </button>
       <button class="btn pill" (click)="newLeaveType = createEmptyLeaveType()">
-        <mat-icon>close</mat-icon>Cancel
+        <mat-icon>close</mat-icon>{{ 'LEAVES.CANCEL' | translate }}
       </button>
     </div>
 
@@ -137,8 +137,8 @@
       <table class="app-table">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Description</th>
+            <th>{{ 'LEAVES.NAME' | translate }}</th>
+            <th>{{ 'LEAVES.DESCRIPTION' | translate }}</th>
             <th></th>
           </tr>
         </thead>
@@ -150,10 +150,10 @@
               <td class="muted">{{ t.description }}</td>
               <td class="actions">
                 <button class="btn pill" (click)="startEditLeaveType(t)">
-                    <mat-icon>edit</mat-icon>Edit
+                    <mat-icon>edit</mat-icon>{{ 'LEAVES.EDIT' | translate }}
                 </button>
                 <button class="btn pill danger" (click)="deleteLeaveType(t)">
-                    <mat-icon>delete</mat-icon>Delete
+                    <mat-icon>delete</mat-icon>{{ 'LEAVES.DELETE' | translate }}
                 </button>
               </td>
             </ng-container>
@@ -167,10 +167,10 @@
               <td class="actions">
                 <button class="btn primary pill" (click)="saveEditLeaveType()"
                   [disabled]="!editLeaveTypeModel.name">
-                    <mat-icon>save</mat-icon>Save
+                    <mat-icon>save</mat-icon>{{ 'LEAVES.SAVE' | translate }}
                 </button>
                 <button class="btn pill" (click)="cancelEditLeaveType()">
-                    <mat-icon>close</mat-icon>Cancel
+                    <mat-icon>close</mat-icon>{{ 'LEAVES.CANCEL' | translate }}
                 </button>
               </td>
             </ng-template>

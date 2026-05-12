@@ -9,11 +9,12 @@ import { ConfirmState } from '../../models/confirm-state.interface';
 import { EmployeeRow } from '../../models/employee-row.interface';
 import { Team } from '../../models/team';
 import { ToastService } from '../../services/toast.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-employees',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmComponent, MatIconModule],
+  imports: [CommonModule, FormsModule, ConfirmComponent, MatIconModule, TranslateModule],
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.scss']
 })
@@ -24,7 +25,8 @@ export class EmployeesComponent implements OnInit {
 
   constructor(
     private api: ApiService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -52,13 +54,13 @@ export class EmployeesComponent implements OnInit {
   }
 
   addNew(): void {
-    this.employees.unshift({ 
-      firstName: '', 
-      lastName: '', 
-      monthlyHoursTarget: 160, 
-      isActive: true, 
-      teamId: null, 
-      _editing: true 
+    this.employees.unshift({
+      firstName: '',
+      lastName: '',
+      monthlyHoursTarget: 160,
+      isActive: true,
+      teamId: null,
+      _editing: true
     });
   }
 
@@ -92,17 +94,17 @@ export class EmployeesComponent implements OnInit {
         next: () => {
           row._editing = false;
           this.load();
-          this.toastService.show('Employee updated successfully.', 'success');
+          this.toastService.show(this.translate.instant('EMPLOYEES.SUCCESS_UPDATE'), 'success');
         },
-        error: () => this.toastService.show('Failed to update employee.', 'error')
+        error: () => this.toastService.show(this.translate.instant('EMPLOYEES.ERROR_UPDATE'), 'error')
       });
     } else {
       this.api.createEmployee(model).subscribe({
         next: () => {
           this.load();
-          this.toastService.show('Employee created successfully.', 'success');
+          this.toastService.show(this.translate.instant('EMPLOYEES.SUCCESS_ADD'), 'success');
         },
-        error: () => this.toastService.show('Failed to create employee.', 'error')
+        error: () => this.toastService.show(this.translate.instant('EMPLOYEES.ERROR_ADD'), 'error')
       });
     }
   }
@@ -115,8 +117,8 @@ export class EmployeesComponent implements OnInit {
 
     this.confirmState = {
       visible: true,
-      title: 'Delete employee',
-      message: `Delete employee ${row.firstName} ${row.lastName}?`,
+      title: this.translate.instant('EMPLOYEES.DELETE'),
+      message: `${this.translate.instant('EMPLOYEES.CONFIRM_DELETE')} ${row.firstName} ${row.lastName}?`,
       target: row
     };
   }
@@ -128,9 +130,9 @@ export class EmployeesComponent implements OnInit {
     this.api.deleteEmployee(row.id).subscribe({
       next: () => {
         this.load();
-        this.toastService.show('Employee deleted successfully.', 'success');
+        this.toastService.show(this.translate.instant('EMPLOYEES.SUCCESS_DELETE'), 'success');
       },
-      error: () => this.toastService.show('Failed to delete employee.', 'error')
+      error: () => this.toastService.show(this.translate.instant('EMPLOYEES.ERROR_DELETE'), 'error')
     });
     this.confirmState.visible = false;
     this.confirmState.target = null;

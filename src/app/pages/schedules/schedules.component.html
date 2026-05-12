@@ -1,12 +1,12 @@
 <div class="card">
 	<div style="display:flex;justify-content:space-between;align-items:center">
 		<div>
-			<div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">schedule</mat-icon>Schedules</div>
-			<div class="muted">Generate and review team schedules</div>
+			<div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">schedule</mat-icon>{{ 'SCHEDULES.TITLE' | translate }}</div>
+			<div class="muted">{{ 'SCHEDULES.SUBTITLE' | translate }}</div>
 		</div>
 		<div class="controls">
 			<select class="input" [(ngModel)]="selectedTeamId" (change)="onTeamChange()">
-				<option [ngValue]="null">Select team</option>
+				<option [ngValue]="null">{{ 'SCHEDULES.SELECT_TEAM' | translate }}</option>
 				@for (team of teams; track $index) {
 				<option [ngValue]="team.id">{{ team.name }}</option>
 				}
@@ -14,21 +14,21 @@
 			<input class="input" type="date" [(ngModel)]="startDate" />
 			<input class="input" type="date" [(ngModel)]="endDate" />
 			<button class="btn primary pill" (click)="generate()"
-				[disabled]="!selectedTeamId || !startDate || !endDate">Generate</button>
-			<button class="btn pill" (click)="download()">Download</button>
+				[disabled]="!selectedTeamId || !startDate || !endDate">{{ 'SCHEDULES.GENERATE' | translate }}</button>
+			<button class="btn pill" (click)="download()">{{ 'SCHEDULES.EXPORT' | translate }}</button>
 		</div>
 	</div>
 
 	<div style="margin-top:1rem">
 		@if (!selectedTeamId) {
 		<div class="muted" style="padding:1rem">
-			Select a team to see existing schedules.
+			{{ 'SCHEDULES.SELECT_TEAM_PROMPT' | translate }}
 		</div>
 		}
 
 		@if (selectedTeamId && schedules && !schedules.length) {
 		<div class="muted" style="padding:1rem">
-			No schedules found for this team.
+			{{ 'SCHEDULES.NO_SCHEDULES' | translate }}
 		</div>
 		}
 
@@ -41,7 +41,7 @@
 						<mat-icon>calendar_month</mat-icon>
 					</div>
 					<div>
-						<div style="font-weight: 800; font-size: 1.1rem; color: #0f172a;">Schedule #{{ schedule.id }}</div>
+						<div style="font-weight: 800; font-size: 1.1rem; color: #0f172a;">{{ 'SCHEDULES.SCHEDULE' | translate }} #{{ schedule.id }}</div>
 						<div class="muted">
 							<mat-icon
 								style="font-size: 14px; width: 14px; height: 14px; vertical-align: middle; margin-right: 4px;">history</mat-icon>
@@ -51,13 +51,13 @@
 				</div>
 				<div class="schedule-actions">
 					<button class="btn pill" (click)="viewSchedule(schedule)">
-						<mat-icon>visibility</mat-icon>View
+						<mat-icon>visibility</mat-icon>{{ 'SCHEDULES.VIEW' | translate }}
 					</button>
                     <button class="btn pill" (click)="printSchedule(schedule)">
-						<mat-icon>print</mat-icon>Print
+						<mat-icon>print</mat-icon>{{ 'SCHEDULES.PRINT' | translate }}
 					</button>
 					<button class="btn pill danger" (click)="deleteScheduleConfirm(schedule)">
-						<mat-icon>delete</mat-icon>Delete
+						<mat-icon>delete</mat-icon>{{ 'SCHEDULES.DELETE' | translate }}
 					</button>
 				</div>
 			</div>
@@ -72,19 +72,19 @@
 				<div class="modal-header">
 					<div style="font-weight:700; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
 						<mat-icon color="primary">calendar_month</mat-icon>
-						Schedule #{{ viewingSchedule.id }}
+						{{ 'SCHEDULES.SCHEDULE' | translate }} #{{ viewingSchedule.id }}
 						<span class="muted" style="font-weight: 400; font-size: 0.9rem;">({{ viewingSchedule.startDate |
 							date:'dd MMM yyyy' }} — {{ viewingSchedule.endDate | date:'dd MMM yyyy' }})</span>
 					</div>
 					<div class="controls">
 						<button class="btn primary pill" (click)="saveTableChanges()">
-							<mat-icon>save</mat-icon>Save Changes
+							<mat-icon>save</mat-icon>{{ 'SCHEDULES.SAVE_CHANGES' | translate }}
 						</button>
                         <button class="btn pill" (click)="printSchedule()">
-							<mat-icon>print</mat-icon>Print
+							<mat-icon>print</mat-icon>{{ 'SCHEDULES.PRINT' | translate }}
 						</button>
 						<button class="btn pill" aria-label="Close" (click)="closeView()">
-							<mat-icon>close</mat-icon>Close
+							<mat-icon>close</mat-icon>{{ 'SCHEDULES.CLOSE' | translate }}
 						</button>
 					</div>
 				</div>
@@ -93,11 +93,11 @@
 						<table class="view-table">
 							<thead>
 								<tr>
-									<th class="sticky-col">Employee</th>
+									<th class="sticky-col">{{ 'SCHEDULES.EMPLOYEE' | translate }}</th>
 									@for (date of tableDates; track $index) {
 									<th>{{ formatDateHeader(date) }}</th>
 									}
-									<th class="employee-total-hours">Total</th>
+									<th class="employee-total-hours">{{ 'SCHEDULES.TOTAL' | translate }}</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -160,16 +160,16 @@
                         @for (chunk of tableDateChunks; track chunkIndex; let chunkIndex = $index) {
                             <div class="print-page-break">
                                 <div style="font-weight:700; font-size: 1rem; margin-bottom: 0.5rem;">
-                                    Schedule: {{ viewingSchedule.startDate | date:'MMM dd, yyyy' }} — {{ viewingSchedule.endDate | date:'MMM dd, yyyy' }} (Part {{ chunkIndex + 1 }})
+                                    {{ 'SCHEDULES.SCHEDULE' | translate }}: {{ viewingSchedule.startDate | date:'MMM dd, yyyy' }} — {{ viewingSchedule.endDate | date:'MMM dd, yyyy' }} ({{ 'SCHEDULES.PART' | translate }} {{ chunkIndex + 1 }})
                                 </div>
                                 <table class="view-table print-table">
                                     <thead>
                                         <tr>
-                                            <th class="sticky-col">Employee</th>
+                                            <th class="sticky-col">{{ 'SCHEDULES.EMPLOYEE' | translate }}</th>
                                             @for (date of chunk; track $index) {
                                             <th>{{ formatDateHeader(date) }}</th>
                                             }
-                                            <th class="employee-total-hours">Total</th>
+                                            <th class="employee-total-hours">{{ 'SCHEDULES.TOTAL' | translate }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

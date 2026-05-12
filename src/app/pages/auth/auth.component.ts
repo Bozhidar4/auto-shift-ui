@@ -4,10 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageSwitcherComponent } from '../../components/language-switcher/language-switcher.component';
+
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, LanguageSwitcherComponent],
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
@@ -20,7 +23,8 @@ export class AuthComponent {
   constructor(
     private api: ApiService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -60,7 +64,7 @@ export class AuthComponent {
               this.router.navigate(['/dashboard']);
             },
             error: (e2) => {
-              this.error = 'Login failed';
+              this.error = this.translate.instant('AUTH.ERROR_LOGIN') || 'Login failed';
             }
           });
         }
@@ -81,7 +85,7 @@ export class AuthComponent {
             this.error = payload.map((it: any) => it.description || it).join('; ');
             return;
           }
-          this.error = 'Registration failed';
+          this.error = this.translate.instant('AUTH.ERROR_REGISTER') || 'Registration failed';
         }
       });
     }

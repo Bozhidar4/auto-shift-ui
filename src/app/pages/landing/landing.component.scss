@@ -106,8 +106,13 @@ section {
         font-weight: 800;
         margin-bottom: 1.5rem;
 
-        span {
-            color: var(--primary);
+        ::ng-deep span {
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            font-weight: 900;
+            text-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
         }
     }
 

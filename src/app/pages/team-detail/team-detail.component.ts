@@ -9,11 +9,12 @@ import { createEmptyEmployee, Employee } from '../../models/employee.interface';
 import { ShiftType } from '../../models/shift-type.interface';
 import { TeamCreate } from '../../models/team-create..interface';
 import { ToastService } from '../../services/toast.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-team-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, MatIconModule],
+  imports: [CommonModule, FormsModule, RouterModule, MatIconModule, TranslateModule],
   templateUrl: './team-detail.component.html',
   styleUrls: ['./team-detail.component.scss']
 })
@@ -24,18 +25,19 @@ export class TeamDetailComponent implements OnInit {
   availableEmployees: Employee[] = [];
 
   constructor(
-    private route: ActivatedRoute, 
-    private apiService: ApiService, 
+    private route: ActivatedRoute,
+    private apiService: ApiService,
     private router: Router,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(pm => {
       const idString = pm.get('id');
 
-      if (!idString) { 
-        this.router.navigate(['/teams']); return; 
+      if (!idString) {
+        this.router.navigate(['/teams']); return;
       }
 
       this.teamId = parseInt(idString, 10);
@@ -78,7 +80,7 @@ export class TeamDetailComponent implements OnInit {
   loadAvailableEmployees(): void {
     // load all employees for the user and exclude those already in the team
     this.apiService.listEmployees().subscribe((list: Employee[]) => {
-      const existing = new Set((this.team?.employees || []).map((e:Employee) => e.id));
+      const existing = new Set((this.team?.employees || []).map((e: Employee) => e.id));
       this.availableEmployees = list.filter(e => !existing.has(e.id));
     });
   }
@@ -99,10 +101,10 @@ export class TeamDetailComponent implements OnInit {
       .subscribe({
         next: () => {
           this.load();
-          this.toastService.show('Team saved successfully.', 'success');
+          this.toastService.show(this.translate.instant('TEAMS.SUCCESS_UPDATE'), 'success');
         },
         error: (error) => {
-          this.toastService.show('Failed to save team.', 'error');
+          this.toastService.show(this.translate.instant('TEAMS.ERROR_UPDATE'), 'error');
         }
       });
   }

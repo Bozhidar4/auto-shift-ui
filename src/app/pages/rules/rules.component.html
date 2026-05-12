@@ -1,9 +1,9 @@
   <div class="card">
-  <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">rule</mat-icon>Rules</div>
+  <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">rule</mat-icon>{{ 'RULES.TITLE' | translate }}</div>
 
   <div class="controls rule-controls-container">
     <select class="input rules-team-select" [(ngModel)]="selectedTeamId" (change)="onTeamChange()">
-      <option [ngValue]="null">-- choose team --</option>
+      <option [ngValue]="null">-- {{ 'RULES.SELECT_TEAM' | translate }} --</option>
       @for (t of teams; track $index) {
       <option [ngValue]="t.id">{{ t.name || ('Team ' + t.id) }}</option>
       }
@@ -11,13 +11,13 @@
   </div>
 
   @if (!selectedTeamId) {
-  <div class="muted">Please select a team to view and edit its rule values.</div>
+  <div class="muted">{{ 'RULES.NO_TEAM' | translate }}</div>
   }
 
   @if (selectedTeamId) {
   <div>
     @if (!rules.length) {
-    <div>No rules available.</div>
+    <div>{{ 'RULES.NO_RULES' | translate }}</div>
     }
     <ul class="rules-list">
       @for (rule of rules; track $index) {
@@ -33,19 +33,19 @@
               [value]="getValueForRule(rule)" (input)="setValueForRule(rule, $any($event.target).valueAsNumber)"
               [disabled]="!selectedTeamId" />
             <div *ngIf="(rule.inputType === 'int' || rule.inputType === null) && isInvalidIntValue(rule)" class="muted"
-              style="font-size:0.85rem;margin-top:0.25rem;color:var(--danger,#d9534f)">Value must be at least 1</div>
+              style="font-size:0.85rem;margin-top:0.25rem;color:var(--danger,#d9534f)">{{ 'RULES.WARNING_INVALID_INT' | translate }}</div>
             <input class="input" *ngIf="rule.inputType === 'string'" type="text" [value]="getValueForRule(rule)"
               (input)="setValueForRule(rule, $any($event.target).value)" [disabled]="!selectedTeamId" />
             <button class="btn primary pill" (click)="saveRuleValue(rule)"
               [disabled]="!selectedTeamId || savingMap[rule.id]">
-              <span *ngIf="!savingMap[rule.id]">Save</span>
-              <span *ngIf="savingMap[rule.id]">Saving...</span>
+              <span *ngIf="!savingMap[rule.id]">{{ 'COMMON.SAVE' | translate }}</span>
+              <span *ngIf="savingMap[rule.id]">{{ 'COMMON.SAVING' | translate }}</span>
             </button>
           </div>
           }
           @if (!rule.requiresInput) {
           <div class="rule-action">
-            <span class="muted">Fixed rule</span>
+            <span class="muted">{{ 'RULES.FIXED_RULE' | translate }}</span>
           </div>
           }
         </div>

@@ -9,11 +9,12 @@ import { TeamCreate } from '../../models/team-create..interface';
 import { ToastService } from '../../services/toast.service';
 import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { ConfirmState, createEmptyConfirmState } from '../../models/confirm-state.interface';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-teams',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ConfirmComponent, MatIconModule],
+  imports: [CommonModule, FormsModule, RouterModule, ConfirmComponent, MatIconModule, TranslateModule],
   templateUrl: './teams.component.html',
   styleUrls: ['./teams.component.scss']
 })
@@ -25,7 +26,8 @@ export class TeamsComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -61,7 +63,7 @@ export class TeamsComponent implements OnInit {
     if (!team
       || !team.name
       || team.name.trim().length === 0) {
-      this.toastService.show('Team name is required.', 'error');
+      this.toastService.show(this.translate.instant('TEAMS.VALIDATION_REQUIRED'), 'error');
       return;
     }
 
@@ -92,8 +94,8 @@ export class TeamsComponent implements OnInit {
   ): void {
     this.confirmState = {
       visible: true,
-      title: 'Delete team',
-      message: `Delete team ${team.name || team.id}? This cannot be undone.`,
+      title: this.translate.instant('TEAMS.DELETE'),
+      message: `${this.translate.instant('TEAMS.CONFIRM_DELETE')} ${team.name || team.id}?`,
       target: team
     };
   }
@@ -114,9 +116,9 @@ export class TeamsComponent implements OnInit {
       .subscribe({
         next: () => {
           this.load();
-          this.toastService.show('Team deleted', 'success');
+          this.toastService.show(this.translate.instant('TEAMS.SUCCESS_DELETE'), 'success');
         },
-        error: () => this.toastService.show('Failed to delete team', 'error')
+        error: () => this.toastService.show(this.translate.instant('TEAMS.ERROR_DELETE'), 'error')
       });
   }
 

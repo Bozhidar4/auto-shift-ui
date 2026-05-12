@@ -1,5 +1,5 @@
 <div class="card">
-  <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">work_history</mat-icon>Shifts</div>
+  <div class="page-title"><mat-icon class="page-title-icon" aria-hidden="true">work_history</mat-icon>{{ 'SHIFTS.TITLE' | translate }}</div>
   <div class="header-row">
     <div class="controls shift-header-controls">
       <select class="input" [(ngModel)]="selectedTeamId" (change)="load(+selectedTeamId)">
@@ -8,20 +8,20 @@
         }
       </select>
       <button class="btn pill" (click)="load(+selectedTeamId)">
-        <mat-icon>refresh</mat-icon>Refresh
+        <mat-icon>refresh</mat-icon>{{ 'EMPLOYEES.REFRESH' | translate }}
       </button>
     </div>
   </div>
 
   <div class="create-shift-container card" style="margin-top: 1rem; flex-direction: row; gap: 0.75rem;">
-    <input class="input" placeholder="Name" [(ngModel)]="newShift.name" />
-    <input class="input" placeholder="Code" maxlength="1" [(ngModel)]="newShift.initialCode" style="width: 80px" />
-    <input class="input" placeholder="Start" [(ngModel)]="newShift.startTime" style="width: 100px" />
-    <input class="input" placeholder="End" [(ngModel)]="newShift.endTime" style="width: 100px" />
-    <input class="input" type="number" min="1" placeholder="People" [(ngModel)]="newShift.requiredPeople"
+    <input class="input" [placeholder]="'SHIFTS.NAME' | translate" [(ngModel)]="newShift.name" />
+    <input class="input" [placeholder]="'SHIFTS.CODE' | translate" maxlength="1" [(ngModel)]="newShift.initialCode" style="width: 80px" />
+    <input class="input" [placeholder]="'SHIFTS.START_TIME' | translate" [(ngModel)]="newShift.startTime" style="width: 100px" />
+    <input class="input" [placeholder]="'SHIFTS.END_TIME' | translate" [(ngModel)]="newShift.endTime" style="width: 100px" />
+    <input class="input" type="number" min="1" [placeholder]="'SHIFTS.REQUIRED_STAFF' | translate" [(ngModel)]="newShift.requiredPeople"
       style="width:100px" />
     <button class="btn primary pill" (click)="create()">
-        <mat-icon>add</mat-icon>Create
+        <mat-icon>add</mat-icon>{{ 'SHIFTS.ADD' | translate }}
     </button>
   </div>
   <div style="margin-top:1.5rem">
@@ -29,11 +29,11 @@
       <table class="app-table">
         <thead>
           <tr>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>People</th>
+            <th>{{ 'SHIFTS.CODE' | translate }}</th>
+            <th>{{ 'SHIFTS.NAME' | translate }}</th>
+            <th>{{ 'SHIFTS.START_TIME' | translate }}</th>
+            <th>{{ 'SHIFTS.END_TIME' | translate }}</th>
+            <th>{{ 'SHIFTS.REQUIRED_STAFF' | translate }}</th>
             <th></th>
           </tr>
         </thead>
@@ -48,10 +48,10 @@
               <td class="muted">{{ shift.requiredPeople || 1 }}</td>
               <td class="actions">
                 <button class="btn pill" (click)="startEdit(shift)">
-                    <mat-icon>edit</mat-icon>Edit
+                    <mat-icon>edit</mat-icon>{{ 'SHIFTS.EDIT' | translate }}
                 </button>
                 <button class="btn pill danger" (click)="deleteShift(shift)">
-                    <mat-icon>delete</mat-icon>Delete
+                    <mat-icon>delete</mat-icon>{{ 'SHIFTS.DELETE' | translate }}
                 </button>
               </td>
             </ng-container>
@@ -73,10 +73,10 @@
               </td>
               <td class="actions">
                 <button class="btn primary pill" (click)="saveEdit()" [disabled]="!canSaveEdit()">
-                    <mat-icon>save</mat-icon>Save
+                    <mat-icon>save</mat-icon>{{ 'SHIFTS.SAVE' | translate }}
                 </button>
                 <button class="btn pill" (click)="cancelEdit()">
-                    <mat-icon>close</mat-icon>Cancel
+                    <mat-icon>close</mat-icon>{{ 'SHIFTS.CANCEL' | translate }}
                 </button>
               </td>
             </ng-template>

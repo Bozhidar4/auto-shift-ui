@@ -5,11 +5,13 @@ import { ApiService } from '../services/api.service';
 import { ToastComponent } from '../components/toast/toast.component';
 import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageSwitcherComponent } from '../components/language-switcher/language-switcher.component';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, ToastComponent, MatIconModule],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, ToastComponent, MatIconModule, TranslateModule, LanguageSwitcherComponent],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']
 })

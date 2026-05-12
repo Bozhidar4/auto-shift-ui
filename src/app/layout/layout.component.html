@@ -14,41 +14,44 @@
             
             <nav class="nav-group">
                 <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
-                    <mat-icon>dashboard</mat-icon> <span>Dashboard</span>
+                    <mat-icon>dashboard</mat-icon> <span>{{ 'LAYOUT.DASHBOARD' | translate }}</span>
                 </a>
                 <a routerLink="/schedules" routerLinkActive="active" class="nav-link">
-                    <mat-icon>calendar_month</mat-icon> <span>Schedules</span>
+                    <mat-icon>calendar_month</mat-icon> <span>{{ 'LAYOUT.SCHEDULES' | translate }}</span>
                 </a>
                 <a routerLink="/teams" routerLinkActive="active" class="nav-link">
-                    <mat-icon>groups</mat-icon> <span>Teams</span>
+                    <mat-icon>groups</mat-icon> <span>{{ 'LAYOUT.TEAMS' | translate }}</span>
                 </a>
                 <a routerLink="/shifts" routerLinkActive="active" class="nav-link">
-                    <mat-icon>work_history</mat-icon> <span>Shifts</span>
+                    <mat-icon>work_history</mat-icon> <span>{{ 'LAYOUT.SHIFTS' | translate }}</span>
                 </a>
                 <a routerLink="/leaves" routerLinkActive="active" class="nav-link">
-                    <mat-icon>person_off</mat-icon> <span>Leaves</span>
+                    <mat-icon>person_off</mat-icon> <span>{{ 'LAYOUT.LEAVES' | translate }}</span>
                 </a>
                 <a routerLink="/employees" routerLinkActive="active" class="nav-link">
-                    <mat-icon>person</mat-icon> <span>Employees</span>
+                    <mat-icon>person</mat-icon> <span>{{ 'LAYOUT.EMPLOYEES' | translate }}</span>
                 </a>
             </nav>
 
             <div class="sidebar-footer">
                 <a class="nav-link danger" (click)="logout()" style="cursor: pointer;">
-                    <mat-icon>logout</mat-icon> <span>Sign Out</span>
+                    <mat-icon>logout</mat-icon> <span>{{ 'LAYOUT.SIGN_OUT' | translate }}</span>
                 </a>
             </div>
         </aside>
 
         <header class="app-header">
             <div class="header-left">
-                <span class="muted">Platform / Overview</span>
+                <span class="muted">{{ 'LAYOUT.PLATFORM_OVERVIEW' | translate }}</span>
             </div>
-            <div class="user-profile">
-                <div class="user-info">
-                    <div class="user-name">Administrator</div>
+            <div class="header-right" style="display: flex; align-items: center; gap: 1rem;">
+                <app-language-switcher></app-language-switcher>
+                <div class="user-profile">
+                    <div class="user-info">
+                        <div class="user-name">{{ 'LAYOUT.ADMIN' | translate }}</div>
+                    </div>
+                    <div class="avatar">A</div>
                 </div>
-                <div class="avatar">A</div>
             </div>
         </header>
 

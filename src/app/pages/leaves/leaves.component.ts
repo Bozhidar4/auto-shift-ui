@@ -13,10 +13,12 @@ import { ConfirmComponent } from '../../components/confirm/confirm.component';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfirmState } from '../../models/confirm-state.interface';
 
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-leaves',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmComponent, MatIconModule],
+  imports: [CommonModule, FormsModule, ConfirmComponent, MatIconModule, TranslateModule],
   templateUrl: './leaves.component.html',
   styleUrls: ['./leaves.component.scss']
 })
@@ -38,7 +40,8 @@ export class LeavesComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private toastService: ToastService,
-    private dateUtilsService: DateUtilsService
+    private dateUtilsService: DateUtilsService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -51,7 +54,7 @@ export class LeavesComponent implements OnInit {
     const observable = this.apiService.listEmployees().pipe(
       tap((e: Employee[]) => this.employees = e || []),
       catchError((err) => {
-        this.employees = []; this.toastService.show('Failed to load employees', 'error'); return of([]);
+        this.employees = []; this.toastService.show(this.translate.instant('LEAVES.ERROR_LOAD_EMPLOYEES'), 'error'); return of([]);
       })
     );
 
@@ -77,7 +80,7 @@ export class LeavesComponent implements OnInit {
         next: (leave: EmployeeLeave[]) => this.leaves = leave || [],
         error: () => {
           this.leaves = [];
-          this.toastService.show('Failed to load leaves', 'error');
+          this.toastService.show(this.translate.instant('LEAVES.ERROR_LOAD_LEAVES'), 'error');
         }
       });
   }
@@ -109,10 +112,10 @@ export class LeavesComponent implements OnInit {
         next: (result) => {
           this.newLeave = createEmptyEmployeeLeave();
           this.loadLeaves();
-          this.toastService.show('Leave created successfully.', 'success');
+          this.toastService.show(this.translate.instant('LEAVES.SUCCESS_ADD'), 'success');
         },
         error: () => {
-          this.toastService.show('Failed to create leave.', 'error');
+          this.toastService.show(this.translate.instant('LEAVES.ERROR_ADD'), 'error');
         }
       });
   }
@@ -122,8 +125,8 @@ export class LeavesComponent implements OnInit {
   ): void {
     this.confirmState = {
       visible: true,
-      title: 'Delete leave',
-      message: 'Delete leave?',
+      title: this.translate.instant('LEAVES.DELETE'),
+      message: this.translate.instant('LEAVES.CONFIRM_DELETE'),
       target: leave
     };
   }
@@ -179,10 +182,10 @@ export class LeavesComponent implements OnInit {
         next: () => {
           this.cancelEditLeave();
           this.loadLeaves();
-          this.toastService.show('Leave updated successfully.', 'success');
+          this.toastService.show(this.translate.instant('LEAVES.SUCCESS_UPDATE'), 'success');
         },
         error: () => {
-          this.toastService.show('Failed to update leave.', 'error');
+          this.toastService.show(this.translate.instant('LEAVES.ERROR_UPDATE'), 'error');
         }
       });
   }
@@ -194,10 +197,10 @@ export class LeavesComponent implements OnInit {
         next: (type) => {
           this.newLeaveType = createEmptyLeaveType();
           this.loadLeaveTypes();
-          this.toastService.show('Leave type created successfully.', 'success');
+          this.toastService.show(this.translate.instant('LEAVES.SUCCESS_ADD_TYPE'), 'success');
         },
         error: () => {
-          this.toastService.show('Failed to create leave type.', 'error');
+          this.toastService.show(this.translate.instant('LEAVES.ERROR_ADD_TYPE'), 'error');
         }
       });
   }
@@ -211,8 +214,8 @@ export class LeavesComponent implements OnInit {
   ): void {
     this.confirmState = {
       visible: true,
-      title: 'Delete leave type',
-      message: 'Delete leave type?',
+      title: this.translate.instant('LEAVES.DELETE_TYPE'),
+      message: this.translate.instant('LEAVES.CONFIRM_DELETE_TYPE'),
       target: leaveType
     };
   }
@@ -229,10 +232,10 @@ export class LeavesComponent implements OnInit {
       this.apiService.deleteEmployeeLeave(leave.id).subscribe({
         next: () => {
           this.loadLeaves();
-          this.toastService.show('Leave deleted successfully.', 'success');
+          this.toastService.show(this.translate.instant('LEAVES.SUCCESS_DELETE'), 'success');
         },
         error: () => {
-          this.toastService.show('Failed to delete leave.', 'error');
+          this.toastService.show(this.translate.instant('LEAVES.ERROR_DELETE'), 'error');
         }
       });
     } else {
@@ -240,10 +243,10 @@ export class LeavesComponent implements OnInit {
       this.apiService.deleteLeaveType(leaveType.id).subscribe({
         next: () => {
           this.loadLeaveTypes();
-          this.toastService.show('Leave type deleted successfully.', 'success');
+          this.toastService.show(this.translate.instant('LEAVES.SUCCESS_DELETE_TYPE'), 'success');
         },
         error: () => {
-          this.toastService.show('Failed to delete leave type.', 'error');
+          this.toastService.show(this.translate.instant('LEAVES.ERROR_DELETE_TYPE'), 'error');
         }
       });
     }
@@ -290,10 +293,10 @@ export class LeavesComponent implements OnInit {
         next: () => {
           this.cancelEditLeaveType();
           this.loadLeaveTypes();
-          this.toastService.show('Leave type updated successfully.', 'success');
+          this.toastService.show(this.translate.instant('LEAVES.SUCCESS_UPDATE_TYPE'), 'success');
         },
         error: () => {
-          this.toastService.show('Failed to update leave type.', 'error');
+          this.toastService.show(this.translate.instant('LEAVES.ERROR_UPDATE_TYPE'), 'error');
         }
       });
   }

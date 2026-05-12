@@ -38,7 +38,8 @@ export class ApiService {
   createTeam(
     model: TeamCreate
   ): Observable<Team> {
-    return this.http.post(`${BASE_URL}/teams`, model).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.post(`${BASE_URL}/teams`, model, { headers }).pipe(
       map((response: any) => {
         if (response && (response.error || response.errors || !response.success)) {
           throw response;
@@ -53,7 +54,8 @@ export class ApiService {
     id: number,
     model: TeamCreate
   ): Observable<Team> {
-    return this.http.put(`${BASE_URL}/teams/${id}`, model).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.put(`${BASE_URL}/teams/${id}`, model, { headers }).pipe(
       map((response: any) => {
         if (response && (response.error || response.errors)) {
           throw response;
@@ -67,7 +69,8 @@ export class ApiService {
   deleteTeam(
     id: number
   ): Observable<void> {
-    return this.http.delete(`${BASE_URL}/teams/${id}`).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.delete(`${BASE_URL}/teams/${id}`, { headers }).pipe(
       map((response: any) => {
         if (response && (response.error || response.errors || !response.success)) {
           throw response;
@@ -136,7 +139,8 @@ export class ApiService {
   createEmployee(
     model: Employee
   ): Observable<Employee> {
-    return this.http.post(`${BASE_URL}/employees`, model).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.post(`${BASE_URL}/employees`, model, { headers }).pipe(
       map((response: any) => {
         if (response && (response.error || response.errors)) {
           throw response;
@@ -151,7 +155,8 @@ export class ApiService {
     id: number,
     model: Employee
   ): Observable<Employee> {
-    return this.http.put(`${BASE_URL}/employees/${id}`, model).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.put(`${BASE_URL}/employees/${id}`, model, { headers }).pipe(
       map((response: any) => {
         if (response && (response.error || response.errors)) {
           throw response;
@@ -165,7 +170,8 @@ export class ApiService {
   deleteEmployee(
     id: number
   ): Observable<void> {
-    return this.http.delete(`${BASE_URL}/employees/${id}`).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.delete(`${BASE_URL}/employees/${id}`, { headers }).pipe(
       map((response: any) => {
         if (response && (response.error || response.errors || !response.success)) {
           throw response;
@@ -206,7 +212,8 @@ export class ApiService {
   createShiftType(
     model: ShiftType
   ): Observable<ShiftType> {
-    return this.http.post(`${BASE_URL}/shifts`, model).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.post(`${BASE_URL}/shifts`, model, { headers }).pipe(
       map((res: any) => {
         if (res && (res.error || res.errors)) {
           throw res;
@@ -220,7 +227,8 @@ export class ApiService {
   updateShiftType(
     model: ShiftType
   ): Observable<ShiftType> {
-    return this.http.put(`${BASE_URL}/shifts/${model.id}`, model).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.put(`${BASE_URL}/shifts/${model.id}`, model, { headers }).pipe(
       map((res: any) => {
         if (res && (res.error || res.errors)) {
           throw res;
@@ -234,7 +242,8 @@ export class ApiService {
   deleteShiftType(
     id: number
   ): Observable<void> {
-    return this.http.delete(`${BASE_URL}/shifts/${id}`).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.delete(`${BASE_URL}/shifts/${id}`, { headers }).pipe(
       map((res: any) => {
         if (res && (res.error || res.errors)) {
           throw res;
@@ -267,7 +276,8 @@ export class ApiService {
   createEmployeeLeave(
     model: EmployeeLeaveDto
   ): Observable<any> {
-    return this.http.post(`${BASE_URL}/employeeLeaves`, model).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.post(`${BASE_URL}/employeeLeaves`, model, { headers }).pipe(
       map((response: any) => {
         if (response && (response.error || response.errors)) {
           throw response;
@@ -282,7 +292,8 @@ export class ApiService {
     id: number,
     model: EmployeeLeaveDto
   ): Observable<EmployeeLeave> {
-    return this.http.put(`${BASE_URL}/employeeLeaves/${id}`, model).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.put(`${BASE_URL}/employeeLeaves/${id}`, model, { headers }).pipe(
       map((response: any) => {
         if (response && (response.error || response.errors)) {
           throw response;
@@ -296,7 +307,8 @@ export class ApiService {
   deleteEmployeeLeave(
     id: number
   ): Observable<void> {
-    return this.http.delete(`${BASE_URL}/employeeLeaves/${id}`).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.delete(`${BASE_URL}/employeeLeaves/${id}`, { headers }).pipe(
       map((res: any) => {
         if (res && (res.error || res.errors)) {
           throw res;
@@ -311,7 +323,8 @@ export class ApiService {
   createLeaveType(
     model: LeaveType
   ): Observable<LeaveType> {
-    return this.http.post(`${BASE_URL}/leaveTypes`, model).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.post(`${BASE_URL}/leaveTypes`, model, { headers }).pipe(
       map((res: any) => {
         if (res && (res.error || res.errors)) {
           throw res;
@@ -346,7 +359,8 @@ export class ApiService {
   updateLeaveType(
     model: LeaveType
   ): Observable<LeaveType> {
-    return this.http.put(`${BASE_URL}/leaveTypes/${model.id}`, model).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.put(`${BASE_URL}/leaveTypes/${model.id}`, model, { headers }).pipe(
       map((res: any) => {
         if (res && (res.error || res.errors)) {
           throw res;
@@ -360,7 +374,8 @@ export class ApiService {
   deleteLeaveType(
     id: number
   ): Observable<void> {
-    return this.http.delete(`${BASE_URL}/leaveTypes/${id}`).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.delete(`${BASE_URL}/leaveTypes/${id}`, { headers }).pipe(
       map((res: any) => {
         if (res && (res.error || res.errors)) {
           throw res;
@@ -416,7 +431,8 @@ export class ApiService {
   createTeamRuleValue(
     model: TeamRuleValue
   ): Observable<TeamRuleValue> {
-    return this.http.post(`${BASE_URL}/teamRuleValues`, model).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.post(`${BASE_URL}/teamRuleValues`, model, { headers }).pipe(
       map((res: any) => {
         if (res && (res.error || res.errors)) {
           throw res;
@@ -431,7 +447,8 @@ export class ApiService {
     id: number,
     model: TeamRuleValue
   ): Observable<TeamRuleValue> {
-    return this.http.put(`${BASE_URL}/teamRuleValues/${id}`, model).pipe(
+    const headers = { 'x-skip-toast': '1' };
+    return this.http.put(`${BASE_URL}/teamRuleValues/${id}`, model, { headers }).pipe(
       map((response: any) => {
         if (response && (response.error || response.errors)) {
           throw response;

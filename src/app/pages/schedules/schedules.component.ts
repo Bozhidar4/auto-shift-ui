@@ -15,10 +15,12 @@ import { GeneratedSchedule } from '../../models/schedule-generated.interface';
 import { EmployeeHoursDto } from '../../models/employee-hours.interface';
 import { MatIconModule } from '@angular/material/icon';
 
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-schedules',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmComponent, MatIconModule],
+  imports: [CommonModule, FormsModule, ConfirmComponent, MatIconModule, TranslateModule],
   templateUrl: './schedules.component.html',
   styleUrls: ['./schedules.component.scss']
 })
@@ -53,7 +55,8 @@ export class SchedulesComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private toastService: ToastService,
-    private dateUtilsService: DateUtilsService
+    private dateUtilsService: DateUtilsService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -102,12 +105,12 @@ export class SchedulesComponent implements OnInit {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 because inclusive
 
     if (diffTime < 0) {
-        this.toastService.show('Start date must be before end date.', 'error');
+        this.toastService.show(this.translate.instant('SCHEDULES.ERROR_DATE_RANGE'), 'error');
         return;
     }
 
     if (diffDays > 31) {
-        this.toastService.show('Cannot generate schedule for more than 31 days.', 'error');
+        this.toastService.show(this.translate.instant('SCHEDULES.ERROR_31_DAYS'), 'error');
         return;
     }
 
@@ -122,14 +125,14 @@ export class SchedulesComponent implements OnInit {
     this.apiService.generateScheduleRequest(model).subscribe({
       next: (schedule: GeneratedSchedule) => {
         this.schedule = schedule;
-        this.toastService.show('Schedule generated', 'success');
+        this.toastService.show(this.translate.instant('SCHEDULES.SUCCESS_GENERATE'), 'success');
         // reload schedules for selected team so it appears in the list
         if (this.selectedTeamId) {
           this.loadSchedules(this.selectedTeamId);
         }
       },
       error: (error) => {
-        this.toastService.show('Failed to generate schedule', 'error');
+        this.toastService.show(this.translate.instant('SCHEDULES.ERROR_GENERATE'), 'error');
       }
     });
   }
@@ -213,8 +216,8 @@ export class SchedulesComponent implements OnInit {
   ): void {
     this.confirmState = {
       visible: true,
-      title: 'Delete schedule',
-      message: `Delete schedule ${schedule.id}? This cannot be undone.`,
+      title: this.translate.instant('SCHEDULES.DELETE'),
+      message: `${this.translate.instant('SCHEDULES.CONFIRM_DELETE')} ${schedule.id}?`,
       target: schedule
     };
   }
@@ -242,11 +245,11 @@ export class SchedulesComponent implements OnInit {
       .deleteSchedule(schedule.id)
       .subscribe({
         next: () => {
-          this.loadSchedules(this.selectedTeamId!); this.toastService.show('Schedule deleted', 'success');
+          this.loadSchedules(this.selectedTeamId!); this.toastService.show(this.translate.instant('SCHEDULES.SUCCESS_DELETE'), 'success');
           this.schedules = this.schedules.filter(x => x.id !== schedule.id);
         },
         error: () => {
-          this.toastService.show('Failed to delete schedule', 'error');
+          this.toastService.show(this.translate.instant('SCHEDULES.ERROR_DELETE'), 'error');
         }
       });
   }
@@ -507,10 +510,10 @@ export class SchedulesComponent implements OnInit {
     if (hasChanges) {
       this.confirmState = {
         visible: true,
-        title: 'Unsaved changes',
-        message: 'There are unsaved changes. Save changes and close the schedule?',
-        confirmLabel: 'Yes',
-        cancelLabel: 'No',
+        title: this.translate.instant('SCHEDULES.UNSAVED_CHANGES_TITLE'),
+        message: this.translate.instant('SCHEDULES.UNSAVED_CHANGES_MESSAGE'),
+        confirmLabel: this.translate.instant('SCHEDULES.YES'),
+        cancelLabel: this.translate.instant('SCHEDULES.NO'),
         target: { action: 'close-with-changes' }
       };
       return;
@@ -592,7 +595,7 @@ export class SchedulesComponent implements OnInit {
 
         this.clearCellChanged(`${employeeId}__${date}`);
         this.loadEmployeeHours(scheduleId);
-        this.toastService.show('Assignment saved successfully', 'success');
+        this.toastService.show(this.translate.instant('SCHEDULES.SUCCESS_ASSIGNMENT_SAVE'), 'success');
       },
       error: (error) => {
         // If this was a newly-created cell and patch failed, revert UI to empty state so user can retry
@@ -604,7 +607,7 @@ export class SchedulesComponent implements OnInit {
           delete this.newlyCreatedCells[key];
           this.clearCellChanged(key);
         }
-        this.toastService.show('Failed to save assignment', 'error');
+        this.toastService.show(this.translate.instant('SCHEDULES.ERROR_ASSIGNMENT_SAVE'), 'error');
       }
     });
   }
@@ -631,14 +634,14 @@ export class SchedulesComponent implements OnInit {
   saveTableChanges(onComplete?: () => void): void {
     const keys = Object.keys(this.changedCells || {});
     if (!keys.length) {
-      this.toastService.show('No changes to save', 'info');
+      this.toastService.show(this.translate.instant('SCHEDULES.NO_CHANGES'), 'info');
       return;
     }
 
     // sequentially save each changed cell to avoid bombarding the API
     const saveNext = (idx: number) => {
       if (idx >= keys.length) {
-        this.toastService.show('Schedule changes saved successfully', 'success');
+        this.toastService.show(this.translate.instant('SCHEDULES.SUCCESS_ALL_SAVED'), 'success');
         if (onComplete) {
           onComplete();
         }

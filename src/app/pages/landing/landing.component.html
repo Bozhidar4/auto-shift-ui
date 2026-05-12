@@ -2,13 +2,14 @@
     <header class="landing-header" id="main-header" [class.scrolled]="isScrolled">
         <div class="brand-wrapper" routerLink="/">
             <div class="brand-logo"></div>
-            <div class="brand-name">AutoShift</div>
+            <div class="brand-name">{{ 'LANDING.BRAND' | translate }}</div>
         </div>
         <nav class="landing-nav">
-            <a href="#features" class="menu-link">Features</a>
-            <a href="#pricing" class="menu-link">Pricing</a>
-            <a class="menu-link" routerLink="/login">Sign in</a>
-            <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">Get Started</a>
+            <a href="#features" class="menu-link">{{ 'LANDING.NAV.FEATURES' | translate }}</a>
+            <a href="#pricing" class="menu-link">{{ 'LANDING.NAV.PRICING' | translate }}</a>
+            <a class="menu-link" routerLink="/login">{{ 'LANDING.NAV.SIGN_IN' | translate }}</a>
+            <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{ 'LANDING.NAV.GET_STARTED' | translate }}</a>
+            <app-language-switcher></app-language-switcher>
         </nav>
     </header>
 
@@ -16,20 +17,19 @@
         <!-- Hero Section -->
         <section class="hero" id="hero">
             <div class="hero-content">
-                <h1>Master Your Workforce with <span>Automated</span> Scheduling</h1>
-                <p class="lead">Optimize your rosters, respect employee preferences, and eliminate scheduling conflicts
-                    in seconds. The most advanced rule-based engine for modern teams.</p>
+                <h1 [innerHTML]="'LANDING.HERO.TITLE' | translate"></h1>
+                <p class="lead">{{ 'LANDING.HERO.SUBTITLE' | translate }}</p>
                 <div class="hero-actions">
-                    <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">Start Free Trial</a>
-                    <a class="btn outline" href="#features">See How it Works</a>
+                    <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{ 'LANDING.HERO.START_FREE' | translate }}</a>
+                    <a class="btn outline" href="#features">{{ 'LANDING.HERO.HOW_IT_WORKS' | translate }}</a>
                 </div>
                 <div style="color:var(--text-muted); font-size: 0.9rem;">
-                    Join the first wave of automated scheduling
+                    {{ 'LANDING.HERO.JOIN' | translate }}
                 </div>
             </div>
             <div class="hero-visual">
                 <div class="mockup-container single-mockup">
-                    <img src="assets/images/real-mockup-v2.png" alt="Utomated Dashboard Mockup">
+                    <img src="assets/images/real-mockup-v2.png" alt="Automated Dashboard Mockup">
                 </div>
             </div>
         </section>
@@ -37,44 +37,39 @@
         <!-- Features Section -->
         <section class="features-section" id="features">
             <div class="section-header">
-                <h2>Everything you need to scale</h2>
-                <p>AutoShift handles the complexity so you can focus on growing your business.</p>
+                <h2>{{ 'LANDING.FEATURES.TITLE' | translate }}</h2>
+                <p>{{ 'LANDING.FEATURES.SUBTITLE' | translate }}</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="icon-box"><mat-icon>settings_suggest</mat-icon></div>
-                    <h3>Rule-Based Engine</h3>
-                    <p>Configure complex constraints like minimum rest hours, max consecutive days, and fair shift
-                        distribution automatically.</p>
+                    <h3>{{ 'LANDING.FEATURES.ITEMS.RULE_BASED.TITLE' | translate }}</h3>
+                    <p>{{ 'LANDING.FEATURES.ITEMS.RULE_BASED.DESC' | translate }}</p>
                 </div>
                 <div class="feature-card">
                     <div class="icon-box"><mat-icon>verified_user</mat-icon></div>
-                    <h3>Contract Compliance</h3>
-                    <p>Never exceed labor limits. Track monthly target hours for every employee and ensure full
-                        regulatory compliance.</p>
+                    <h3>{{ 'LANDING.FEATURES.ITEMS.COMPLIANCE.TITLE' | translate }}</h3>
+                    <p>{{ 'LANDING.FEATURES.ITEMS.COMPLIANCE.DESC' | translate }}</p>
                 </div>
                 <div class="feature-card">
                     <div class="icon-box"><mat-icon>flash_on</mat-icon></div>
-                    <h3>One-Click Generation</h3>
-                    <p>Generate optimal monthly rosters with a single click. Our engine considers availability, skills,
-                        and rules instantly.</p>
+                    <h3>{{ 'LANDING.FEATURES.ITEMS.ONE_CLICK.TITLE' | translate }}</h3>
+                    <p>{{ 'LANDING.FEATURES.ITEMS.ONE_CLICK.DESC' | translate }}</p>
                 </div>
                 <div class="feature-card">
                     <div class="icon-box"><mat-icon>event_available</mat-icon></div>
-                    <h3>Unified Leave Tracking</h3>
-                    <p>Integrated management for paid leave and sick days. Schedules are automatically updated to
-                        reflect staff availability.</p>
+                    <h3>{{ 'LANDING.FEATURES.ITEMS.LEAVE.TITLE' | translate }}</h3>
+                    <p>{{ 'LANDING.FEATURES.ITEMS.LEAVE.DESC' | translate }}</p>
                 </div>
                 <div class="feature-card">
                     <div class="icon-box"><mat-icon>work_history</mat-icon></div>
-                    <h3>Flexible Shift Types</h3>
-                    <p>Define custom shift codes, hours, and staffing requirements to match your unique business
-                        operations.</p>
+                    <h3>{{ 'LANDING.FEATURES.ITEMS.FLEXIBLE.TITLE' | translate }}</h3>
+                    <p>{{ 'LANDING.FEATURES.ITEMS.FLEXIBLE.DESC' | translate }}</p>
                 </div>
                 <div class="feature-card">
                     <div class="icon-box"><mat-icon>gpp_good</mat-icon></div>
-                    <h3>Instant Conflict Detection</h3>
-                    <p>Automatically identify and resolve overlapping shifts or double-bookings before the schedule is published.</p>
+                    <h3>{{ 'LANDING.FEATURES.ITEMS.CONFLICT.TITLE' | translate }}</h3>
+                    <p>{{ 'LANDING.FEATURES.ITEMS.CONFLICT.DESC' | translate }}</p>
                 </div>
             </div>
         </section>
@@ -82,48 +77,48 @@
         <!-- Pricing Section -->
         <section class="pricing-section" id="pricing">
             <div class="section-header">
-                <h2>Simple, transparent pricing</h2>
-                <p>Choose the plan that fits your team's size and needs.</p>
+                <h2>{{ 'LANDING.PRICING.TITLE' | translate }}</h2>
+                <p>{{ 'LANDING.PRICING.SUBTITLE' | translate }}</p>
             </div>
             <div class="pricing-grid">
                 <div class="pricing-card">
-                    <div class="plan-name">Free</div>
-                    <div class="plan-price">$0<span>/mo</span></div>
-                    <p class="plan-desc">Perfect for small teams getting started.</p>
+                    <div class="plan-name">{{ 'LANDING.PRICING.FREE.NAME' | translate }}</div>
+                    <div class="plan-price">{{ 'LANDING.PRICING.FREE.PRICE' | translate }}<span>{{ 'LANDING.PRICING.FREE.PERIOD' | translate }}</span></div>
+                    <p class="plan-desc">{{ 'LANDING.PRICING.FREE.DESC' | translate }}</p>
                     <ul class="features-list">
-                        <li>Up to 5 employees</li>
-                        <li>Basic rule engine</li>
-                        <li>Standard shift types</li>
-                        <li>Export to PDF</li>
+                        <li>{{ 'LANDING.PRICING.FREE.F1' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.FREE.F2' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.FREE.F3' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.FREE.F4' | translate }}</li>
                     </ul>
-                    <a class="btn outline" routerLink="/login" [queryParams]="{ mode: 'register' }">Get Started</a>
+                    <a class="btn outline" routerLink="/login" [queryParams]="{ mode: 'register' }">{{ 'LANDING.PRICING.FREE.BTN' | translate }}</a>
                 </div>
 
                 <div class="pricing-card popular">
-                    <span class="popular-badge">Most Popular</span>
-                    <div class="plan-name">Starter</div>
-                    <div class="plan-price">$49<span>/mo</span></div>
-                    <p class="plan-desc">For growing teams that need more power.</p>
+                    <span class="popular-badge">{{ 'LANDING.PRICING.STARTER.BADGE' | translate }}</span>
+                    <div class="plan-name">{{ 'LANDING.PRICING.STARTER.NAME' | translate }}</div>
+                    <div class="plan-price">{{ 'LANDING.PRICING.STARTER.PRICE' | translate }}<span>{{ 'LANDING.PRICING.STARTER.PERIOD' | translate }}</span></div>
+                    <p class="plan-desc">{{ 'LANDING.PRICING.STARTER.DESC' | translate }}</p>
                     <ul class="features-list">
-                        <li>Up to 20 employees</li>
-                        <li>Advanced rule engine</li>
-                        <li>Contract compliance tracking</li>
-                        <li>Priority email support</li>
+                        <li>{{ 'LANDING.PRICING.STARTER.F1' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.STARTER.F2' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.STARTER.F3' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.STARTER.F4' | translate }}</li>
                     </ul>
-                    <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">Register now</a>
+                    <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{ 'LANDING.PRICING.STARTER.BTN' | translate }}</a>
                 </div>
 
                 <div class="pricing-card">
-                    <div class="plan-name">Growth</div>
-                    <div class="plan-price">$199<span>/mo</span></div>
-                    <p class="plan-desc">For large organizations with complex needs.</p>
+                    <div class="plan-name">{{ 'LANDING.PRICING.GROWTH.NAME' | translate }}</div>
+                    <div class="plan-price">{{ 'LANDING.PRICING.GROWTH.PRICE' | translate }}<span>{{ 'LANDING.PRICING.GROWTH.PERIOD' | translate }}</span></div>
+                    <p class="plan-desc">{{ 'LANDING.PRICING.GROWTH.DESC' | translate }}</p>
                     <ul class="features-list">
-                        <li>Up to 100 employees</li>
-                        <li>Custom SLAs</li>
-                        <li>Dedicated account manager</li>
-                        <li>Advanced reporting</li>
+                        <li>{{ 'LANDING.PRICING.GROWTH.F1' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.GROWTH.F2' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.GROWTH.F3' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.GROWTH.F4' | translate }}</li>
                     </ul>
-                    <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">Register now</a>
+                    <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{ 'LANDING.PRICING.GROWTH.BTN' | translate }}</a>
                 </div>
             </div>
         </section>
@@ -132,27 +127,27 @@
     <footer class="landing-footer">
         <div class="footer-grid">
             <div class="footer-brand">
-                <div class="brand-name">AutoShift</div>
-                <p>The smarter way to manage your workforce. Built for modern teams who value time and efficiency.</p>
+                <div class="brand-name">{{ 'LANDING.BRAND' | translate }}</div>
+                <p>{{ 'LANDING.FOOTER.BRAND_DESC' | translate }}</p>
             </div>
             <div class="footer-links">
-                <h4>Product</h4>
+                <h4>{{ 'LANDING.FOOTER.PRODUCT' | translate }}</h4>
                 <ul>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
-                    <li><a routerLink="/login">Sign In</a></li>
+                    <li><a href="#features">{{ 'LANDING.NAV.FEATURES' | translate }}</a></li>
+                    <li><a href="#pricing">{{ 'LANDING.NAV.PRICING' | translate }}</a></li>
+                    <li><a routerLink="/login">{{ 'LANDING.NAV.SIGN_IN' | translate }}</a></li>
                 </ul>
             </div>
             <div class="footer-links">
-                <h4>Support</h4>
+                <h4>{{ 'LANDING.FOOTER.SUPPORT' | translate }}</h4>
                 <ul>
-                    <li><a href="mailto:support@autoshift.com">Contact Support</a></li>
-                    <li><a href="#">Documentation</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="mailto:support@autoshift.com">{{ 'LANDING.FOOTER.CONTACT' | translate }}</a></li>
+                    <li><a href="#">{{ 'LANDING.FOOTER.DOCS' | translate }}</a></li>
+                    <li><a href="#">{{ 'LANDING.FOOTER.PRIVACY' | translate }}</a></li>
                 </ul>
             </div>
             <div class="footer-links">
-                <h4>Connect</h4>
+                <h4>{{ 'LANDING.FOOTER.CONNECT' | translate }}</h4>
                 <ul>
                     <li><a href="#">Twitter</a></li>
                     <li><a href="#">LinkedIn</a></li>
@@ -161,10 +156,10 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <div>© 2024 AutoShift Inc. All rights reserved.</div>
+            <div>{{ 'LANDING.FOOTER.COPYRIGHT' | translate }}</div>
             <div style="display:flex; gap: 2rem">
-                <a href="#" style="color: inherit; text-decoration: none">Terms</a>
-                <a href="#" style="color: inherit; text-decoration: none">Privacy</a>
+                <a href="#" style="color: inherit; text-decoration: none">{{ 'LANDING.FOOTER.TERMS' | translate }}</a>
+                <a href="#" style="color: inherit; text-decoration: none">{{ 'LANDING.FOOTER.PRIVACY_LINK' | translate }}</a>
             </div>
         </div>
     </footer>
