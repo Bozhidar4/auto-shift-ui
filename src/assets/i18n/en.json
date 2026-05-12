@@ -57,6 +57,35 @@
         }
       }
     },
+    "HOW_IT_WORKS": {
+      "TITLE": "How It Works",
+      "SUBTITLE": "Professional scheduling in three simple steps.",
+      "STEP1_TITLE": "Define Your Rules",
+      "STEP1_DESC": "Input your team's specific requirements, labor laws, and employee preferences into our engine.",
+      "STEP2_TITLE": "Add Your Team",
+      "STEP2_DESC": "Import employees and their shift patterns. Manage availability and leaves in one central place.",
+      "STEP3_TITLE": "Generate & Refine",
+      "STEP3_DESC": "Click 'Generate' and watch the engine create the perfect roster. Fine-tune manually if needed."
+    },
+    "WHY_AUTOSHIFT": {
+      "TITLE": "Why It Works",
+      "SUBTITLE": "The science behind smart scheduling.",
+      "ITEM1_TITLE": "Combinatorial Optimization",
+      "ITEM1_DESC": "Our engine evaluates millions of possible combinations to find the one that best fits all your constraints.",
+      "ITEM2_TITLE": "Fairness Algorithm",
+      "ITEM2_DESC": "Distributes unpopular shifts and weekend work evenly across the team to improve employee satisfaction.",
+      "ITEM3_TITLE": "Real-time Validation",
+      "ITEM3_DESC": "Every manual change is instantly validated against your rules to prevent human errors."
+    },
+    "FAQ": {
+      "TITLE": "Frequently Asked Questions",
+      "Q1": "Can I customize the scheduling rules?",
+      "A1": "Yes! AutoShift is built for flexibility. You can define custom work hour limits, resting periods, and even specific employee exclusions.",
+      "Q2": "Does it support 24/7 industries?",
+      "A2": "Absolutely. Whether you're in healthcare, retail, or manufacturing, our engine handles complex round-the-clock rotations.",
+      "Q3": "Can I export the schedules?",
+      "A3": "Yes, you can export your rosters to PDF or Excel formats with a single click, ready for printing or sharing."
+    },
     "PRICING": {
       "TITLE": "Simple, transparent pricing",
       "SUBTITLE": "Choose the plan that fits your team's size and needs.",
@@ -103,7 +132,9 @@
       "CONTACT": "Contact Support",
       "DOCS": "Documentation",
       "PRIVACY": "Privacy Policy",
-      "COPYRIGHT": "© 2024 AutoShift Inc. All rights reserved.",
+      "COOKIES": "Cookie Policy",
+      "COPYRIGHT": "© 2026 AutoShift - Automated Workforce Scheduling & Management. All Rights Reserved.",
+      "DEVELOPED_BY": "Developed by",
       "TERMS": "Terms",
       "PRIVACY_LINK": "Privacy"
     }
@@ -120,7 +151,9 @@
     "HAS_ACCOUNT": "Already have an account? Sign in",
     "BACK": "Back to Home",
     "LEGAL_NOTICE": "By creating an account, you agree to our",
-    "AND": "and"
+    "AND": "and",
+    "ERROR_LOGIN": "Invalid email or password. Please try again.",
+    "ERROR_REGISTER": "Could not create account. Please check your details and try again."
   },
   "LAYOUT": {
     "DASHBOARD": "Dashboard",
