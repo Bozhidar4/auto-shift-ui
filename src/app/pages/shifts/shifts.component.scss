@@ -2,15 +2,40 @@ h2 {
     margin-top: 0;
 }
 
-.shift-header-controls {
-    margin-top: 1.5rem;
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: flex-start;
+    
+    .controls {
+      width: 100%;
+      display: flex;
+      gap: 0.5rem;
+      .btn, .input { flex: 1; }
+    }
+  }
 }
 
 .create-shift-container {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.75rem;
     align-items: center;
     margin-top: 1.5rem;
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: stretch;
+        
+        .btn { width: 100%; }
+        .input { width: 100% !important; }
+    }
 }
 
 .shifts-table {

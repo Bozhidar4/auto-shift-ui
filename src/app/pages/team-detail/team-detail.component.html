@@ -13,8 +13,10 @@
   <div>
     <div class="team-title-container">
       <input class="input" [(ngModel)]="team.name" [placeholder]="'TEAMS.NAME' | translate" />
-      <button class="btn pill primary" (click)="save()">{{ 'COMMON.SAVE' | translate }}</button>
-      <button class="btn pill" routerLink="/teams">{{ 'COMMON.BACK' | translate }}</button>
+      <div class="controls">
+          <button class="btn pill primary" (click)="save()">{{ 'COMMON.SAVE' | translate }}</button>
+          <button class="btn pill" routerLink="/teams">{{ 'COMMON.BACK' | translate }}</button>
+      </div>
     </div>
 
     <h3 style="margin-top:1rem">{{ 'EMPLOYEES.TITLE' | translate }}</h3>
@@ -65,17 +67,37 @@
     </div>
 
     <h3>{{ 'SHIFTS.TITLE' | translate }}</h3>
-    <div class="list">
+    <div class="shift-grid">
       @for (shiftType of (team.shiftTypes || []); track $index) {
-      <div class="shift-type-container">
-        <input class="input" [(ngModel)]="shiftType.name" [placeholder]="'SHIFTS.NAME' | translate" />
-        <input class="input" [(ngModel)]="shiftType.startTime" [placeholder]="'SHIFTS.START_TIME' | translate" />
-        <input class="input" [(ngModel)]="shiftType.endTime" [placeholder]="'SHIFTS.END_TIME' | translate" />
-        <input class="input" type="number" [(ngModel)]="shiftType.requiredPeople" [placeholder]="'SHIFTS.REQUIRED_STAFF' | translate"
-          style="width:160px" />
-        <button class="btn pill danger" (click)="removeShift(shiftType)">{{ 'COMMON.DELETE' | translate }}</button>
+      <div class="shift-card">
+        <div class="shift-header">
+            <input class="input" [(ngModel)]="shiftType.name" [placeholder]="'SHIFTS.NAME' | translate" style="font-weight: 700; border: none; padding: 0; background: transparent; font-size: 1.1rem" />
+            <button class="btn btn-icon danger" (click)="removeShift(shiftType)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+        <div class="shift-inputs">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem">
+                <div>
+                    <label>{{ 'SHIFTS.START_TIME' | translate }}</label>
+                    <input class="input" [(ngModel)]="shiftType.startTime" [placeholder]="'SHIFTS.START_TIME' | translate" />
+                </div>
+                <div>
+                    <label>{{ 'SHIFTS.END_TIME' | translate }}</label>
+                    <input class="input" [(ngModel)]="shiftType.endTime" [placeholder]="'SHIFTS.END_TIME' | translate" />
+                </div>
+            </div>
+            <div>
+                <label>{{ 'SHIFTS.REQUIRED_STAFF' | translate }}</label>
+                <input class="input" type="number" [(ngModel)]="shiftType.requiredPeople" [placeholder]="'SHIFTS.REQUIRED_STAFF' | translate" />
+            </div>
+        </div>
       </div>
       }
+      <div class="shift-card add-placeholder" (click)="addShift()">
+          <mat-icon>add_circle_outline</mat-icon>
+          <div class="muted">{{ 'SHIFTS.ADD' | translate }}</div>
+      </div>
     </div>
   </div>
   }

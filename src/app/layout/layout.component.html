@@ -5,8 +5,9 @@
     <router-outlet></router-outlet>
 }
 @else {
-    <div class="app-root">
-        <aside class="app-sidebar">
+    <div class="app-root" [class.sidebar-open]="isSidebarOpen">
+        <div class="sidebar-overlay" (click)="isSidebarOpen = false"></div>
+        <aside class="app-sidebar" [class.open]="isSidebarOpen">
             <div class="sidebar-brand">
                 <div class="logo">AS</div>
                 <div class="brand-name">AutoShift</div>
@@ -42,6 +43,9 @@
 
         <header class="app-header">
             <div class="header-left">
+                <button class="sidebar-toggle" (click)="toggleSidebar()">
+                    <mat-icon>menu</mat-icon>
+                </button>
                 <span class="muted">{{ 'LAYOUT.PLATFORM_OVERVIEW' | translate }}</span>
             </div>
             <div class="header-right" style="display: flex; align-items: center; gap: 1rem;">

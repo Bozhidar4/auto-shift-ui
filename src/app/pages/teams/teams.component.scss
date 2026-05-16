@@ -1,20 +1,65 @@
-h2 {
-    margin-top: 0;
-}
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
 
-.team-card .btn {
-    margin-left: 0.35rem;
-}
-
-.header-row .btn {
-    margin-left: 0.5rem;
-
-    .header-title {
-        display: block;
+    @media (max-width: 640px) {
+        grid-template-columns: 1fr;
     }
 }
 
-.team-buttons-container {
-    margin-left: auto;
+.team-card {
+    .card-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+
+        @media (max-width: 480px) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+    .controls {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+
+        @media (max-width: 480px) {
+            width: 100%;
+            justify-content: flex-end;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f1f5f9;
+        }
+    }
+
+    .edit-controls {
+        display: flex;
+        gap: 1rem;
+        width: 100%;
+
+        @media (max-width: 480px) {
+            flex-direction: column;
+        }
+
+        .input {
+            flex: 1;
+        }
+    }
+}
+
+.header-row {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    @media (max-width: 640px) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }

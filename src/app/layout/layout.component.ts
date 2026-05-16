@@ -18,6 +18,7 @@ import { LanguageSwitcherComponent } from '../components/language-switcher/langu
 export class LayoutComponent implements OnDestroy {
   isLanding = false;
   isAuth = false;
+  isSidebarOpen = false;
   private sub: Subscription | null = null;
 
   constructor(
@@ -29,12 +30,17 @@ export class LayoutComponent implements OnDestroy {
         const url = evt.urlAfterRedirects || this.router.url || '';
         this.isLanding = (url === '/' || url === '');
         this.isAuth = url.startsWith('/login');
+        this.isSidebarOpen = false;
       }
     });
 
     const initUrl = this.router.url || '';
     this.isLanding = (initUrl === '/' || initUrl === '');
     this.isAuth = initUrl.startsWith('/login');
+  }
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
   }
 
   logout() {

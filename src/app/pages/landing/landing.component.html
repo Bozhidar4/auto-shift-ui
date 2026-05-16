@@ -1,17 +1,23 @@
 <div class="landing-root">
+    <div class="mobile-menu-overlay" [class.active]="isMenuOpen" (click)="isMenuOpen = false"></div>
     <header class="landing-header" id="main-header" [class.scrolled]="isScrolled">
         <div class="brand-wrapper" routerLink="/">
             <div class="brand-logo"></div>
             <div class="brand-name">{{ 'LANDING.BRAND' | translate }}</div>
         </div>
-        <nav class="landing-nav">
-            <a href="#features" class="menu-link">{{ 'LANDING.NAV.FEATURES' | translate }}</a>
-            <a href="#how-it-works" class="menu-link">{{ 'LANDING.HOW_IT_WORKS.TITLE' | translate }}</a>
-            <a href="#why-it-works" class="menu-link">{{ 'LANDING.WHY_AUTOSHIFT.TITLE' | translate }}</a>
-            <a href="#pricing" class="menu-link">{{ 'LANDING.NAV.PRICING' | translate }}</a>
-            <a href="#faq" class="menu-link">FAQ</a>
+        <button class="mobile-menu-toggle" (click)="isMenuOpen = !isMenuOpen">
+            <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+        </button>
+
+        <nav class="landing-nav" [class.open]="isMenuOpen">
+            <a href="#features" class="menu-link" (click)="isMenuOpen = false">{{ 'LANDING.NAV.FEATURES' | translate }}</a>
+            <a href="#how-it-works" class="menu-link" (click)="isMenuOpen = false">{{ 'LANDING.HOW_IT_WORKS.TITLE' | translate }}</a>
+            <a href="#why-it-works" class="menu-link" (click)="isMenuOpen = false">{{ 'LANDING.WHY_AUTOSHIFT.TITLE' | translate }}</a>
+            <a href="#pricing" class="menu-link" (click)="isMenuOpen = false">{{ 'LANDING.NAV.PRICING' | translate }}</a>
+            <a href="#faq" class="menu-link" (click)="isMenuOpen = false">FAQ</a>
             <a class="menu-link" routerLink="/login">{{ 'LANDING.NAV.SIGN_IN' | translate }}</a>
-            <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{ 'LANDING.NAV.GET_STARTED' | translate }}</a>
+            <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{ 'LANDING.NAV.GET_STARTED'
+                | translate }}</a>
             <app-language-switcher></app-language-switcher>
         </nav>
     </header>
@@ -23,7 +29,8 @@
                 <h1 [innerHTML]="'LANDING.HERO.TITLE' | translate"></h1>
                 <p class="lead">{{ 'LANDING.HERO.SUBTITLE' | translate }}</p>
                 <div class="hero-actions">
-                    <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{ 'LANDING.HERO.START_FREE' | translate }}</a>
+                    <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{
+                        'LANDING.HERO.START_FREE' | translate }}</a>
                     <a class="btn outline" href="#features">{{ 'LANDING.HERO.HOW_IT_WORKS' | translate }}</a>
                 </div>
                 <div style="color:var(--text-muted); font-size: 0.9rem;">
@@ -73,55 +80,6 @@
                     <div class="icon-box"><mat-icon>gpp_good</mat-icon></div>
                     <h3>{{ 'LANDING.FEATURES.ITEMS.CONFLICT.TITLE' | translate }}</h3>
                     <p>{{ 'LANDING.FEATURES.ITEMS.CONFLICT.DESC' | translate }}</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Pricing Section -->
-        <section class="pricing-section" id="pricing">
-            <div class="section-header">
-                <h2>{{ 'LANDING.PRICING.TITLE' | translate }}</h2>
-                <p>{{ 'LANDING.PRICING.SUBTITLE' | translate }}</p>
-            </div>
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <div class="plan-name">{{ 'LANDING.PRICING.FREE.NAME' | translate }}</div>
-                    <div class="plan-price">{{ 'LANDING.PRICING.FREE.PRICE' | translate }}<span>{{ 'LANDING.PRICING.FREE.PERIOD' | translate }}</span></div>
-                    <p class="plan-desc">{{ 'LANDING.PRICING.FREE.DESC' | translate }}</p>
-                    <ul class="features-list">
-                        <li>{{ 'LANDING.PRICING.FREE.F1' | translate }}</li>
-                        <li>{{ 'LANDING.PRICING.FREE.F2' | translate }}</li>
-                        <li>{{ 'LANDING.PRICING.FREE.F3' | translate }}</li>
-                        <li>{{ 'LANDING.PRICING.FREE.F4' | translate }}</li>
-                    </ul>
-                    <a class="btn outline" routerLink="/login" [queryParams]="{ mode: 'register' }">{{ 'LANDING.PRICING.FREE.BTN' | translate }}</a>
-                </div>
-
-                <div class="pricing-card popular">
-                    <span class="popular-badge">{{ 'LANDING.PRICING.STARTER.BADGE' | translate }}</span>
-                    <div class="plan-name">{{ 'LANDING.PRICING.STARTER.NAME' | translate }}</div>
-                    <div class="plan-price">{{ 'LANDING.PRICING.STARTER.PRICE' | translate }}<span>{{ 'LANDING.PRICING.STARTER.PERIOD' | translate }}</span></div>
-                    <p class="plan-desc">{{ 'LANDING.PRICING.STARTER.DESC' | translate }}</p>
-                    <ul class="features-list">
-                        <li>{{ 'LANDING.PRICING.STARTER.F1' | translate }}</li>
-                        <li>{{ 'LANDING.PRICING.STARTER.F2' | translate }}</li>
-                        <li>{{ 'LANDING.PRICING.STARTER.F3' | translate }}</li>
-                        <li>{{ 'LANDING.PRICING.STARTER.F4' | translate }}</li>
-                    </ul>
-                    <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{ 'LANDING.PRICING.STARTER.BTN' | translate }}</a>
-                </div>
-
-                <div class="pricing-card">
-                    <div class="plan-name">{{ 'LANDING.PRICING.GROWTH.NAME' | translate }}</div>
-                    <div class="plan-price">{{ 'LANDING.PRICING.GROWTH.PRICE' | translate }}<span>{{ 'LANDING.PRICING.GROWTH.PERIOD' | translate }}</span></div>
-                    <p class="plan-desc">{{ 'LANDING.PRICING.GROWTH.DESC' | translate }}</p>
-                    <ul class="features-list">
-                        <li>{{ 'LANDING.PRICING.GROWTH.F1' | translate }}</li>
-                        <li>{{ 'LANDING.PRICING.GROWTH.F2' | translate }}</li>
-                        <li>{{ 'LANDING.PRICING.GROWTH.F3' | translate }}</li>
-                        <li>{{ 'LANDING.PRICING.GROWTH.F4' | translate }}</li>
-                    </ul>
-                    <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{ 'LANDING.PRICING.GROWTH.BTN' | translate }}</a>
                 </div>
             </div>
         </section>
@@ -176,6 +134,61 @@
             </div>
         </section>
 
+        <!-- Pricing Section -->
+        <section class="pricing-section" id="pricing">
+            <div class="section-header">
+                <h2>{{ 'LANDING.PRICING.TITLE' | translate }}</h2>
+                <p>{{ 'LANDING.PRICING.SUBTITLE' | translate }}</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="plan-name">{{ 'LANDING.PRICING.FREE.NAME' | translate }}</div>
+                    <div class="plan-price">{{ 'LANDING.PRICING.FREE.PRICE' | translate }}<span>{{
+                            'LANDING.PRICING.FREE.PERIOD' | translate }}</span></div>
+                    <p class="plan-desc">{{ 'LANDING.PRICING.FREE.DESC' | translate }}</p>
+                    <ul class="features-list">
+                        <li>{{ 'LANDING.PRICING.FREE.F1' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.FREE.F2' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.FREE.F3' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.FREE.F4' | translate }}</li>
+                    </ul>
+                    <a class="btn outline" routerLink="/login" [queryParams]="{ mode: 'register' }">{{
+                        'LANDING.PRICING.FREE.BTN' | translate }}</a>
+                </div>
+
+                <div class="pricing-card popular">
+                    <span class="popular-badge">{{ 'LANDING.PRICING.STARTER.BADGE' | translate }}</span>
+                    <div class="plan-name">{{ 'LANDING.PRICING.STARTER.NAME' | translate }}</div>
+                    <div class="plan-price">{{ 'LANDING.PRICING.STARTER.PRICE' | translate }}<span>{{
+                            'LANDING.PRICING.STARTER.PERIOD' | translate }}</span></div>
+                    <p class="plan-desc">{{ 'LANDING.PRICING.STARTER.DESC' | translate }}</p>
+                    <ul class="features-list">
+                        <li>{{ 'LANDING.PRICING.STARTER.F1' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.STARTER.F2' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.STARTER.F3' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.STARTER.F4' | translate }}</li>
+                    </ul>
+                    <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{
+                        'LANDING.PRICING.STARTER.BTN' | translate }}</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="plan-name">{{ 'LANDING.PRICING.GROWTH.NAME' | translate }}</div>
+                    <div class="plan-price">{{ 'LANDING.PRICING.GROWTH.PRICE' | translate }}<span>{{
+                            'LANDING.PRICING.GROWTH.PERIOD' | translate }}</span></div>
+                    <p class="plan-desc">{{ 'LANDING.PRICING.GROWTH.DESC' | translate }}</p>
+                    <ul class="features-list">
+                        <li>{{ 'LANDING.PRICING.GROWTH.F1' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.GROWTH.F2' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.GROWTH.F3' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.GROWTH.F4' | translate }}</li>
+                    </ul>
+                    <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{
+                        'LANDING.PRICING.GROWTH.BTN' | translate }}</a>
+                </div>
+            </div>
+        </section>
+
         <!-- FAQ Section -->
         <section class="faq-section" id="faq">
             <div class="section-header">
@@ -184,6 +197,26 @@
             <div class="faq-grid">
                 <div class="faq-item" [class.open]="openFaqIndex === 0">
                     <h3 (click)="toggleFaq(0)">
+                        {{ 'LANDING.FAQ.Q4' | translate }}
+                        <mat-icon class="faq-arrow">expand_more</mat-icon>
+                    </h3>
+                    <div class="faq-answer">
+                        <p>{{ 'LANDING.FAQ.A4' | translate }}</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" [class.open]="openFaqIndex === 1">
+                    <h3 (click)="toggleFaq(1)">
+                        {{ 'LANDING.FAQ.Q5' | translate }}
+                        <mat-icon class="faq-arrow">expand_more</mat-icon>
+                    </h3>
+                    <div class="faq-answer">
+                        <p>{{ 'LANDING.FAQ.A5' | translate }}</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" [class.open]="openFaqIndex === 2">
+                    <h3 (click)="toggleFaq(2)">
                         {{ 'LANDING.FAQ.Q1' | translate }}
                         <mat-icon class="faq-arrow">expand_more</mat-icon>
                     </h3>
@@ -191,8 +224,9 @@
                         <p>{{ 'LANDING.FAQ.A1' | translate }}</p>
                     </div>
                 </div>
-                <div class="faq-item" [class.open]="openFaqIndex === 1">
-                    <h3 (click)="toggleFaq(1)">
+
+                <div class="faq-item" [class.open]="openFaqIndex === 3">
+                    <h3 (click)="toggleFaq(3)">
                         {{ 'LANDING.FAQ.Q2' | translate }}
                         <mat-icon class="faq-arrow">expand_more</mat-icon>
                     </h3>
@@ -200,13 +234,34 @@
                         <p>{{ 'LANDING.FAQ.A2' | translate }}</p>
                     </div>
                 </div>
-                <div class="faq-item" [class.open]="openFaqIndex === 2">
-                    <h3 (click)="toggleFaq(2)">
+
+                <div class="faq-item" [class.open]="openFaqIndex === 4">
+                    <h3 (click)="toggleFaq(4)">
+                        {{ 'LANDING.FAQ.Q6' | translate }}
+                        <mat-icon class="faq-arrow">expand_more</mat-icon>
+                    </h3>
+                    <div class="faq-answer">
+                        <p>{{ 'LANDING.FAQ.A6' | translate }}</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" [class.open]="openFaqIndex === 5">
+                    <h3 (click)="toggleFaq(5)">
                         {{ 'LANDING.FAQ.Q3' | translate }}
                         <mat-icon class="faq-arrow">expand_more</mat-icon>
                     </h3>
                     <div class="faq-answer">
                         <p>{{ 'LANDING.FAQ.A3' | translate }}</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" [class.open]="openFaqIndex === 6">
+                    <h3 (click)="toggleFaq(6)">
+                        {{ 'LANDING.FAQ.Q8' | translate }}
+                        <mat-icon class="faq-arrow">expand_more</mat-icon>
+                    </h3>
+                    <div class="faq-answer">
+                        <p>{{ 'LANDING.FAQ.A8' | translate }}</p>
                     </div>
                 </div>
             </div>
@@ -242,7 +297,8 @@
             <div class="footer-links">
                 <h4>{{ 'LANDING.FOOTER.CONNECT' | translate }}</h4>
                 <ul>
-                    <li><a href="https://www.linkedin.com/in/bozhidar-rangelov-534839151/" target="_blank">LinkedIn</a></li>
+                    <li><a href="https://www.linkedin.com/in/bozhidar-rangelov-534839151/" target="_blank">LinkedIn</a>
+                    </li>
                     <li><a href="mailto:support@autoshift.com">{{ 'LANDING.FOOTER.CONTACT' | translate }}</a></li>
                 </ul>
             </div>
@@ -250,15 +306,16 @@
         <div class="footer-bottom">
             <div>
                 {{ 'LANDING.FOOTER.COPYRIGHT' | translate }}
-                <br/>
+                <br />
                 <span style="font-size: 0.85rem; opacity: 0.7; margin-top: 0.5rem; display: block;">
-                    {{ 'LANDING.FOOTER.DEVELOPED_BY' | translate }} 
-                    <a href="https://bozhidar-rangelov.eu" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">Bozhidar Rangelov</a>
+                    {{ 'LANDING.FOOTER.DEVELOPED_BY' | translate }}
+                    <a href="https://bozhidar-rangelov.eu" target="_blank"
+                        style="color: var(--primary); text-decoration: none; font-weight: 600;">Bozhidar Rangelov</a>
                 </span>
             </div>
-            <div style="display:flex; gap: 2rem">
-                <a routerLink="/terms" style="color: inherit; text-decoration: none">{{ 'LANDING.FOOTER.TERMS' | translate }}</a>
-                <a routerLink="/privacy" style="color: inherit; text-decoration: none">{{ 'LANDING.FOOTER.PRIVACY_LINK' | translate }}</a>
+            <div class="footer-bottom-links">
+                <a routerLink="/terms">{{ 'LANDING.FOOTER.TERMS' | translate }}</a>
+                <a routerLink="/privacy">{{ 'LANDING.FOOTER.PRIVACY_LINK' | translate }}</a>
             </div>
         </div>
     </footer>

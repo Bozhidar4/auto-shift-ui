@@ -11,11 +11,11 @@
     </div>
   </div>
 
-  <div class="team-grid" style="margin-top:1.5rem">
+  <div class="team-grid">
     @for (team of teams; track $index) {
     <div class="card team-card">
       @if (!team._editing) {
-      <div style="display:flex;justify-content:space-between;align-items:center">
+      <div class="card-content">
         <div style="display: flex; align-items: center; gap: 1rem;">
             <div class="avatar" style="background: rgba(79, 70, 229, 0.1); color: var(--primary); border: none;">
                 <mat-icon>groups</mat-icon>
@@ -39,14 +39,16 @@
       </div>
       }
       @if (team._editing) {
-      <div class="controls">
+      <div class="edit-controls">
           <input class="input" [(ngModel)]="team.name" [placeholder]="'TEAMS.NAME' | translate" />
-          <button class="btn pill primary" [disabled]="!team.name" (click)="save(team)">
-            <mat-icon>save</mat-icon>{{ 'TEAMS.SAVE' | translate }}
-          </button>
-          <button class="btn pill" (click)="cancelEdit(team)">
-            <mat-icon>close</mat-icon>{{ 'TEAMS.CANCEL' | translate }}
-          </button>
+          <div class="controls">
+              <button class="btn pill primary" [disabled]="!team.name" (click)="save(team)">
+                <mat-icon>save</mat-icon>{{ 'TEAMS.SAVE' | translate }}
+              </button>
+              <button class="btn pill" (click)="cancelEdit(team)">
+                <mat-icon>close</mat-icon>{{ 'TEAMS.CANCEL' | translate }}
+              </button>
+          </div>
       </div>
       }
     </div>

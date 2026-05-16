@@ -14,6 +14,7 @@ import { LanguageSwitcherComponent } from '../../components/language-switcher/la
 })
 export class LandingComponent implements OnInit {
     isScrolled = false;
+    isMenuOpen = false;
     openFaqIndex: number | null = null;
 
     constructor(private translate: TranslateService) { }

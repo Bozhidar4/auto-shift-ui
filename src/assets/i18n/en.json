@@ -84,7 +84,17 @@
       "Q2": "Does it support 24/7 industries?",
       "A2": "Absolutely. Whether you're in healthcare, retail, or manufacturing, our engine handles complex round-the-clock rotations.",
       "Q3": "Can I export the schedules?",
-      "A3": "Yes, you can export your rosters to PDF or Excel formats with a single click, ready for printing or sharing."
+      "A3": "Yes, you can export your rosters to PDF or Excel formats with a single click, ready for printing or sharing.",
+      "Q4": "What is AutoShift?",
+      "A4": "AutoShift is an automated workforce scheduling platform that uses advanced rules and algorithms to create perfect rosters in seconds. It eliminates manual errors and saves hours of administrative work.",
+      "Q5": "Can I make manual changes?",
+      "A5": "Yes! While the engine generates the optimal schedule, you have full control. You can manually move shifts, swap employees, or adjust hours directly in the calendar.",
+      "Q6": "Does it handle vacations and sick leaves?",
+      "A6": "Absolutely. You can track all types of absences, and the scheduling engine will automatically skip those employees when generating the roster.",
+      "Q7": "How do I export the schedule?",
+      "A7": "You can export your monthly schedules to PDF or Excel formats with a single click, ready for printing or sharing with your team.",
+      "Q8": "Is there a mobile app?",
+      "A8": "AutoShift is a fully responsive web application, meaning it works perfectly on smartphones and tablets without needing to install anything from an app store."
     },
     "PRICING": {
       "TITLE": "Simple, transparent pricing",

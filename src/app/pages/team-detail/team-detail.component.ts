@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ApiService } from '../../services/api.service';
 import { Team } from '../../models/team';
 import { createEmptyEmployee, Employee } from '../../models/employee.interface';
-import { ShiftType } from '../../models/shift-type.interface';
+import { createEmptyShift, ShiftType } from '../../models/shift-type.interface';
 import { TeamCreate } from '../../models/team-create..interface';
 import { ToastService } from '../../services/toast.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -163,5 +163,19 @@ export class TeamDetailComponent implements OnInit {
     }
 
     this.team.shiftTypes = this.team.shiftTypes?.filter(x => x !== shift);
+  }
+
+  addShift(): void {
+    if (!this.team) {
+      return;
+    }
+
+    this.team.shiftTypes = this.team.shiftTypes || [];
+    const newShift = createEmptyShift();
+    newShift.teamId = this.team.id;
+    newShift.startTime = '08:00';
+    newShift.endTime = '16:00';
+    newShift.requiredPeople = 1;
+    this.team.shiftTypes.push(newShift);
   }
 }
