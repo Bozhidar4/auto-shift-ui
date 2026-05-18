@@ -13,9 +13,9 @@ export class EmailService {
 
   async send(
     message: ContactMessage
-  ): Promise<void> {
+  ): Promise<any> {
     try {
-      await firstValueFrom(this.apiService.sendContactMessage(message));
+      return await firstValueFrom(this.apiService.sendContactMessage(message));
     } catch (error) {
       throw error;
     }

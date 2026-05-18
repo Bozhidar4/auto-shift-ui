@@ -1,10 +1,10 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageSwitcherComponent } from '../../components/language-switcher/language-switcher.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { EmailService } from '../../services/email.service';
 import { ToastService } from '../../services/toast.service';
 import { ContactMessage } from '../../models/contact-message.interface';
@@ -17,6 +17,7 @@ import { ContactMessage } from '../../models/contact-message.interface';
     styleUrls: ['./landing.component.scss']
 })
 export class LandingComponent implements OnInit {
+    @ViewChild('contactFormRef') contactFormRef!: NgForm;
     isScrolled = false;
     isMenuOpen = false;
     openFaqIndex: number | null = null;
@@ -63,24 +64,26 @@ export class LandingComponent implements OnInit {
         this.isSending = true;
 
         try {
-            await this.emailService.send(this.contactForm);
-            this.toast.show(this.translate.instant('CONTACT.SUCCESS'), 'success');
-            this.resetForm();
+            const response = await this.emailService.send(this.contactForm);
+            const msg = response?.message || this.translate.instant('CONTACT.SUCCESS');
+            this.toast.show(msg, 'success');
+            
+            const defaultState = {
+                name: '',
+                email: '',
+                type: 'GENERAL',
+                message: '',
+                rating: 0,
+                page: 'Landing'
+            };
+            if (this.contactFormRef) {
+                this.contactFormRef.resetForm(defaultState);
+            }
+            this.contactForm = defaultState;
         } catch (error) {
             this.toast.show(this.translate.instant('CONTACT.ERROR'), 'error');
         } finally {
             this.isSending = false;
         }
-    }
-
-    private resetForm(): void {
-        this.contactForm = {
-            name: '',
-            email: '',
-            type: 'GENERAL',
-            message: '',
-            rating: 0,
-            page: 'Landing'
-        };
     }
 }
