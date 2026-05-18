@@ -2,7 +2,7 @@
     <div class="mobile-menu-overlay" [class.active]="isMenuOpen" (click)="isMenuOpen = false"></div>
     <header class="landing-header" id="main-header" [class.scrolled]="isScrolled">
         <div class="brand-wrapper" routerLink="/">
-            <div class="brand-logo"></div>
+            <img class="brand-logo" src="assets/images/logo.svg" alt="Way of Roster Logo">
             <div class="brand-name">{{ 'LANDING.BRAND' | translate }}</div>
         </div>
         <button class="mobile-menu-toggle" (click)="isMenuOpen = !isMenuOpen">
@@ -12,7 +12,7 @@
         <nav class="landing-nav" [class.open]="isMenuOpen">
             <a href="#features" class="menu-link" (click)="isMenuOpen = false">{{ 'LANDING.NAV.FEATURES' | translate }}</a>
             <a href="#how-it-works" class="menu-link" (click)="isMenuOpen = false">{{ 'LANDING.HOW_IT_WORKS.TITLE' | translate }}</a>
-            <a href="#why-it-works" class="menu-link" (click)="isMenuOpen = false">{{ 'LANDING.WHY_AUTOSHIFT.TITLE' | translate }}</a>
+            <a href="#why-it-works" class="menu-link" (click)="isMenuOpen = false">{{ 'LANDING.WHY_WAY_OF_ROSTER.TITLE' | translate }}</a>
             <a href="#pricing" class="menu-link" (click)="isMenuOpen = false">{{ 'LANDING.NAV.PRICING' | translate }}</a>
             <a href="#faq" class="menu-link" (click)="isMenuOpen = false">FAQ</a>
             <a class="menu-link" routerLink="/login">{{ 'LANDING.NAV.SIGN_IN' | translate }}</a>
@@ -112,24 +112,24 @@
         <!-- Why It Works Section -->
         <section class="why-it-works" id="why-it-works">
             <div class="section-header">
-                <h2>{{ 'LANDING.WHY_AUTOSHIFT.TITLE' | translate }}</h2>
-                <p>{{ 'LANDING.WHY_AUTOSHIFT.SUBTITLE' | translate }}</p>
+                <h2>{{ 'LANDING.WHY_WAY_OF_ROSTER.TITLE' | translate }}</h2>
+                <p>{{ 'LANDING.WHY_WAY_OF_ROSTER.SUBTITLE' | translate }}</p>
             </div>
             <div class="science-grid">
                 <div class="science-card">
                     <mat-icon>psychology</mat-icon>
-                    <h3>{{ 'LANDING.WHY_AUTOSHIFT.ITEM1_TITLE' | translate }}</h3>
-                    <p>{{ 'LANDING.WHY_AUTOSHIFT.ITEM1_DESC' | translate }}</p>
+                    <h3>{{ 'LANDING.WHY_WAY_OF_ROSTER.ITEM1_TITLE' | translate }}</h3>
+                    <p>{{ 'LANDING.WHY_WAY_OF_ROSTER.ITEM1_DESC' | translate }}</p>
                 </div>
                 <div class="science-card">
                     <mat-icon>balance</mat-icon>
-                    <h3>{{ 'LANDING.WHY_AUTOSHIFT.ITEM2_TITLE' | translate }}</h3>
-                    <p>{{ 'LANDING.WHY_AUTOSHIFT.ITEM2_DESC' | translate }}</p>
+                    <h3>{{ 'LANDING.WHY_WAY_OF_ROSTER.ITEM2_TITLE' | translate }}</h3>
+                    <p>{{ 'LANDING.WHY_WAY_OF_ROSTER.ITEM2_DESC' | translate }}</p>
                 </div>
                 <div class="science-card">
                     <mat-icon>security</mat-icon>
-                    <h3>{{ 'LANDING.WHY_AUTOSHIFT.ITEM3_TITLE' | translate }}</h3>
-                    <p>{{ 'LANDING.WHY_AUTOSHIFT.ITEM3_DESC' | translate }}</p>
+                    <h3>{{ 'LANDING.WHY_WAY_OF_ROSTER.ITEM3_TITLE' | translate }}</h3>
+                    <p>{{ 'LANDING.WHY_WAY_OF_ROSTER.ITEM3_DESC' | translate }}</p>
                 </div>
             </div>
         </section>
@@ -329,7 +329,10 @@
     <footer class="landing-footer">
         <div class="footer-grid">
             <div class="footer-brand">
-                <div class="brand-name">{{ 'LANDING.BRAND' | translate }}</div>
+                <div class="brand-wrapper" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                    <img class="brand-logo" src="assets/images/logo.svg" alt="Way of Roster Logo" style="width: 32px; height: 32px;">
+                    <div class="brand-name" style="margin: 0;">{{ 'LANDING.BRAND' | translate }}</div>
+                </div>
                 <p>{{ 'LANDING.FOOTER.BRAND_DESC' | translate }}</p>
             </div>
             <div class="footer-links">
@@ -337,7 +340,7 @@
                 <ul>
                     <li><a href="#features">{{ 'LANDING.NAV.FEATURES' | translate }}</a></li>
                     <li><a href="#how-it-works">{{ 'LANDING.HOW_IT_WORKS.TITLE' | translate }}</a></li>
-                    <li><a href="#why-it-works">{{ 'LANDING.WHY_AUTOSHIFT.TITLE' | translate }}</a></li>
+                    <li><a href="#why-it-works">{{ 'LANDING.WHY_WAY_OF_ROSTER.TITLE' | translate }}</a></li>
                     <li><a href="#pricing">{{ 'LANDING.NAV.PRICING' | translate }}</a></li>
                     <li><a routerLink="/login">{{ 'LANDING.NAV.SIGN_IN' | translate }}</a></li>
                 </ul>
@@ -345,7 +348,7 @@
             <div class="footer-links">
                 <h4>{{ 'LANDING.FOOTER.SUPPORT' | translate }}</h4>
                 <ul>
-                    <li><a href="mailto:support@autoshift.com">{{ 'LANDING.FOOTER.CONTACT' | translate }}</a></li>
+                    <li><a href="mailto:support@wayofroster.com">{{ 'LANDING.FOOTER.CONTACT' | translate }}</a></li>
                     <li><a href="#faq">FAQ</a></li>
                     <li><a href="#">{{ 'LANDING.FOOTER.DOCS' | translate }}</a></li>
                     <li><a routerLink="/privacy">{{ 'LANDING.FOOTER.PRIVACY' | translate }}</a></li>
@@ -357,7 +360,7 @@
                 <ul>
                     <li><a href="https://www.linkedin.com/in/bozhidar-rangelov-534839151/" target="_blank">LinkedIn</a>
                     </li>
-                    <li><a href="mailto:support@autoshift.com">{{ 'LANDING.FOOTER.CONTACT' | translate }}</a></li>
+                    <li><a href="mailto:support@wayofroster.com">{{ 'LANDING.FOOTER.CONTACT' | translate }}</a></li>
                 </ul>
             </div>
         </div>

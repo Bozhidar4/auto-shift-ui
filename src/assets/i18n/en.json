@@ -13,7 +13,7 @@
     "SAVING": "Saving..."
   },
   "LANDING": {
-    "BRAND": "AutoShift",
+    "BRAND": "Way of Roster",
     "NAV": {
       "FEATURES": "Features",
       "PRICING": "Pricing",
@@ -29,7 +29,7 @@
     },
     "FEATURES": {
       "TITLE": "Everything you need to scale",
-      "SUBTITLE": "AutoShift handles the complexity so you can focus on growing your business.",
+      "SUBTITLE": "Way of Roster handles the complexity so you can focus on growing your business.",
       "ITEMS": {
         "RULE_BASED": {
           "TITLE": "Rule-Based Engine",
@@ -67,7 +67,7 @@
       "STEP3_TITLE": "Generate & Refine",
       "STEP3_DESC": "Click 'Generate' and watch the engine create the perfect roster. Fine-tune manually if needed."
     },
-    "WHY_AUTOSHIFT": {
+    "WHY_WAY_OF_ROSTER": {
       "TITLE": "Why It Works",
       "SUBTITLE": "The science behind smart scheduling.",
       "ITEM1_TITLE": "Combinatorial Optimization",
@@ -80,13 +80,13 @@
     "FAQ": {
       "TITLE": "Frequently Asked Questions",
       "Q1": "Can I customize the scheduling rules?",
-      "A1": "Yes! AutoShift is built for flexibility. You can define custom work hour limits, resting periods, and even specific employee exclusions.",
+      "A1": "Yes! Way of Roster is built for flexibility. You can define custom work hour limits, resting periods, and even specific employee exclusions.",
       "Q2": "Does it support 24/7 industries?",
       "A2": "Absolutely. Whether you're in healthcare, retail, or manufacturing, our engine handles complex round-the-clock rotations.",
       "Q3": "Can I export the schedules?",
       "A3": "Yes, you can export your rosters to PDF or Excel formats with a single click, ready for printing or sharing.",
-      "Q4": "What is AutoShift?",
-      "A4": "AutoShift is an automated workforce scheduling platform that uses advanced rules and algorithms to create perfect rosters in seconds. It eliminates manual errors and saves hours of administrative work.",
+      "Q4": "What is Way of Roster?",
+      "A4": "Way of Roster is an automated workforce scheduling platform that uses advanced rules and algorithms to create perfect rosters in seconds. It eliminates manual errors and saves hours of administrative work.",
       "Q5": "Can I make manual changes?",
       "A5": "Yes! While the engine generates the optimal schedule, you have full control. You can manually move shifts, swap employees, or adjust hours directly in the calendar.",
       "Q6": "Does it handle vacations and sick leaves?",
@@ -94,7 +94,7 @@
       "Q7": "How do I export the schedule?",
       "A7": "You can export your monthly schedules to PDF or Excel formats with a single click, ready for printing or sharing with your team.",
       "Q8": "Is there a mobile app?",
-      "A8": "AutoShift is a fully responsive web application, meaning it works perfectly on smartphones and tablets without needing to install anything from an app store."
+      "A8": "Way of Roster is a fully responsive web application, meaning it works perfectly on smartphones and tablets without needing to install anything from an app store."
     },
     "PRICING": {
       "TITLE": "Simple, transparent pricing",
@@ -143,7 +143,7 @@
       "DOCS": "Documentation",
       "PRIVACY": "Privacy Policy",
       "COOKIES": "Cookie Policy",
-      "COPYRIGHT": "© 2026 AutoShift - Automated Workforce Scheduling & Management. All Rights Reserved.",
+      "COPYRIGHT": "© 2026 Way of Roster - Automated Workforce Scheduling & Management. All Rights Reserved.",
       "DEVELOPED_BY": "Developed by",
       "TERMS": "Terms",
       "PRIVACY_LINK": "Privacy"
@@ -383,10 +383,10 @@
     "TERMS_TITLE": "Terms of Service",
     "PRIVACY_TITLE": "Privacy Policy",
     "LAST_UPDATED": "Last Updated",
-    "TERMS_CONTENT": "<h2>1. Agreement to Terms</h2><p>By accessing or using AutoShift, you agree to be bound by these Terms of Service. If you do not agree, you may not use our platform.</p><h2>2. Description of Service</h2><p>AutoShift provides an automated, rule-based workforce scheduling platform. While our engine optimizes for various constraints, the final responsibility for staff assignments and legal compliance remains with the User.</p><h2>3. User Accounts</h2><p>You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.</p><h2>4. Intellectual Property</h2><p>All software, designs, and content provided through AutoShift are the property of AutoShift and are protected by international copyright laws.</p><h2>5. Limitation of Liability</h2><p>AutoShift shall not be liable for any business disruptions, loss of profits, or staffing issues resulting from the use of the service. We provide the tools; you provide the oversight.</p>",
-    "PRIVACY_CONTENT": "<h2>1. Information We Collect</h2><p>We collect your email address and name during registration. We also store employee names, hours, and leave data provided by you to perform the scheduling service.</p><h2>2. How We Use Your Data</h2><p>Your data is used solely to provide and improve the AutoShift platform. We do not sell your data to third parties.</p><h2>3. Data Protection (GDPR)</h2><p>For users in the EU, we comply with GDPR regulations. You have the right to access, rectify, or delete your personal data at any time.</p><h2>4. Data Retention</h2><p>We retain your data as long as your account is active or as needed to provide you with the services.</p><h2>5. Contact Us</h2><p>If you have any questions about this Privacy Policy, please contact us at privacy@autoshift.io.</p>",
+    "TERMS_CONTENT": "<h2>1. Agreement to Terms</h2><p>By accessing or using Way of Roster, you agree to be bound by these Terms of Service. If you do not agree, you may not use our platform.</p><h2>2. Description of Service</h2><p>Way of Roster provides an automated, rule-based workforce scheduling platform. While our engine optimizes for various constraints, the final responsibility for staff assignments and legal compliance remains with the User.</p><h2>3. User Accounts</h2><p>You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.</p><h2>4. Intellectual Property</h2><p>All software, designs, and content provided through Way of Roster are the property of Way of Roster and are protected by international copyright laws.</p><h2>5. Limitation of Liability</h2><p>Way of Roster shall not be liable for any business disruptions, loss of profits, or staffing issues resulting from the use of the service. We provide the tools; you provide the oversight.</p>",
+    "PRIVACY_CONTENT": "<h2>1. Information We Collect</h2><p>We collect your email address and name during registration. We also store employee names, hours, and leave data provided by you to perform the scheduling service.</p><h2>2. How We Use Your Data</h2><p>Your data is used solely to provide and improve the Way of Roster platform. We do not sell your data to third parties.</p><h2>3. Data Protection (GDPR)</h2><p>For users in the EU, we comply with GDPR regulations. You have the right to access, rectify, or delete your personal data at any time.</p><h2>4. Data Retention</h2><p>We retain your data as long as your account is active or as needed to provide you with the services.</p><h2>5. Contact Us</h2><p>If you have any questions about this Privacy Policy, please contact us at privacy@wayofroster.com.</p>",
     "COOKIES_TITLE": "Cookie Policy",
-    "COOKIES_CONTENT": "<h2>1. What are Cookies?</h2><p>Cookies are small text files stored on your device when you visit a website. They help us recognize your session and provide essential functionalities.</p><h2>2. How We Use Cookies</h2><ul><li><strong>Essential Cookies:</strong> Necessary for the website to function. These include authentication and security cookies.</li><li><strong>Functional Cookies:</strong> Remember your preferences, such as your selected language.</li><li><strong>Analytics:</strong> We may use anonymous analytics to understand how users interact with our platform.</li></ul><h2>3. Your Consent</h2><p>By using AutoShift, you consent to the use of essential cookies. You can manage your cookie preferences through your browser settings.</p>"
+    "COOKIES_CONTENT": "<h2>1. What are Cookies?</h2><p>Cookies are small text files stored on your device when you visit a website. They help us recognize your session and provide essential functionalities.</p><h2>2. How We Use Cookies</h2><ul><li><strong>Essential Cookies:</strong> Necessary for the website to function. These include authentication and security cookies.</li><li><strong>Functional Cookies:</strong> Remember your preferences, such as your selected language.</li><li><strong>Analytics:</strong> We may use anonymous analytics to understand how users interact with our platform.</li></ul><h2>3. Your Consent</h2><p>By using Way of Roster, you consent to the use of essential cookies. You can manage your cookie preferences through your browser settings.</p>"
   },
   "COOKIES": {
     "BANNER_TEXT": "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.",

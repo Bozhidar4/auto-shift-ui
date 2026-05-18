@@ -726,7 +726,7 @@ export class SchedulesComponent implements OnInit {
         // Format dates nicely for filename
         const safeStart = schedToPrint.startDate ? schedToPrint.startDate.split('T')[0] : 'Start';
         const safeEnd = schedToPrint.endDate ? schedToPrint.endDate.split('T')[0] : 'End';
-        document.title = `AutoShift_Schedule_${safeStart}_to_${safeEnd}`;
+        document.title = `Way_of_Roster_Schedule_${safeStart}_to_${safeEnd}`;
 
         const doPrint = () => {
             window.print();
