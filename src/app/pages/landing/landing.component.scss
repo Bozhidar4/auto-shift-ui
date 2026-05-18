@@ -707,3 +707,79 @@ section {
         }
     }
 }
+
+/* Contact Section */
+.contact-section {
+    padding: 8rem 5%;
+    background: white;
+
+    .contact-container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 3rem;
+
+        @media (max-width: 640px) {
+            padding: 1.5rem;
+        }
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+
+        @media (max-width: 640px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 0.9rem;
+        }
+
+        .input {
+            width: 100%;
+        }
+
+        &.rating-group {
+            .stars {
+                display: flex;
+                gap: 0.25rem;
+                
+                mat-icon {
+                    cursor: pointer;
+                    color: #e2e8f0;
+                    font-size: 32px;
+                    width: 32px;
+                    height: 32px;
+                    transition: all 0.2s ease;
+
+                    &.active {
+                        color: #fbbf24;
+                        transform: scale(1.1);
+                    }
+
+                    &:hover {
+                        transform: scale(1.2);
+                    }
+                }
+            }
+        }
+    }
+
+    .spin {
+        animation: rotate 1s linear infinite;
+    }
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

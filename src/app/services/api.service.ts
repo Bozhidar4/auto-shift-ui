@@ -11,6 +11,7 @@ import { TeamCreate } from '../models/team-create..interface';
 import { ShiftRule } from '../models/shift-rule.interface';
 import { TeamRuleValue } from '../models/team-rule-value.interface';
 import { GeneratedSchedule } from '../models/schedule-generated.interface';
+import { ContactMessage } from '../models/contact-message.interface';
 
 const BASE_URL = 'https://localhost:7291/api';
 
@@ -650,5 +651,11 @@ export class ApiService {
 
   logout(): Observable<any> {
     return this.http.post(`${BASE_URL}/auth/logout`, {});
+  }
+
+  sendContactMessage(
+    message: ContactMessage
+  ): Observable<any> {
+    return this.http.post(`${BASE_URL}/contact`, message);
   }
 }

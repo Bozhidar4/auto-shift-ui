@@ -1,0 +1,45 @@
+<div class="card">
+    <div class="page-title">
+        <mat-icon class="page-title-icon" aria-hidden="true">feedback</mat-icon>
+        {{ 'CONTACT.TITLE' | translate }}
+    </div>
+    <div class="muted">{{ 'CONTACT.SUBTITLE' | translate }}</div>
+
+    <div class="feedback-container" style="margin-top: 2rem; max-width: 600px;">
+        <form (ngSubmit)="submitFeedback()" #feedbackFormRef="ngForm">
+            <div class="form-group">
+                <label>{{ 'CONTACT.TYPE' | translate }}</label>
+                <select class="input" name="type" [(ngModel)]="feedbackForm.type">
+                    <option value="GENERAL">{{ 'CONTACT.TYPES.GENERAL' | translate }}</option>
+                    <option value="BUG">{{ 'CONTACT.TYPES.BUG' | translate }}</option>
+                    <option value="FEEDBACK">{{ 'CONTACT.TYPES.FEEDBACK' | translate }}</option>
+                    <option value="FEATURE">{{ 'CONTACT.TYPES.FEATURE' | translate }}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>{{ 'CONTACT.MESSAGE' | translate }}</label>
+                <textarea class="input" name="message" [(ngModel)]="feedbackForm.message" rows="6" required></textarea>
+            </div>
+
+            <div class="form-group rating-group">
+                <label>{{ 'CONTACT.RATING' | translate }}</label>
+                <div class="stars">
+                    @for (star of [1,2,3,4,5]; track star) {
+                        <mat-icon (click)="setRating(star)" [class.active]="feedbackForm.rating >= star">
+                            {{ feedbackForm.rating >= star ? 'star' : 'star_outline' }}
+                        </mat-icon>
+                    }
+                </div>
+            </div>
+
+            <button type="submit" class="btn primary pill" [disabled]="!feedbackFormRef.valid || isSending" style="min-width: 150px;">
+                @if (isSending) {
+                    <mat-icon class="spin">refresh</mat-icon> {{ 'CONTACT.SENDING' | translate }}
+                } @else {
+                    <mat-icon>send</mat-icon> {{ 'CONTACT.SUBMIT' | translate }}
+                }
+            </button>
+        </form>
+    </div>
+</div>

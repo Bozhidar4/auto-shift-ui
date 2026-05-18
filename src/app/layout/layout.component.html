@@ -34,6 +34,14 @@
                 </a>
             </nav>
 
+            <div class="sidebar-divider"></div>
+
+            <nav class="nav-group">
+                <a routerLink="/feedback" routerLinkActive="active" class="nav-link">
+                    <mat-icon>feedback</mat-icon> <span>{{ 'CONTACT.TITLE' | translate }}</span>
+                </a>
+            </nav>
+
             <div class="sidebar-footer">
                 <a class="nav-link danger" (click)="logout()" style="cursor: pointer;">
                     <mat-icon>logout</mat-icon> <span>{{ 'LAYOUT.SIGN_OUT' | translate }}</span>

@@ -392,5 +392,25 @@
     "BANNER_TEXT": "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.",
     "LEARN_MORE": "Learn more",
     "ACCEPT": "Accept"
+  },
+  "CONTACT": {
+    "TITLE": "Contact Us",
+    "SUBTITLE": "Have a question or feedback? We'd love to hear from you.",
+    "NAME": "Your Name",
+    "EMAIL": "Your Email",
+    "TYPE": "Message Type",
+    "MESSAGE": "Your Message",
+    "RATING": "Your Rating",
+    "SUBMIT": "Send Message",
+    "SENDING": "Sending...",
+    "SUCCESS": "Thank you! Your message has been sent.",
+    "ERROR": "An error occurred. Please try again later.",
+    "TYPES": {
+      "GENERAL": "General Inquiry",
+      "BUG": "Technical Issue / Bug",
+      "FEEDBACK": "Feedback",
+      "FEATURE": "Feature Request",
+      "BUSINESS": "Business Proposal"
+    }
   }
 }

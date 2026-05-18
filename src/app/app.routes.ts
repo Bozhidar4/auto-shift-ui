@@ -20,7 +20,8 @@ export const routes: Routes = [
 			{ path: 'shifts', loadComponent: () => import('./pages/shifts/shifts.component').then(m => m.ShiftsComponent) },
 			{ path: 'rules', loadComponent: () => import('./pages/rules/rules.component').then(m => m.RulesComponent) },
 			{ path: 'schedules', loadComponent: () => import('./pages/schedules/schedules.component').then(m => m.SchedulesComponent) },
-			{ path: 'leaves', loadComponent: () => import('./pages/leaves/leaves.component').then(m => m.LeavesComponent) }
+			{ path: 'leaves', loadComponent: () => import('./pages/leaves/leaves.component').then(m => m.LeavesComponent) },
+			{ path: 'feedback', loadComponent: () => import('./pages/feedback/feedback.component').then(m => m.FeedbackComponent) }
 		]
 	},
 

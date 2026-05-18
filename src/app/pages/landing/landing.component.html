@@ -266,6 +266,64 @@
                 </div>
             </div>
         </section>
+
+        <!-- Contact Section -->
+        <section class="contact-section" id="contact">
+            <div class="section-header">
+                <h2>{{ 'CONTACT.TITLE' | translate }}</h2>
+                <p>{{ 'CONTACT.SUBTITLE' | translate }}</p>
+            </div>
+
+            <div class="contact-container card">
+                <form (ngSubmit)="submitContact()" #contactFormRef="ngForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>{{ 'CONTACT.NAME' | translate }}</label>
+                            <input type="text" class="input" name="name" [(ngModel)]="contactForm.name" required />
+                        </div>
+                        <div class="form-group">
+                            <label>{{ 'CONTACT.EMAIL' | translate }}</label>
+                            <input type="email" class="input" name="email" [(ngModel)]="contactForm.email" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ 'CONTACT.TYPE' | translate }}</label>
+                        <select class="input" name="type" [(ngModel)]="contactForm.type">
+                            <option value="GENERAL">{{ 'CONTACT.TYPES.GENERAL' | translate }}</option>
+                            <option value="BUG">{{ 'CONTACT.TYPES.BUG' | translate }}</option>
+                            <option value="FEEDBACK">{{ 'CONTACT.TYPES.FEEDBACK' | translate }}</option>
+                            <option value="FEATURE">{{ 'CONTACT.TYPES.FEATURE' | translate }}</option>
+                            <option value="BUSINESS">{{ 'CONTACT.TYPES.BUSINESS' | translate }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ 'CONTACT.MESSAGE' | translate }}</label>
+                        <textarea class="input" name="message" [(ngModel)]="contactForm.message" rows="5" required></textarea>
+                    </div>
+
+                    <div class="form-group rating-group">
+                        <label>{{ 'CONTACT.RATING' | translate }}</label>
+                        <div class="stars">
+                            @for (star of [1,2,3,4,5]; track star) {
+                                <mat-icon (click)="setRating(star)" [class.active]="contactForm.rating >= star">
+                                    {{ contactForm.rating >= star ? 'star' : 'star_outline' }}
+                                </mat-icon>
+                            }
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn primary pill full-width" [disabled]="!contactFormRef.valid || isSending">
+                        @if (isSending) {
+                            <mat-icon class="spin">refresh</mat-icon> {{ 'CONTACT.SENDING' | translate }}
+                        } @else {
+                            <mat-icon>send</mat-icon> {{ 'CONTACT.SUBMIT' | translate }}
+                        }
+                    </button>
+                </form>
+            </div>
+        </section>
     </main>
 
     <footer class="landing-footer">

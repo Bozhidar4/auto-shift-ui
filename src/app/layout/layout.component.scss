@@ -139,6 +139,12 @@
     gap: 0.25rem;
   }
 
+  .sidebar-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 0.5rem 0;
+  }
+
   .nav-link {
     display: flex;
     align-items: center;

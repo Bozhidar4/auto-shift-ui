@@ -1,0 +1,50 @@
+.form-group {
+    margin-bottom: 1.5rem;
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--text-main);
+        font-size: 0.9rem;
+    }
+
+    .input {
+        width: 100%;
+    }
+
+    &.rating-group {
+        .stars {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+            
+            mat-icon {
+                cursor: pointer;
+                color: #e2e8f0;
+                font-size: 32px;
+                width: 32px;
+                height: 32px;
+                transition: all 0.2s ease;
+
+                &.active {
+                    color: #fbbf24;
+                    transform: scale(1.1);
+                }
+
+                &:hover {
+                    transform: scale(1.2);
+                }
+            }
+        }
+    }
+}
+
+.spin {
+    animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
