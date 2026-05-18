@@ -38,7 +38,7 @@ export class FeedbackComponent implements OnInit {
       try {
         const payloadStr = atob(token.split('.')[1]);
         const payload = JSON.parse(payloadStr);
-        debugger
+
         const email = payload.email || payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] || '';
         const name = payload.name || payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || email.split('@')[0] || 'App User';
 
