@@ -10,11 +10,12 @@
         </button>
 
         <nav class="landing-nav" [class.open]="isMenuOpen">
-            <a href="#features" class="menu-link" (click)="isMenuOpen = false">{{ 'LANDING.NAV.FEATURES' | translate }}</a>
-            <a href="#how-it-works" class="menu-link" (click)="isMenuOpen = false">{{ 'LANDING.HOW_IT_WORKS.TITLE' | translate }}</a>
-            <a href="#why-it-works" class="menu-link" (click)="isMenuOpen = false">{{ 'LANDING.WHY_WAY_OF_ROSTER.TITLE' | translate }}</a>
-            <a href="#pricing" class="menu-link" (click)="isMenuOpen = false">{{ 'LANDING.NAV.PRICING' | translate }}</a>
-            <a href="#faq" class="menu-link" (click)="isMenuOpen = false">FAQ</a>
+            <a href="#features" class="menu-link" (click)="scrollTo('features', $event)">{{ 'LANDING.NAV.FEATURES' | translate }}</a>
+            <a href="#how-it-works" class="menu-link" (click)="scrollTo('how-it-works', $event)">{{ 'LANDING.HOW_IT_WORKS.TITLE' | translate }}</a>
+            <a href="#why-it-works" class="menu-link" (click)="scrollTo('why-it-works', $event)">{{ 'LANDING.WHY_WAY_OF_ROSTER.TITLE' | translate }}</a>
+            <a href="#pricing" class="menu-link" (click)="scrollTo('pricing', $event)">{{ 'LANDING.NAV.PRICING' | translate }}</a>
+            <a href="#faq" class="menu-link" (click)="scrollTo('faq', $event)">FAQ</a>
+            <a href="#contact" class="menu-link" (click)="scrollTo('contact', $event)">{{ 'CONTACT.TITLE' | translate }}</a>
             <a class="menu-link" routerLink="/login">{{ 'LANDING.NAV.SIGN_IN' | translate }}</a>
             <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{ 'LANDING.NAV.GET_STARTED'
                 | translate }}</a>
@@ -31,7 +32,7 @@
                 <div class="hero-actions">
                     <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{
                         'LANDING.HERO.START_FREE' | translate }}</a>
-                    <a class="btn outline" href="#features">{{ 'LANDING.HERO.HOW_IT_WORKS' | translate }}</a>
+                    <a class="btn outline" href="#features" (click)="scrollTo('features', $event)">{{ 'LANDING.HERO.HOW_IT_WORKS' | translate }}</a>
                 </div>
                 <div style="color:var(--text-muted); font-size: 0.9rem;">
                     {{ 'LANDING.HERO.JOIN' | translate }}
@@ -338,10 +339,11 @@
             <div class="footer-links">
                 <h4>{{ 'LANDING.FOOTER.PRODUCT' | translate }}</h4>
                 <ul>
-                    <li><a href="#features">{{ 'LANDING.NAV.FEATURES' | translate }}</a></li>
-                    <li><a href="#how-it-works">{{ 'LANDING.HOW_IT_WORKS.TITLE' | translate }}</a></li>
-                    <li><a href="#why-it-works">{{ 'LANDING.WHY_WAY_OF_ROSTER.TITLE' | translate }}</a></li>
-                    <li><a href="#pricing">{{ 'LANDING.NAV.PRICING' | translate }}</a></li>
+                    <li><a href="#features" (click)="scrollTo('features', $event)">{{ 'LANDING.NAV.FEATURES' | translate }}</a></li>
+                    <li><a href="#how-it-works" (click)="scrollTo('how-it-works', $event)">{{ 'LANDING.HOW_IT_WORKS.TITLE' | translate }}</a></li>
+                    <li><a href="#why-it-works" (click)="scrollTo('why-it-works', $event)">{{ 'LANDING.WHY_WAY_OF_ROSTER.TITLE' | translate }}</a></li>
+                    <li><a href="#pricing" (click)="scrollTo('pricing', $event)">{{ 'LANDING.NAV.PRICING' | translate }}</a></li>
+                    <li><a href="#contact" (click)="scrollTo('contact', $event)">{{ 'CONTACT.TITLE' | translate }}</a></li>
                     <li><a routerLink="/login">{{ 'LANDING.NAV.SIGN_IN' | translate }}</a></li>
                 </ul>
             </div>
@@ -349,7 +351,7 @@
                 <h4>{{ 'LANDING.FOOTER.SUPPORT' | translate }}</h4>
                 <ul>
                     <li><a href="mailto:support@wayofroster.com">{{ 'LANDING.FOOTER.CONTACT' | translate }}</a></li>
-                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#faq" (click)="scrollTo('faq', $event)">FAQ</a></li>
                     <li><a href="#">{{ 'LANDING.FOOTER.DOCS' | translate }}</a></li>
                     <li><a routerLink="/privacy">{{ 'LANDING.FOOTER.PRIVACY' | translate }}</a></li>
                     <li><a routerLink="/cookies">{{ 'LEGAL.COOKIES_TITLE' | translate }}</a></li>

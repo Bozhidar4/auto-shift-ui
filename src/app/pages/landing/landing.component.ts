@@ -43,6 +43,19 @@ export class LandingComponent implements OnInit {
         this.isScrolled = window.scrollY > 50;
     }
 
+    scrollTo(
+        sectionId: string,
+        event: Event
+    ): void {
+        event.preventDefault();
+        this.isMenuOpen = false;
+        const element = document.getElementById(sectionId);
+
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
     @HostListener('window:scroll', [])
     onWindowScroll() {
         this.isScrolled = window.scrollY > 50;
@@ -67,7 +80,7 @@ export class LandingComponent implements OnInit {
             const response = await this.emailService.send(this.contactForm);
             const msg = response?.message || this.translate.instant('CONTACT.SUCCESS');
             this.toast.show(msg, 'success');
-            
+
             const defaultState = {
                 name: '',
                 email: '',
