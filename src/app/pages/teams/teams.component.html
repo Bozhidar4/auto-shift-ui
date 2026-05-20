@@ -16,14 +16,19 @@
     <div class="card team-card">
       @if (!team._editing) {
       <div class="card-content">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-            <div class="avatar" style="background: rgba(79, 70, 229, 0.1); color: var(--primary); border: none;">
-                <mat-icon>groups</mat-icon>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div class="avatar" style="background: rgba(79, 70, 229, 0.1); color: var(--primary); border: none;">
+                    <mat-icon>groups</mat-icon>
+                </div>
+                <div>
+                    <div style="font-weight:800;font-size:1.1rem">{{ team.name }}</div>
+                    <div class="muted" style="font-size:0.9rem">Internal Team</div>
+                </div>
             </div>
-            <div>
-                <div style="font-weight:800;font-size:1.1rem">{{ team.name }}</div>
-                <div class="muted" style="font-size:0.9rem">Internal Team</div>
-            </div>
+            <button class="btn btn-icon danger" (click)="confirmRemove(team)" title="{{ 'TEAMS.DELETE' | translate }}">
+                <mat-icon>delete</mat-icon>
+            </button>
         </div>
         <div class="controls">
             <button class="btn pill" (click)="edit(team)">
@@ -31,9 +36,6 @@
             </button>
             <button class="btn pill" [routerLink]="['/teams', team.id]">
                 <mat-icon>open_in_new</mat-icon>{{ 'TEAMS.OPEN' | translate }}
-            </button>
-            <button class="btn pill danger" (click)="confirmRemove(team)">
-                <mat-icon>delete</mat-icon>{{ 'TEAMS.DELETE' | translate }}
             </button>
         </div>
       </div>
