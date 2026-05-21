@@ -13,7 +13,7 @@ import { TeamRuleValue } from '../models/team-rule-value.interface';
 import { GeneratedSchedule } from '../models/schedule-generated.interface';
 import { ContactMessage } from '../models/contact-message.interface';
 
-const BASE_URL = 'https://localhost:7291/api';
+const BASE_URL = 'https://api.wayofroster.com/api';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
