@@ -185,7 +185,7 @@
                 <div class="pricing-card popular">
                     <span class="popular-badge">{{ 'LANDING.PRICING.STARTER.BADGE' | translate }}</span>
                     <div class="plan-name">{{ 'LANDING.PRICING.STARTER.NAME' | translate }}</div>
-                    <div class="plan-price">{{ 'LANDING.PRICING.STARTER.PRICE' | translate }}<span>{{
+                    <div class="plan-price">{{ starterPriceFormatted || ('LANDING.PRICING.STARTER.PRICE' | translate) }}<span>{{
                             'LANDING.PRICING.STARTER.PERIOD' | translate }}</span></div>
                     <p class="plan-desc">{{ 'LANDING.PRICING.STARTER.DESC' | translate }}</p>
                     <ul class="features-list">
@@ -202,7 +202,7 @@
 
                 <div class="pricing-card">
                     <div class="plan-name">{{ 'LANDING.PRICING.GROWTH.NAME' | translate }}</div>
-                    <div class="plan-price">{{ 'LANDING.PRICING.GROWTH.PRICE' | translate }}<span>{{
+                    <div class="plan-price">{{ growthPriceFormatted || ('LANDING.PRICING.GROWTH.PRICE' | translate) }}<span>{{
                             'LANDING.PRICING.GROWTH.PERIOD' | translate }}</span></div>
                     <p class="plan-desc">{{ 'LANDING.PRICING.GROWTH.DESC' | translate }}</p>
                     <ul class="features-list">

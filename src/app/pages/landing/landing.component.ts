@@ -10,6 +10,7 @@ import { ToastService } from '../../services/toast.service';
 import { ContactMessage } from '../../models/contact-message.interface';
 import { SeoService } from '../../services/seo.service';
 import { Subscription } from 'rxjs';
+import { ApiService } from '../../services/api.service';
 
 @Component({
     selector: 'app-landing',
@@ -35,20 +36,50 @@ export class LandingComponent implements OnInit, OnDestroy {
     };
     isSending = false;
 
+    prices: any[] = [];
+    starterPriceFormatted: string | null = null;
+    growthPriceFormatted: string | null = null;
+
     constructor(
         private translate: TranslateService,
         private emailService: EmailService,
         private toast: ToastService,
-        private seo: SeoService
+        private seo: SeoService,
+        private apiService: ApiService
     ) { }
 
     ngOnInit(): void {
         this.isScrolled = window.scrollY > 50;
         this.refreshLandingSeo();
+        this.loadPrices();
 
         this.langSubscription = this.translate.onLangChange.subscribe(() => {
             this.refreshLandingSeo();
         });
+    }
+
+    private loadPrices(): void {
+        this.apiService.getStripePrices().subscribe({
+            next: (res: any[]) => {
+                if (!res || res.length === 0) return;
+                const sortedPrices = [...res].sort((a, b) => (a.amount || 0) - (b.amount || 0));
+                if (sortedPrices.length > 0) {
+                    this.starterPriceFormatted = this.formatPrice(sortedPrices[0].amount, sortedPrices[0].currency);
+                    if (sortedPrices.length > 1) {
+                        this.growthPriceFormatted = this.formatPrice(sortedPrices[1].amount, sortedPrices[1].currency);
+                    }
+                }
+            }
+        });
+    }
+
+    private formatPrice(amount: number, currency: string): string {
+        const decimalValue = (amount || 0) / 100;
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: currency || 'USD',
+            minimumFractionDigits: 0
+        }).format(decimalValue);
     }
 
     ngOnDestroy(): void {

@@ -1,0 +1,66 @@
+<div class="billing-container">
+    <div class="page-header">
+        <h1>{{ 'LANDING.NAV.PRICING' | translate }}</h1>
+        <p class="subtitle">{{ 'LANDING.PRICING.SUBTITLE' | translate }}</p>
+    </div>
+
+    @if (isLoading) {
+        <div class="loading-state">
+            <mat-icon class="spin">refresh</mat-icon>
+            <p>Loading plans...</p>
+        </div>
+    } @else {
+        <div class="pricing-grid">
+            <!-- Free Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">{{ freePlan.name | translate }}</div>
+                <div class="plan-price">{{ freePlan.priceKey | translate }}<span>{{ 'LANDING.PRICING.FREE.PERIOD' | translate }}</span></div>
+                <p class="plan-desc">{{ freePlan.desc | translate }}</p>
+                <ul class="features-list">
+                    @for (feat of freePlan.features; track feat) {
+                        <li>{{ feat | translate }}</li>
+                    }
+                </ul>
+                <button class="btn outline full-width" disabled>{{ 'LANDING.PRICING.FREE.BTN' | translate }}</button>
+            </div>
+
+            <!-- Starter Plan -->
+            <div class="pricing-card popular">
+                <span class="popular-badge">{{ starterPlan.badge | translate }}</span>
+                <div class="plan-name">{{ starterPlan.name | translate }}</div>
+                <div class="plan-price">
+                    <!-- If we replaced with formatted string it won't be translated, so we can just output it, unless it's a key -->
+                    {{ starterPlan.priceId ? starterPlan.priceKey : (starterPlan.priceKey | translate) }}
+                    <span>{{ 'LANDING.PRICING.STARTER.PERIOD' | translate }}</span>
+                </div>
+                <p class="plan-desc">{{ starterPlan.desc | translate }}</p>
+                <ul class="features-list">
+                    @for (feat of starterPlan.features; track feat) {
+                        <li>{{ feat | translate }}</li>
+                    }
+                </ul>
+                <button class="btn primary full-width" (click)="upgrade(starterPlan.priceId)" [disabled]="isCheckingOut || !starterPlan.priceId">
+                    {{ isCheckingOut ? ('CONTACT.SENDING' | translate) : ('LANDING.PRICING.STARTER.BTN' | translate) }}
+                </button>
+            </div>
+
+            <!-- Growth Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">{{ growthPlan.name | translate }}</div>
+                <div class="plan-price">
+                    {{ growthPlan.priceId ? growthPlan.priceKey : (growthPlan.priceKey | translate) }}
+                    <span>{{ 'LANDING.PRICING.GROWTH.PERIOD' | translate }}</span>
+                </div>
+                <p class="plan-desc">{{ growthPlan.desc | translate }}</p>
+                <ul class="features-list">
+                    @for (feat of growthPlan.features; track feat) {
+                        <li>{{ feat | translate }}</li>
+                    }
+                </ul>
+                <button class="btn primary full-width" (click)="upgrade(growthPlan.priceId)" [disabled]="isCheckingOut || !growthPlan.priceId">
+                    {{ isCheckingOut ? ('CONTACT.SENDING' | translate) : ('LANDING.PRICING.GROWTH.BTN' | translate) }}
+                </button>
+            </div>
+        </div>
+    }
+</div>

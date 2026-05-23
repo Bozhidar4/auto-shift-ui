@@ -658,4 +658,31 @@ export class ApiService {
   ): Observable<any> {
     return this.http.post(`${BASE_URL}/contact`, message);
   }
+
+  // Stripe Integration
+  getStripePrices(): Observable<any[]> {
+    return this.http.get<any[]>(`${BASE_URL}/Stripe/prices`).pipe(
+      map((res: any) => {
+        if (!res) {
+          return [];
+        }
+
+        if (res.$values && Array.isArray(res.$values)) {
+          return res.$values;
+        }
+        if (Array.isArray(res)) {
+          return res;
+        }
+
+        return [];
+      })
+    );
+  }
+
+  createCheckoutSession(
+    priceId: string
+  ): Observable<{ url: string }> {
+    const headers = { 'x-skip-toast': '1' } as any;
+    return this.http.post<{ url: string }>(`${BASE_URL}/Stripe/create-checkout`, { priceId }, { headers });
+  }
 }

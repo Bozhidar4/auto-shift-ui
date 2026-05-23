@@ -60,7 +60,8 @@ export class AuthComponent implements OnInit {
             localStorage.setItem('access_token', token);
           }
 
-          this.router.navigate(['/dashboard']);
+          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
+          this.router.navigateByUrl(returnUrl);
         },
         error: (e) => {
           // Try a flexible login with alternate payload shapes (diagnostic fallback)
@@ -71,7 +72,8 @@ export class AuthComponent implements OnInit {
                 localStorage.setItem('access_token', token);
               }
 
-              this.router.navigate(['/dashboard']);
+              const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
+              this.router.navigateByUrl(returnUrl);
             },
             error: (e2) => {
               this.error = this.translate.instant('AUTH.ERROR_LOGIN') || 'Login failed';
@@ -87,7 +89,8 @@ export class AuthComponent implements OnInit {
             localStorage.setItem('access_token', token);
           }
 
-          this.router.navigate(['/dashboard']);
+          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
+          this.router.navigateByUrl(returnUrl);
         },
         error: (e) => {
           const payload = e?.error;

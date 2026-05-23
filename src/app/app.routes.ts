@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './services/auth.guard';
 
 export const routes: Routes = [
 	// Top-level marketing/auth routes (no app shell)
@@ -12,6 +13,7 @@ export const routes: Routes = [
 	{
 		path: '',
 		loadComponent: () => import('./layout/layout.component').then(m => m.LayoutComponent),
+		canActivateChild: [AuthGuard],
 		children: [
 			{ path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent) },
 			{ path: 'teams', loadComponent: () => import('./pages/teams/teams.component').then(m => m.TeamsComponent) },
@@ -21,7 +23,8 @@ export const routes: Routes = [
 			{ path: 'rules', loadComponent: () => import('./pages/rules/rules.component').then(m => m.RulesComponent) },
 			{ path: 'schedules', loadComponent: () => import('./pages/schedules/schedules.component').then(m => m.SchedulesComponent) },
 			{ path: 'leaves', loadComponent: () => import('./pages/leaves/leaves.component').then(m => m.LeavesComponent) },
-			{ path: 'feedback', loadComponent: () => import('./pages/feedback/feedback.component').then(m => m.FeedbackComponent) }
+			{ path: 'feedback', loadComponent: () => import('./pages/feedback/feedback.component').then(m => m.FeedbackComponent) },
+			{ path: 'billing', loadComponent: () => import('./pages/billing/billing.component').then(m => m.BillingComponent) }
 		]
 	},
 
