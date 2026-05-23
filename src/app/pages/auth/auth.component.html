@@ -1,10 +1,7 @@
 <div class="auth-container">
-    <div style="position: absolute; top: 2rem; right: 2rem;">
-        <app-language-switcher></app-language-switcher>
-    </div>
     <div class="auth-card">
         <div class="auth-header">
-            <div class="logo"></div>
+            <img class="logo" src="assets/images/logo.svg" [attr.alt]="'LANDING.BRAND' | translate">
             <h1>{{ mode === 'login' ? ('AUTH.WELCOME' | translate) : ('AUTH.CREATE' | translate) }}</h1>
             <p>{{ 'AUTH.SUBTITLE' | translate }}</p>
         </div>
@@ -49,6 +46,9 @@
             <div style="margin-top: 0.5rem;">
                 <a routerLink="/" style="cursor: pointer; color: #94a3b8; font-size: 0.85rem; font-weight: 500;">&larr;
                     {{ 'AUTH.BACK' | translate }}</a>
+            </div>
+            <div class="auth-lang">
+                <app-language-switcher></app-language-switcher>
             </div>
         </div>
     </div>

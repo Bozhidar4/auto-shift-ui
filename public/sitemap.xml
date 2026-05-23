@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://wayofroster.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://wayofroster.com/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="bg" href="https://wayofroster.com/?lang=bg"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://wayofroster.com/?lang=en"/>
+  </url>
+  <url>
+    <loc>https://wayofroster.com/login</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://wayofroster.com/login?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="bg" href="https://wayofroster.com/login?lang=bg"/>
+  </url>
+  <url>
+    <loc>https://wayofroster.com/login?mode=register</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://wayofroster.com/login?mode=register&amp;lang=en"/>
+    <xhtml:link rel="alternate" hreflang="bg" href="https://wayofroster.com/login?mode=register&amp;lang=bg"/>
+  </url>
+  <url>
+    <loc>https://wayofroster.com/terms</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://wayofroster.com/terms?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="bg" href="https://wayofroster.com/terms?lang=bg"/>
+  </url>
+  <url>
+    <loc>https://wayofroster.com/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://wayofroster.com/privacy?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="bg" href="https://wayofroster.com/privacy?lang=bg"/>
+  </url>
+  <url>
+    <loc>https://wayofroster.com/cookies</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://wayofroster.com/cookies?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="bg" href="https://wayofroster.com/cookies?lang=bg"/>
+  </url>
+</urlset>

@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /terms
+Allow: /privacy
+Allow: /cookies
+
+Disallow: /dashboard
+Disallow: /teams
+Disallow: /employees
+Disallow: /shifts
+Disallow: /rules
+Disallow: /schedules
+Disallow: /leaves
+Disallow: /feedback
+
+Sitemap: https://wayofroster.com/sitemap.xml

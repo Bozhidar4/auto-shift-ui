@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { SeoService } from '../../services/seo.service';
 
 @Component({
   selector: 'app-language-switcher',
@@ -14,13 +15,15 @@ export class LanguageSwitcherComponent {
   currentLang: string;
   isOpen = false;
 
-  constructor(private translate: TranslateService) {
+  constructor(
+    private translate: TranslateService,
+    private seo: SeoService
+  ) {
     this.currentLang = this.translate.getCurrentLang() || this.translate.getFallbackLang() || 'en';
     this.translate.onLangChange.subscribe(event => {
       this.currentLang = event.lang;
     });
 
-    // Close dropdown on click outside
     document.addEventListener('click', () => {
       this.isOpen = false;
     });
@@ -35,5 +38,6 @@ export class LanguageSwitcherComponent {
     this.currentLang = lang;
     this.isOpen = false;
     localStorage.setItem('lang', lang);
+    this.seo.syncLangQueryParam(lang);
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
@@ -6,6 +6,7 @@ import { ApiService } from '../../services/api.service';
 
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageSwitcherComponent } from '../../components/language-switcher/language-switcher.component';
+import { SeoService } from '../../services/seo.service';
 
 @Component({
   selector: 'app-auth',
@@ -14,7 +15,7 @@ import { LanguageSwitcherComponent } from '../../components/language-switcher/la
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
-export class AuthComponent {
+export class AuthComponent implements OnInit {
   mode: 'login' | 'register' = 'login';
   email = '';
   password = '';
@@ -24,7 +25,8 @@ export class AuthComponent {
     private api: ApiService,
     private router: Router,
     private route: ActivatedRoute,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private seo: SeoService
   ) { }
 
   ngOnInit(): void {
@@ -32,11 +34,19 @@ export class AuthComponent {
     if (qp === 'register' || qp === 'login') {
       this.mode = qp as 'login' | 'register';
     }
+    this.updateSeo();
+  }
+
+  private updateSeo(): void {
+    const key = this.mode === 'register' ? 'SEO.REGISTER' : 'SEO.LOGIN';
+    this.seo.updateFromKey(key, '/login');
+    this.seo.setStructuredData(null);
   }
 
   toggleMode() {
     this.mode = this.mode === 'login' ? 'register' : 'login';
     this.error = '';
+    this.updateSeo();
   }
 
   submit() {

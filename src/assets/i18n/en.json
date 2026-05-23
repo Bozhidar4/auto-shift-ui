@@ -12,24 +12,71 @@
     "BACK": "Back",
     "SAVING": "Saving..."
   },
+  "SEO": {
+    "HOME": {
+      "TITLE": "Way of Roster | Automated Workforce Scheduling & Shift Planning Software",
+      "DESCRIPTION": "Create fair, conflict-free work rosters in seconds. Way of Roster is rule-based workforce scheduling software with leave management, shift planning, and schedule approval for healthcare, retail, hospitality, and 24/7 teams.",
+      "KEYWORDS": "workforce scheduling software, employee scheduling, shift planning, roster management, automated scheduling, staff scheduling app, work schedule generator, leave management, workforce planning, schedule approval",
+      "OG_IMAGE_ALT": "Way of Roster dashboard preview showing automated shift schedule generation"
+    },
+    "LOGIN": {
+      "TITLE": "Sign In | Way of Roster Workforce Scheduling",
+      "DESCRIPTION": "Sign in to Way of Roster to manage teams, employees, shifts, leaves, and automated work schedules in one place.",
+      "KEYWORDS": "Way of Roster login, workforce scheduling login, employee scheduling sign in",
+      "OG_IMAGE_ALT": "Sign in to Way of Roster scheduling platform"
+    },
+    "REGISTER": {
+      "TITLE": "Create Free Account | Way of Roster Scheduling Software",
+      "DESCRIPTION": "Start free with Way of Roster. Build automated work rosters, manage leave, and plan shifts with a powerful rule-based scheduling engine.",
+      "KEYWORDS": "workforce scheduling free trial, employee scheduling signup, shift planning software register",
+      "OG_IMAGE_ALT": "Create your Way of Roster account"
+    },
+    "TERMS": {
+      "TITLE": "Terms of Service | Way of Roster",
+      "DESCRIPTION": "Read the Way of Roster Terms of Service for using our automated workforce scheduling and roster management platform.",
+      "KEYWORDS": "Way of Roster terms, scheduling software terms of service",
+      "OG_IMAGE_ALT": "Way of Roster terms of service"
+    },
+    "PRIVACY": {
+      "TITLE": "Privacy Policy | Way of Roster",
+      "DESCRIPTION": "Learn how Way of Roster collects, uses, and protects your data when you use our workforce scheduling software. GDPR-ready for EU teams.",
+      "KEYWORDS": "Way of Roster privacy policy, workforce scheduling GDPR",
+      "OG_IMAGE_ALT": "Way of Roster privacy policy"
+    },
+    "COOKIES": {
+      "TITLE": "Cookie Policy | Way of Roster",
+      "DESCRIPTION": "Understand how Way of Roster uses essential and functional cookies to deliver secure workforce scheduling and language preferences.",
+      "KEYWORDS": "Way of Roster cookies, scheduling software cookie policy",
+      "OG_IMAGE_ALT": "Way of Roster cookie policy"
+    },
+    "APP": {
+      "TITLE": "Way of Roster App",
+      "DESCRIPTION": "Way of Roster application workspace for authenticated users.",
+      "KEYWORDS": "Way of Roster app",
+      "OG_IMAGE_ALT": "Way of Roster application"
+    }
+  },
   "LANDING": {
     "BRAND": "Way of Roster",
     "NAV": {
       "FEATURES": "Features",
       "PRICING": "Pricing",
+      "FAQ": "FAQ",
+      "MAIN": "Main navigation",
       "SIGN_IN": "Sign in",
       "GET_STARTED": "Get Started"
     },
     "HERO": {
-      "TITLE": "Master Your Workforce with <span>Automated</span> Scheduling",
-      "SUBTITLE": "Optimize your rosters, respect employee preferences, and eliminate scheduling conflicts in seconds. The most advanced rule-based engine for modern teams.",
+      "TITLE": "Automated <span>Workforce Scheduling</span> & Shift Planning Software",
+      "SUBTITLE": "Way of Roster helps managers build fair, conflict-free work rosters in seconds. Rule-based employee scheduling, leave management, and workforce planning for healthcare, retail, hospitality, and 24/7 operations.",
       "START_FREE": "Start Free Trial",
       "HOW_IT_WORKS": "See How it Works",
-      "JOIN": "Join the first wave of automated scheduling"
+      "JOIN": "Join teams saving hours on manual shift planning every week",
+      "IMAGE_ALT": "Way of Roster workforce scheduling dashboard with monthly shift roster and team calendar"
     },
     "FEATURES": {
-      "TITLE": "Everything you need to scale",
-      "SUBTITLE": "Way of Roster handles the complexity so you can focus on growing your business.",
+      "TITLE": "Workforce Scheduling Features Built for Growing Teams",
+      "SUBTITLE": "From shift rules and leave tracking to one-click roster generation — Way of Roster replaces spreadsheets with smart workforce scheduling.",
       "ITEMS": {
         "RULE_BASED": {
           "TITLE": "Rule-Based Engine",
@@ -58,8 +105,8 @@
       }
     },
     "HOW_IT_WORKS": {
-      "TITLE": "How It Works",
-      "SUBTITLE": "Professional scheduling in three simple steps.",
+      "TITLE": "How Workforce Scheduling Works",
+      "SUBTITLE": "Launch automated shift planning in three simple steps.",
       "STEP1_TITLE": "Define Your Rules",
       "STEP1_DESC": "Input your team's specific requirements, labor laws, and employee preferences into our engine.",
       "STEP2_TITLE": "Add Your Team",
@@ -68,8 +115,8 @@
       "STEP3_DESC": "Click 'Generate' and watch the engine create the perfect roster. Fine-tune manually if needed."
     },
     "WHY_WAY_OF_ROSTER": {
-      "TITLE": "Why It Works",
-      "SUBTITLE": "The science behind smart scheduling.",
+      "TITLE": "Why Teams Choose Way of Roster",
+      "SUBTITLE": "Smarter algorithms, fairer shifts, and fewer scheduling mistakes.",
       "ITEM1_TITLE": "Combinatorial Optimization",
       "ITEM1_DESC": "Our engine evaluates millions of possible combinations to find the one that best fits all your constraints.",
       "ITEM2_TITLE": "Fairness Algorithm",
@@ -97,17 +144,18 @@
       "A8": "Way of Roster is a fully responsive web application, meaning it works perfectly on smartphones and tablets without needing to install anything from an app store."
     },
     "PRICING": {
-      "TITLE": "Simple, transparent pricing",
-      "SUBTITLE": "Choose the plan that fits your team's size and needs.",
+      "TITLE": "Workforce Scheduling Software Pricing",
+      "SUBTITLE": "Transparent plans for small teams, growing operations, and large organizations.",
       "FREE": {
         "NAME": "Free",
         "PRICE": "$0",
         "PERIOD": "/mo",
         "DESC": "Perfect for small teams getting started.",
-        "F1": "Up to 5 employees",
-        "F2": "Basic rule engine",
-        "F3": "Standard shift types",
-        "F4": "Export to PDF",
+        "F1": "1 team",
+        "F2": "Up to 5 employees",
+        "F3": "Basic rule engine (predefined rules)",
+        "F4": "Standard shift types & schedule generation",
+        "F5": "Leave management & schedule approval",
         "BTN": "Get Started"
       },
       "STARTER": {
@@ -115,22 +163,24 @@
         "NAME": "Starter",
         "PRICE": "$49",
         "PERIOD": "/mo",
-        "DESC": "For growing teams that need more power.",
-        "F1": "Up to 20 employees",
-        "F2": "Advanced rule engine",
-        "F3": "Contract compliance tracking",
-        "F4": "Priority email support",
+        "DESC": "For growing teams that need more capacity.",
+        "F1": "Up to 5 teams",
+        "F2": "Up to 20 employees",
+        "F3": "Team-level rule overrides",
+        "F4": "Multiple shift types per team",
+        "F5": "Advanced schedule generation (more teams/employees)",
+        "F6": "Email support (contact/feedback)",
         "BTN": "Register now"
       },
       "GROWTH": {
         "NAME": "Growth",
         "PRICE": "$199",
         "PERIOD": "/mo",
-        "DESC": "For large organizations with complex needs.",
-        "F1": "Up to 100 employees",
-        "F2": "Custom SLAs",
-        "F3": "Dedicated account manager",
-        "F4": "Advanced reporting",
+        "DESC": "For large organizations and integrations.",
+        "F1": "Up to 50 teams",
+        "F2": "Up to 100 employees",
+        "F3": "Team rule customization at scale",
+        "F4": "Email support and onboarding assistance (contact)",
         "BTN": "Register now"
       }
     },

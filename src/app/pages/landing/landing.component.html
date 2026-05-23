@@ -1,33 +1,36 @@
 <div class="landing-root">
-    <div class="mobile-menu-overlay" [class.active]="isMenuOpen" (click)="isMenuOpen = false"></div>
-    <header class="landing-header" id="main-header" [class.scrolled]="isScrolled">
-        <div class="brand-wrapper" routerLink="/">
-            <img class="brand-logo" src="assets/images/logo.svg" alt="Way of Roster Logo">
+    <div class="mobile-menu-overlay" [class.active]="isMenuOpen" (click)="isMenuOpen = false" aria-hidden="true"></div>
+    <header class="landing-header" id="main-header" [class.scrolled]="isScrolled" role="banner">
+        <div class="brand-wrapper" routerLink="/" [attr.aria-label]="'LANDING.BRAND' | translate">
+            <img class="brand-logo" src="assets/images/logo.svg" [attr.alt]="'LANDING.BRAND' | translate">
             <div class="brand-name">{{ 'LANDING.BRAND' | translate }}</div>
         </div>
-        <button class="mobile-menu-toggle" (click)="isMenuOpen = !isMenuOpen">
-            <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
-        </button>
+        <div class="header-mobile-actions">
+            <app-language-switcher class="header-lang-switcher"></app-language-switcher>
+            <button class="mobile-menu-toggle" type="button" [attr.aria-label]="isMenuOpen ? 'Close menu' : 'Open menu'" [attr.aria-expanded]="isMenuOpen" (click)="isMenuOpen = !isMenuOpen">
+                <mat-icon aria-hidden="true">{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+            </button>
+        </div>
 
-        <nav class="landing-nav" [class.open]="isMenuOpen">
+        <nav class="landing-nav" [class.open]="isMenuOpen" [attr.aria-label]="'LANDING.NAV.MAIN' | translate">
             <a href="#features" class="menu-link" (click)="scrollTo('features', $event)">{{ 'LANDING.NAV.FEATURES' | translate }}</a>
             <a href="#how-it-works" class="menu-link" (click)="scrollTo('how-it-works', $event)">{{ 'LANDING.HOW_IT_WORKS.TITLE' | translate }}</a>
             <a href="#why-it-works" class="menu-link" (click)="scrollTo('why-it-works', $event)">{{ 'LANDING.WHY_WAY_OF_ROSTER.TITLE' | translate }}</a>
             <a href="#pricing" class="menu-link" (click)="scrollTo('pricing', $event)">{{ 'LANDING.NAV.PRICING' | translate }}</a>
-            <a href="#faq" class="menu-link" (click)="scrollTo('faq', $event)">FAQ</a>
+            <a href="#faq" class="menu-link" (click)="scrollTo('faq', $event)">{{ 'LANDING.NAV.FAQ' | translate }}</a>
             <a href="#contact" class="menu-link" (click)="scrollTo('contact', $event)">{{ 'CONTACT.TITLE' | translate }}</a>
             <a class="menu-link" routerLink="/login">{{ 'LANDING.NAV.SIGN_IN' | translate }}</a>
             <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{ 'LANDING.NAV.GET_STARTED'
                 | translate }}</a>
-            <app-language-switcher></app-language-switcher>
+            <app-language-switcher class="header-lang-desktop"></app-language-switcher>
         </nav>
     </header>
 
-    <main class="landing-main">
+    <main class="landing-main" id="main-content">
         <!-- Hero Section -->
-        <section class="hero" id="hero">
+        <section class="hero" id="hero" aria-labelledby="hero-heading">
             <div class="hero-content">
-                <h1 [innerHTML]="'LANDING.HERO.TITLE' | translate"></h1>
+                <h1 id="hero-heading" [innerHTML]="'LANDING.HERO.TITLE' | translate"></h1>
                 <p class="lead">{{ 'LANDING.HERO.SUBTITLE' | translate }}</p>
                 <div class="hero-actions">
                     <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{
@@ -53,7 +56,9 @@
                         <div class="mockup-container single-mockup">
                             <img
                                 src="assets/images/real-mockup-v2.png"
-                                alt="Automated Dashboard Mockup"
+                                [attr.alt]="'LANDING.HERO.IMAGE_ALT' | translate"
+                                width="1200"
+                                height="750"
                                 loading="eager"
                                 decoding="async"
                                 fetchpriority="high"
@@ -65,9 +70,9 @@
         </section>
 
         <!-- Features Section -->
-        <section class="features-section" id="features">
+        <section class="features-section" id="features" aria-labelledby="features-heading">
             <div class="section-header">
-                <h2>{{ 'LANDING.FEATURES.TITLE' | translate }}</h2>
+                <h2 id="features-heading">{{ 'LANDING.FEATURES.TITLE' | translate }}</h2>
                 <p>{{ 'LANDING.FEATURES.SUBTITLE' | translate }}</p>
             </div>
             <div class="features-grid">
@@ -105,9 +110,9 @@
         </section>
 
         <!-- How It Works Section -->
-        <section class="how-it-works" id="how-it-works">
+        <section class="how-it-works" id="how-it-works" aria-labelledby="how-it-works-heading">
             <div class="section-header">
-                <h2>{{ 'LANDING.HOW_IT_WORKS.TITLE' | translate }}</h2>
+                <h2 id="how-it-works-heading">{{ 'LANDING.HOW_IT_WORKS.TITLE' | translate }}</h2>
                 <p>{{ 'LANDING.HOW_IT_WORKS.SUBTITLE' | translate }}</p>
             </div>
             <div class="steps-grid">
@@ -130,9 +135,9 @@
         </section>
 
         <!-- Why It Works Section -->
-        <section class="why-it-works" id="why-it-works">
+        <section class="why-it-works" id="why-it-works" aria-labelledby="why-it-works-heading">
             <div class="section-header">
-                <h2>{{ 'LANDING.WHY_WAY_OF_ROSTER.TITLE' | translate }}</h2>
+                <h2 id="why-it-works-heading">{{ 'LANDING.WHY_WAY_OF_ROSTER.TITLE' | translate }}</h2>
                 <p>{{ 'LANDING.WHY_WAY_OF_ROSTER.SUBTITLE' | translate }}</p>
             </div>
             <div class="science-grid">
@@ -155,9 +160,9 @@
         </section>
 
         <!-- Pricing Section -->
-        <section class="pricing-section" id="pricing">
+        <section class="pricing-section" id="pricing" aria-labelledby="pricing-heading">
             <div class="section-header">
-                <h2>{{ 'LANDING.PRICING.TITLE' | translate }}</h2>
+                <h2 id="pricing-heading">{{ 'LANDING.PRICING.TITLE' | translate }}</h2>
                 <p>{{ 'LANDING.PRICING.SUBTITLE' | translate }}</p>
             </div>
             <div class="pricing-grid">
@@ -171,6 +176,7 @@
                         <li>{{ 'LANDING.PRICING.FREE.F2' | translate }}</li>
                         <li>{{ 'LANDING.PRICING.FREE.F3' | translate }}</li>
                         <li>{{ 'LANDING.PRICING.FREE.F4' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.FREE.F5' | translate }}</li>
                     </ul>
                     <a class="btn outline" routerLink="/login" [queryParams]="{ mode: 'register' }">{{
                         'LANDING.PRICING.FREE.BTN' | translate }}</a>
@@ -187,6 +193,8 @@
                         <li>{{ 'LANDING.PRICING.STARTER.F2' | translate }}</li>
                         <li>{{ 'LANDING.PRICING.STARTER.F3' | translate }}</li>
                         <li>{{ 'LANDING.PRICING.STARTER.F4' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.STARTER.F5' | translate }}</li>
+                        <li>{{ 'LANDING.PRICING.STARTER.F6' | translate }}</li>
                     </ul>
                     <a class="btn primary" routerLink="/login" [queryParams]="{ mode: 'register' }">{{
                         'LANDING.PRICING.STARTER.BTN' | translate }}</a>
@@ -210,9 +218,9 @@
         </section>
 
         <!-- FAQ Section -->
-        <section class="faq-section" id="faq">
+        <section class="faq-section" id="faq" aria-labelledby="faq-heading">
             <div class="section-header">
-                <h2>{{ 'LANDING.FAQ.TITLE' | translate }}</h2>
+                <h2 id="faq-heading">{{ 'LANDING.FAQ.TITLE' | translate }}</h2>
             </div>
             <div class="faq-grid">
                 <div class="faq-item" [class.open]="openFaqIndex === 0">
@@ -288,9 +296,9 @@
         </section>
 
         <!-- Contact Section -->
-        <section class="contact-section" id="contact">
+        <section class="contact-section" id="contact" aria-labelledby="contact-heading">
             <div class="section-header">
-                <h2>{{ 'CONTACT.TITLE' | translate }}</h2>
+                <h2 id="contact-heading">{{ 'CONTACT.TITLE' | translate }}</h2>
                 <p>{{ 'CONTACT.SUBTITLE' | translate }}</p>
             </div>
 
@@ -346,14 +354,17 @@
         </section>
     </main>
 
-    <footer class="landing-footer">
+    <footer class="landing-footer" role="contentinfo">
         <div class="footer-grid">
             <div class="footer-brand">
                 <div class="brand-wrapper" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
-                    <img class="brand-logo" src="assets/images/logo.svg" alt="Way of Roster Logo" style="width: 32px; height: 32px;">
+                    <img class="brand-logo" src="assets/images/logo.svg" [attr.alt]="'LANDING.BRAND' | translate" style="width: 32px; height: 32px;">
                     <div class="brand-name" style="margin: 0;">{{ 'LANDING.BRAND' | translate }}</div>
                 </div>
                 <p>{{ 'LANDING.FOOTER.BRAND_DESC' | translate }}</p>
+                <div class="footer-language-switcher">
+                    <app-language-switcher></app-language-switcher>
+                </div>
             </div>
             <div class="footer-links">
                 <h4>{{ 'LANDING.FOOTER.PRODUCT' | translate }}</h4>
@@ -379,7 +390,7 @@
             <div class="footer-links">
                 <h4>{{ 'LANDING.FOOTER.CONNECT' | translate }}</h4>
                 <ul>
-                    <li><a href="https://www.linkedin.com/in/bozhidar-rangelov-534839151/" target="_blank">LinkedIn</a>
+                    <li><a href="https://www.linkedin.com/in/bozhidar-rangelov-534839151/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                     </li>
                     <li><a href="mailto:support@wayofroster.com">{{ 'LANDING.FOOTER.CONTACT' | translate }}</a></li>
                 </ul>
@@ -391,7 +402,7 @@
                 <br />
                 <span style="font-size: 0.85rem; opacity: 0.7; margin-top: 0.5rem; display: block;">
                     {{ 'LANDING.FOOTER.DEVELOPED_BY' | translate }}
-                    <a href="https://bozhidar-rangelov.eu" target="_blank"
+                    <a href="https://bozhidar-rangelov.eu" target="_blank" rel="noopener noreferrer"
                         style="color: var(--primary); text-decoration: none; font-weight: 600;">Bozhidar Rangelov</a>
                 </span>
             </div>

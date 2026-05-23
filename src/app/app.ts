@@ -1,8 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component } from '@angular/core';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { filter } from 'rxjs/operators';
 import { CookieConsentComponent } from './components/cookie-consent/cookie-consent.component';
+import { SITE_CONFIG } from './config/site.config';
+import { SeoService } from './services/seo.service';
 
 @Component({
   selector: 'app-root',
@@ -12,24 +15,37 @@ import { CookieConsentComponent } from './components/cookie-consent/cookie-conse
   standalone: true
 })
 export class App {
-  protected readonly title = signal('auto-shift-ui');
+  constructor(
+    private translate: TranslateService,
+    private router: Router,
+    private seo: SeoService
+  ) {
+    this.translate.addLangs([...SITE_CONFIG.locales]);
+    this.translate.setDefaultLang(SITE_CONFIG.defaultLocale);
 
-  constructor(private translate: TranslateService) {
-    this.translate.addLangs(['en', 'bg']);
-    this.translate.setDefaultLang('en');
-
-    // 1. Check localStorage
-    // 2. Check browser language
-    // 3. Fallback to bg
+    const urlLang = this.seo.readLangFromUrl();
     const savedLang = localStorage.getItem('lang');
-    if (savedLang) {
-      this.translate.use(savedLang);
-    } else {
-      const browserLang = navigator.language.split('-')[0]; // get 'en' from 'en-US'
-      const supported = ['en', 'bg'];
-      const defaultLang = supported.includes(browserLang) ? browserLang : 'en';
-      this.translate.use(defaultLang);
-      localStorage.setItem('lang', defaultLang);
-    }
+    const browserLang = navigator.language.split('-')[0];
+    const supported = [...SITE_CONFIG.locales];
+    const initialLang =
+      urlLang ||
+      (savedLang && supported.includes(savedLang as (typeof SITE_CONFIG.locales)[number]) ? savedLang : null) ||
+      (supported.includes(browserLang as (typeof SITE_CONFIG.locales)[number]) ? browserLang : SITE_CONFIG.defaultLocale);
+
+    this.translate.use(initialLang);
+    localStorage.setItem('lang', initialLang);
+    this.seo.syncLangQueryParam(initialLang);
+
+    this.translate.onLangChange.subscribe((event) => {
+      this.seo.setHtmlLang(event.lang);
+      this.seo.updateForRoute(this.router.url);
+    });
+
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event) => {
+        const navigation = event as NavigationEnd;
+        this.seo.updateForRoute(navigation.urlAfterRedirects);
+      });
   }
 }

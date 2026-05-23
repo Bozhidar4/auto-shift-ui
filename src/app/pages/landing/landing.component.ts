@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, HostListener, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,8 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { EmailService } from '../../services/email.service';
 import { ToastService } from '../../services/toast.service';
 import { ContactMessage } from '../../models/contact-message.interface';
+import { SeoService } from '../../services/seo.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-landing',
@@ -16,11 +18,12 @@ import { ContactMessage } from '../../models/contact-message.interface';
     templateUrl: './landing.component.html',
     styleUrls: ['./landing.component.scss']
 })
-export class LandingComponent implements OnInit {
+export class LandingComponent implements OnInit, OnDestroy {
     @ViewChild('contactFormRef') contactFormRef!: NgForm;
     isScrolled = false;
     isMenuOpen = false;
     openFaqIndex: number | null = null;
+    private langSubscription?: Subscription;
 
     contactForm: ContactMessage = {
         name: '',
@@ -35,12 +38,26 @@ export class LandingComponent implements OnInit {
     constructor(
         private translate: TranslateService,
         private emailService: EmailService,
-        private toast: ToastService
+        private toast: ToastService,
+        private seo: SeoService
     ) { }
 
     ngOnInit(): void {
-        // Initial scroll check
         this.isScrolled = window.scrollY > 50;
+        this.refreshLandingSeo();
+
+        this.langSubscription = this.translate.onLangChange.subscribe(() => {
+            this.refreshLandingSeo();
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.langSubscription?.unsubscribe();
+    }
+
+    private refreshLandingSeo(): void {
+        this.seo.updateFromKey('SEO.HOME', '/');
+        this.seo.setStructuredData(this.seo.buildLandingStructuredData());
     }
 
     scrollTo(

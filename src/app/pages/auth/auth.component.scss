@@ -1,12 +1,11 @@
 .auth-container {
-    position: fixed;
-    inset: 0;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 2rem 1rem;
+    overflow-y: auto;
     background-color: #f8fafc;
-    z-index: 9999;
     background-image: 
         radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.05) 0px, transparent 50%),
         radial-gradient(at 100% 100%, rgba(124, 58, 237, 0.05) 0px, transparent 50%);
@@ -16,6 +15,7 @@
     width: 100%;
     max-width: 420px;
     padding: 3rem;
+    margin: auto;
     background: white;
     border-radius: 24px;
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
@@ -37,20 +37,10 @@
     .logo {
         width: 60px;
         height: 60px;
-        background: linear-gradient(135deg, #4f46e5, #7c3aed);
         margin: 0 auto 1.5rem;
         border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 8px 16px rgba(79, 70, 229, 0.25);
-        
-        &::after {
-            content: 'AS';
-            color: white;
-            font-weight: 800;
-            font-size: 1.6rem;
-        }
+        display: block;
+        object-fit: contain;
     }
     
     h1 {
@@ -108,6 +98,12 @@
     color: #64748b;
     padding-top: 1.5rem;
     border-top: 1px solid #f1f5f9;
+
+    .auth-lang {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.25rem;
+    }
     
     a {
         color: #4f46e5;
