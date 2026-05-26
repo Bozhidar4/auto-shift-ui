@@ -372,18 +372,18 @@ section {
     }
 }
 
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+
+    h2 {
+        font-size: 2.5rem;
+        font-weight: 800;
+    }
+}
+
 .features-section {
     background: white;
-
-    .section-header {
-        text-align: center;
-        margin-bottom: 4rem;
-
-        h2 {
-            font-size: 2.5rem;
-            font-weight: 800;
-        }
-    }
 
     .features-grid {
         display: grid;

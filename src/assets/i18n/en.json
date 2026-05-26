@@ -148,7 +148,7 @@
       "SUBTITLE": "Transparent plans for small teams, growing operations, and large organizations.",
       "FREE": {
         "NAME": "Free",
-        "PRICE": "$0",
+        "PRICE": "€0",
         "PERIOD": "/mo",
         "DESC": "Perfect for small teams getting started.",
         "F1": "1 team",
@@ -161,7 +161,7 @@
       "STARTER": {
         "BADGE": "Most Popular",
         "NAME": "Starter",
-        "PRICE": "$49",
+        "PRICE": "€49",
         "PERIOD": "/mo",
         "DESC": "For growing teams that need more capacity.",
         "F1": "Up to 5 teams",
@@ -174,7 +174,7 @@
       },
       "GROWTH": {
         "NAME": "Growth",
-        "PRICE": "$199",
+        "PRICE": "€199",
         "PERIOD": "/mo",
         "DESC": "For large organizations and integrations.",
         "F1": "Up to 50 teams",
