@@ -14,12 +14,11 @@
   </div>
 
   <div class="create-shift-container card">
-    <input class="input" [placeholder]="'SHIFTS.NAME' | translate" [(ngModel)]="newShift.name" />
-    <input class="input" [placeholder]="'SHIFTS.CODE' | translate" maxlength="1" [(ngModel)]="newShift.initialCode" style="width: 80px" />
-    <input class="input" [placeholder]="'SHIFTS.START_TIME' | translate" [(ngModel)]="newShift.startTime" style="width: 100px" />
-    <input class="input" [placeholder]="'SHIFTS.END_TIME' | translate" [(ngModel)]="newShift.endTime" style="width: 100px" />
-    <input class="input" type="number" min="1" [placeholder]="'SHIFTS.REQUIRED_STAFF' | translate" [(ngModel)]="newShift.requiredPeople"
-      style="width:100px" />
+    <input class="input flex" [placeholder]="'SHIFTS.NAME' | translate" [(ngModel)]="newShift.name" />
+    <input class="input small" [placeholder]="'SHIFTS.CODE' | translate" maxlength="1" [(ngModel)]="newShift.initialCode" />
+    <input class="input small" [placeholder]="'SHIFTS.START_TIME' | translate" [(ngModel)]="newShift.startTime" />
+    <input class="input small" [placeholder]="'SHIFTS.END_TIME' | translate" [(ngModel)]="newShift.endTime" />
+    <input class="input small" type="number" min="1" [placeholder]="'SHIFTS.REQUIRED_STAFF' | translate" [(ngModel)]="newShift.requiredPeople" />
     <button class="btn primary pill" (click)="create()">
         <mat-icon>add</mat-icon>{{ 'SHIFTS.ADD' | translate }}
     </button>

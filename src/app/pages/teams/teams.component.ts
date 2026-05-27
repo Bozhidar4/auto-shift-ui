@@ -35,7 +35,13 @@ export class TeamsComponent implements OnInit {
 
     this.apiService
       .getTeams()
-      .subscribe({ next: (t) => (this.teams = t), complete: () => (this.loading = false) });
+      .subscribe({
+        next: (t) => (this.teams = t),
+        error: () => {
+          this.toastService.show(this.translate.instant('TEAMS.ERROR_LOAD'), 'error');
+        },
+        complete: () => (this.loading = false)
+      });
   }
 
   load(): void {
@@ -43,7 +49,13 @@ export class TeamsComponent implements OnInit {
 
     this.apiService
       .getTeams()
-      .subscribe({ next: (t) => (this.teams = t), complete: () => (this.loading = false) });
+      .subscribe({
+        next: (t) => (this.teams = t),
+        error: () => {
+          this.toastService.show(this.translate.instant('TEAMS.ERROR_LOAD'), 'error');
+        },
+        complete: () => (this.loading = false)
+      });
   }
 
   addNew(): void {
@@ -70,9 +82,25 @@ export class TeamsComponent implements OnInit {
     const isNew = team.id === 0;
     const model: TeamCreate = { name: team.name };
     if (isNew) {
-      this.apiService.createTeam(model).subscribe({ next: () => this.load() });
+      this.apiService.createTeam(model).subscribe({
+        next: () => {
+          this.load();
+          this.toastService.show(this.translate.instant('TEAMS.SUCCESS_CREATE'), 'success');
+        },
+        error: () => {
+          // remove placeholder team from the list when creation fails
+          this.teams = this.teams.filter(x => x !== team);
+          this.toastService.show(this.translate.instant('TEAMS.ERROR_CREATE'), 'error');
+        }
+      });
     } else {
-      this.apiService.updateTeam(team.id, model).subscribe({ next: () => this.load() });
+      this.apiService.updateTeam(team.id, model).subscribe({
+        next: () => {
+          this.load();
+          this.toastService.show(this.translate.instant('TEAMS.SUCCESS_UPDATE'), 'success');
+        },
+        error: () => this.toastService.show(this.translate.instant('TEAMS.ERROR_UPDATE'), 'error')
+      });
     }
 
     this.originalTeam = null;
@@ -86,7 +114,10 @@ export class TeamsComponent implements OnInit {
       this.teams = this.teams.filter(x => x !== team);
       return;
     }
-    this.apiService.deleteTeam(team.id).subscribe({ next: () => this.load() });
+    this.apiService.deleteTeam(team.id).subscribe({
+      next: () => this.load(),
+      error: () => this.toastService.show(this.translate.instant('TEAMS.ERROR_DELETE'), 'error')
+    });
   }
 
   confirmRemove(
