@@ -18,6 +18,12 @@
     overflow-x: hidden;
 }
 
+.landing-main {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 .mobile-menu-overlay {
     position: fixed;
     inset: 0;
@@ -671,6 +677,22 @@ section {
     .hero {
         grid-template-columns: 1fr;
         text-align: center;
+        justify-items: center;
+
+        .hero-content {
+            width: 100%;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .hero-visual {
+            width: 100%;
+            margin: 0 auto;
+
+            .hero-mockup {
+                margin: 0 auto;
+            }
+        }
 
         .hero-actions {
             justify-content: center;
@@ -699,6 +721,11 @@ section {
 
         .lead {
             font-size: 1.05rem;
+        }
+
+        .hero-content,
+        .hero-visual {
+            max-width: 100%;
         }
     }
 
