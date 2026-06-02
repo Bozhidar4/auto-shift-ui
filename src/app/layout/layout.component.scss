@@ -36,7 +36,7 @@
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 8px;
-    
+
     &:hover {
       background: #f1f5f9;
     }
@@ -54,7 +54,7 @@
 
     .user-info {
       text-align: right;
-      
+
       @media (max-width: 480px) {
         display: none;
       }
@@ -102,7 +102,7 @@
     height: 100vh;
     z-index: 1001;
     transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     &.open {
       left: 0;
     }
@@ -195,7 +195,6 @@
 
 .app-main {
   grid-area: main;
-  padding: 2.5rem;
   background: #f8fafc;
   overflow-y: auto;
 

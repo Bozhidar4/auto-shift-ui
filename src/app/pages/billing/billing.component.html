@@ -1,51 +1,146 @@
 <div class="billing-container">
     <div class="page-header">
-        <h1>{{ 'LANDING.NAV.PRICING' | translate }}</h1>
-        <p class="subtitle">{{ 'LANDING.PRICING.SUBTITLE' | translate }}</p>
+        <h1>{{ 'BILLING_PAGE.TITLE' | translate }}</h1>
+        <p class="subtitle">{{ 'BILLING_PAGE.SUBTITLE' | translate }}</p>
     </div>
 
-    @if (isLoading) {
-        <div class="loading-state">
-            <mat-icon class="spin">refresh</mat-icon>
-            <p>Loading plans...</p>
-        </div>
+    @if (isLoading || isBillingLoading) {
+    <div class="loading-state">
+        <mat-icon class="spin">refresh</mat-icon>
+        <p>{{ 'BILLING_PAGE.LOADING' | translate }}</p>
+    </div>
     } @else {
+    <!-- Subscription Summary Card -->
+    @if (currentPlanId || subscription) {
+    <div class="active-subscription-card">
+        <div class="card-header">
+            <div class="header-main">
+                <span class="badge-plan">{{ getActivePlanName() | translate }}</span>
+                <h2>{{ 'BILLING_PAGE.CURRENT_PLAN' | translate }}</h2>
+            </div>
+            <!-- Status Badge -->
+            <span class="status-badge"
+                [ngClass]="subscription?.status || billingProfile?.subscriptionStatus || 'unknown'">
+                {{ 'BILLING_PAGE.STATUS' | translate }}: {{ 'BILLING_PAGE.STATUS_' + ((subscription?.status ||
+                billingProfile?.subscriptionStatus || 'unknown') | uppercase) | translate }}
+            </span>
+        </div>
+
+        <div class="card-body">
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">{{ 'BILLING_PAGE.CURRENT_PLAN' | translate }}</span>
+                    <span class="value">{{ getActivePlanName() | translate }} ({{ getActivePlanCost() }})</span>
+                </div>
+                @if (getRenewalDate()) {
+                <div class="info-item">
+                    <span class="label">
+                        {{ isPendingCancellation() ? ('BILLING_PAGE.EXPIRATION_DATE' | translate) :
+                        ('BILLING_PAGE.RENEWAL_DATE' | translate) }}
+                    </span>
+                    <span class="value">{{ getRenewalDate() }}</span>
+                </div>
+                }
+            </div>
+
+            <!-- Pending cancellation warning banner -->
+            @if (isPendingCancellation()) {
+            <div class="cancellation-warning">
+                <mat-icon>warning</mat-icon>
+                <span>{{ 'BILLING_PAGE.PENDING_CANCELLATION' | translate }}</span>
+            </div>
+            }
+        </div>
+
+        <div class="card-actions">
+            <button class="btn secondary" (click)="manageBilling()" [disabled]="isPortalRedirecting">
+                <mat-icon class="icon-spin-wrapper" [class.spin]="isPortalRedirecting">
+                    {{ isPortalRedirecting ? 'refresh' : 'open_in_new' }}
+                </mat-icon>
+                {{ 'BILLING_PAGE.MANAGE_BTN' | translate }}
+            </button>
+
+            @if (!isPendingCancellation() && currentPlanId) {
+            <button class="btn danger-outline" (click)="confirmCancelSubscription()" [disabled]="isCancelling">
+                <mat-icon class="icon-spin-wrapper" [class.spin]="isCancelling">
+                    {{ isCancelling ? 'refresh' : 'cancel' }}
+                </mat-icon>
+                {{ 'BILLING_PAGE.CANCEL_BTN' | translate }}
+            </button>
+            }
+        </div>
+    </div>
+    }
+
+    <div class="pricing-section">
+        <h3 class="section-title">
+            {{ (currentPlanId ? 'BILLING_PAGE.CHOOSE_PLAN' : 'LANDING.PRICING.SUBTITLE') | translate }}
+        </h3>
+
         <div class="pricing-grid">
             <!-- Free Plan -->
-            <div class="pricing-card">
-                <div class="plan-name">{{ freePlan.name | translate }}</div>
-                <div class="plan-price">{{ freePlan.priceKey | translate }}<span>{{ 'LANDING.PRICING.FREE.PERIOD' | translate }}</span></div>
+            <div class="pricing-card" [class.current]="!currentPlanId">
+                <div class="plan-name">
+                    {{ freePlan.name | translate }}
+                    <span *ngIf="!currentPlanId" class="current-badge">{{ 'BILLING_PAGE.CURRENT_PLAN' | translate
+                        }}</span>
+                </div>
+                <div class="plan-price">{{ freePlan.priceKey | translate }}<span>{{ 'LANDING.PRICING.FREE.PERIOD' |
+                        translate }}</span></div>
                 <p class="plan-desc">{{ freePlan.desc | translate }}</p>
                 <ul class="features-list">
                     @for (feat of freePlan.features; track feat) {
-                        <li>{{ feat | translate }}</li>
+                    <li>{{ feat | translate }}</li>
                     }
                 </ul>
-                <button class="btn outline full-width" disabled>{{ 'LANDING.PRICING.FREE.BTN' | translate }}</button>
+                <button class="btn outline full-width" disabled>
+                    {{ !currentPlanId ? ('BILLING_PAGE.CURRENT_PLAN' | translate) : ('LANDING.PRICING.FREE.BTN' |
+                    translate) }}
+                </button>
             </div>
 
             <!-- Starter Plan -->
-            <div class="pricing-card popular">
-                <span class="popular-badge">{{ starterPlan.badge | translate }}</span>
+            <div class="pricing-card popular" [class.current]="currentPlanId === starterPlan.priceId">
+                <span *ngIf="currentPlanId !== starterPlan.priceId" class="popular-badge">{{ starterPlan.badge |
+                    translate }}</span>
+                <span *ngIf="currentPlanId === starterPlan.priceId" class="current-badge-popular">{{
+                    'BILLING_PAGE.CURRENT_PLAN' | translate }}</span>
                 <div class="plan-name">{{ starterPlan.name | translate }}</div>
                 <div class="plan-price">
-                    <!-- If we replaced with formatted string it won't be translated, so we can just output it, unless it's a key -->
                     {{ starterPlan.priceId ? starterPlan.priceKey : (starterPlan.priceKey | translate) }}
                     <span>{{ 'LANDING.PRICING.STARTER.PERIOD' | translate }}</span>
                 </div>
                 <p class="plan-desc">{{ starterPlan.desc | translate }}</p>
                 <ul class="features-list">
                     @for (feat of starterPlan.features; track feat) {
-                        <li>{{ feat | translate }}</li>
+                    <li>{{ feat | translate }}</li>
                     }
                 </ul>
-                <button class="btn primary full-width" (click)="upgrade(starterPlan.priceId)" [disabled]="isCheckingOut || !starterPlan.priceId">
-                    {{ isCheckingOut ? ('CONTACT.SENDING' | translate) : ('LANDING.PRICING.STARTER.BTN' | translate) }}
+
+                @if (currentPlanId === starterPlan.priceId) {
+                <button class="btn primary full-width" disabled>
+                    {{ 'BILLING_PAGE.CURRENT_PLAN' | translate }}
                 </button>
+                } @else if (currentPlanId) {
+                <button class="btn outline full-width"
+                    (click)="confirmChangePlan(starterPlan.priceId, starterPlan.name)"
+                    [disabled]="isChangingPlan || isPortalRedirecting">
+                    {{ (currentPlanId === growthPlan.priceId ? 'BILLING_PAGE.DOWNGRADE_BTN' : 'BILLING_PAGE.SWITCH_BTN')
+                    | translate }}
+                </button>
+                } @else {
+                <button class="btn primary full-width" (click)="upgrade(starterPlan.priceId)"
+                    [disabled]="loadingCheckoutPriceId !== null || !starterPlan.priceId">
+                    {{ loadingCheckoutPriceId === starterPlan.priceId ? ('CONTACT.SENDING' | translate) :
+                    ('LANDING.PRICING.STARTER.BTN' | translate) }}
+                </button>
+                }
             </div>
 
             <!-- Growth Plan -->
-            <div class="pricing-card">
+            <div class="pricing-card" [class.current]="currentPlanId === growthPlan.priceId">
+                <span *ngIf="currentPlanId === growthPlan.priceId" class="current-badge-popular">{{
+                    'BILLING_PAGE.CURRENT_PLAN' | translate }}</span>
                 <div class="plan-name">{{ growthPlan.name | translate }}</div>
                 <div class="plan-price">
                     {{ growthPlan.priceId ? growthPlan.priceKey : (growthPlan.priceKey | translate) }}
@@ -54,13 +149,33 @@
                 <p class="plan-desc">{{ growthPlan.desc | translate }}</p>
                 <ul class="features-list">
                     @for (feat of growthPlan.features; track feat) {
-                        <li>{{ feat | translate }}</li>
+                    <li>{{ feat | translate }}</li>
                     }
                 </ul>
-                <button class="btn primary full-width" (click)="upgrade(growthPlan.priceId)" [disabled]="isCheckingOut || !growthPlan.priceId">
-                    {{ isCheckingOut ? ('CONTACT.SENDING' | translate) : ('LANDING.PRICING.GROWTH.BTN' | translate) }}
+
+                @if (currentPlanId === growthPlan.priceId) {
+                <button class="btn primary full-width" disabled>
+                    {{ 'BILLING_PAGE.CURRENT_PLAN' | translate }}
                 </button>
+                } @else if (currentPlanId) {
+                <button class="btn outline full-width" (click)="confirmChangePlan(growthPlan.priceId, growthPlan.name)"
+                    [disabled]="isChangingPlan || isPortalRedirecting">
+                    {{ (currentPlanId === starterPlan.priceId ? 'BILLING_PAGE.UPGRADE_BTN' : 'BILLING_PAGE.SWITCH_BTN')
+                    | translate }}
+                </button>
+                } @else {
+                <button class="btn primary full-width" (click)="upgrade(growthPlan.priceId)"
+                    [disabled]="loadingCheckoutPriceId !== null || !growthPlan.priceId">
+                    {{ loadingCheckoutPriceId === growthPlan.priceId ? ('CONTACT.SENDING' | translate) :
+                    ('LANDING.PRICING.GROWTH.BTN' | translate) }}
+                </button>
+                }
             </div>
         </div>
+    </div>
     }
+
+    <app-confirm [visible]="confirmState.visible" [title]="confirmState.title" [message]="confirmState.message"
+        (confirmed)="onConfirmedAction()" (cancelled)="onCancelledAction()">
+    </app-confirm>
 </div>

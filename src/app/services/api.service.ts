@@ -685,4 +685,20 @@ export class ApiService {
     const headers = { 'x-skip-toast': '1' } as any;
     return this.http.post<{ url: string }>(`${BASE_URL}/Stripe/create-checkout`, { priceId }, { headers });
   }
+
+  getBillingProfile(): Observable<any> {
+    return this.http.get<any>(`${BASE_URL}/Billing`);
+  }
+
+  createBillingPortalSession(returnUrl: string): Observable<{ url: string }> {
+    return this.http.post<{ url: string }>(`${BASE_URL}/Billing/portal`, { returnUrl });
+  }
+
+  cancelSubscription(atPeriodEnd: boolean = true): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${BASE_URL}/Billing/cancel`, { atPeriodEnd });
+  }
+
+  changePlan(priceId: string, prorationBehavior: string = 'always_invoice'): Observable<any> {
+    return this.http.post<any>(`${BASE_URL}/Billing/change-plan`, { priceId, prorationBehavior });
+  }
 }
